@@ -80,8 +80,9 @@
 	<classpathentry kind="lib" path="tools/lib/crystal/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="tools/lib/mssql-jdbc-9.4.1.jre8.jar"/>
 	<classpathentry kind="lib" path="tools/lib/jtds-1.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-27">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="add-exports" value="java.naming/com.sun.jndi.ldap=ALL-UNNAMED:java.sql.rowset/com.sun.rowset=ALL-UNNAMED:java.sql.rowset/com.sun.rowset.internal=ALL-UNNAMED:java.sql.rowset/com.sun.rowset.providers=ALL-UNNAMED"/>
 		</attributes>
 		<accessrules>
