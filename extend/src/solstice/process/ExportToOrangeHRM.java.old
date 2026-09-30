@@ -1,0 +1,562 @@
+package solstice.process;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import java.io.PrintStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
+
+
+import org.compiere.Compiere;
+import org.compiere.model.MCountry;
+import org.compiere.model.MLocation;
+import org.compiere.model.MRegion;
+import org.compiere.util.CLogger;
+import org.compiere.util.CompiereUserError;
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+
+
+import solstice.model.P_NonBusinessDay;
+import solstice.model.P_Workplace;
+import solstice.model.P_Period;
+import solstice.utils.PgiUtil;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+
+import com.sshtools.j2ssh.SftpClient;
+import com.sshtools.j2ssh.SshClient;
+import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
+import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
+import com.sshtools.j2ssh.transport.ConsoleKnownHostsKeyVerification;
+import com.sshtools.j2ssh.transport.InvalidHostFileException;
+import com.sshtools.j2ssh.transport.publickey.SshPublicKey;
+
+
+public class ExportToOrangeHRM // extends SvrProcess
+{
+
+	//private String Path = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPath");
+	private static String Path ;
+
+	private static CLogger		log = CLogger.getCLogger (ExportToOrangeHRM.class);
+
+	protected void prepare() 
+	{
+/*		ProcessInfoParameter[] para = getParameter();
+		for (int i = 0; i < para.length; i++)
+		{
+			String name = para[i].getParameterName();
+			if (para[i].getParameter() == null)
+				;
+
+		}
+*/		
+	}
+
+	boolean success = true; 
+
+	
+	protected String doIt() throws Exception 
+	{
+		
+		sendWorkPlace();
+		sendPayPeriod();
+		sendNonBusinessDay(); //Holiday
+		sendProvince();		
+		
+		return "Export terminé " ;
+		
+	}
+
+
+    private StringBuffer addElement( String Element, String value )
+    {
+    	StringBuffer xmlStr = new StringBuffer( "");
+    	//PgiUtil.convertHTMLString( 
+    	if ( value != null)
+    		xmlStr = xmlStr.append(  new StringBuffer( "<" + Element + ">" + value  + "</" + Element + ">" ));
+    	else
+    		xmlStr = xmlStr.append(  new StringBuffer( "<" + Element + ">" + "</" + Element + ">" ));
+    	
+    	return xmlStr;
+    }
+
+
+    private void sendPayPeriod()
+    {
+    	StringBuffer xmlStr = new StringBuffer( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+    	
+    	String sql = "Select * from P_Period" ;
+    	PreparedStatement stmt = DB.prepareStatement(sql, null);
+        try
+        {
+        	P_Period Period = null;
+        	
+			String EXPORT_LOC =  PgiUtil.getSolsticeParameter(getCtx(), "PayStubPDFPath");
+
+			xmlStr = xmlStr.append( "<Periods>");
+
+	        ResultSet rs = stmt.executeQuery();
+	        while(rs.next())
+	        {
+				xmlStr = xmlStr.append( "<Period>");
+
+	        	Period = new P_Period( getCtx(), rs, null);
+
+				xmlStr = xmlStr.append(  addElement("id" , String.valueOf( Period.getP_Period_ID() ) ) );
+				xmlStr = xmlStr.append( addElement("Start_Date" , String.valueOf(Period.getStartDate() )).substring(0,10) ) ;
+				xmlStr = xmlStr.append( addElement("End_Date" ,  String.valueOf(Period.getEndDate() ).substring(0,10) )) ;
+
+				xmlStr = xmlStr.append( addElement("Close_Date" , "" )) ;
+				xmlStr = xmlStr.append( addElement("Check_Date" , "" )) ;
+				xmlStr = xmlStr.append( addElement("timesheet_aproval_due_date" ,  "" )) ;
+
+				xmlStr = xmlStr.append( "</Period>");
+	        }
+
+	        xmlStr = xmlStr.append( "</Periods>");
+
+	        rs.close();
+	        stmt.close();
+
+		
+			String xmlFileName =  "hs_hr_pay_period.xml" ;
+    		File xmlFile = new File( EXPORT_LOC + xmlFileName );
+    		FileOutputStream out = new FileOutputStream(xmlFile, false);
+    		PrintStream p = new PrintStream(out); 
+    		p.println(xmlStr);
+    		p.close();
+    		
+			SendFileFTP( EXPORT_LOC,  xmlFileName  );
+        }
+        catch (Exception e)
+        {
+        	log.log (Level.SEVERE,"ExportToOrangeHrm - " + sql, e);
+        }
+
+    	
+    }
+    
+    
+    
+    private void sendWorkPlace()
+    {
+    	StringBuffer xmlStr = new StringBuffer( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+    	
+    	String sql = "Select * from P_Workplace" ;
+    	PreparedStatement stmt = DB.prepareStatement(sql, null);
+        try
+        {
+        	P_Workplace Workplace = null;
+        	
+			String EXPORT_LOC =  PgiUtil.getSolsticeParameter(getCtx(), "PayStubPDFPath");
+
+			xmlStr = xmlStr.append( "<Workplaces>");
+
+	        ResultSet rs = stmt.executeQuery();
+	        while(rs.next())
+	        {
+				xmlStr = xmlStr.append( "<Workplace>");
+
+	        	Workplace = new P_Workplace( getCtx(), rs, null);
+				MLocation Location = MLocation.get( getCtx(), Workplace.getC_Location_ID(), null);
+				MRegion Region = new MRegion( getCtx(), Location.getC_Region_ID(), null);
+				MCountry Country = new MCountry( getCtx(), Location.getC_Country_ID(), null);
+
+				xmlStr = xmlStr.append(  addElement("id" , String.valueOf( Workplace.getP_Workplace_ID() ) ) );
+				xmlStr = xmlStr.append( addElement("Name" , Workplace.getValue() + ' ' + Workplace.getName() )) ;
+				xmlStr = xmlStr.append( addElement("country_code" , Country.getCountryCode() )) ;
+
+				xmlStr = xmlStr.append( addElement("city" , Location.getCity() )) ;
+				xmlStr = xmlStr.append( addElement("province" , Region.getDescription() )) ;
+				xmlStr = xmlStr.append( addElement("zip_code" , Location.getPostal() )) ;
+
+				xmlStr = xmlStr.append( addElement("phone" , Workplace.getPhone() )) ;
+				xmlStr = xmlStr.append( addElement("fax" , "" )) ;
+				xmlStr = xmlStr.append( addElement("notes" , "" )) ;
+
+				xmlStr = xmlStr.append( "</Workplace>");
+	        }
+
+	        xmlStr = xmlStr.append( "</Workplaces>");
+
+	        rs.close();
+	        stmt.close();
+			
+			String xmlFileName =  "ohrm_location.xml" ;
+    		File xmlFile = new File( EXPORT_LOC + xmlFileName );
+    		FileOutputStream out = new FileOutputStream(xmlFile, false);
+    		PrintStream p = new PrintStream(out); 
+    		p.println(xmlStr);
+    		p.close();
+    		
+			SendFileFTP( EXPORT_LOC,  xmlFileName  );
+        }
+        catch (Exception e)
+        {
+        	log.log (Level.SEVERE,"ExportToOrangeHrm - " + sql, e);
+        }
+
+    	
+    }
+
+    private void sendNonBusinessDay()
+    {
+    	StringBuffer xmlStr = new StringBuffer( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+    	
+    	String sql = "Select * from P_NonBusinessDay" ;
+    	PreparedStatement stmt = DB.prepareStatement(sql, null);
+        try
+        {
+        	P_NonBusinessDay NonBusinessDay = null;
+        	
+			String EXPORT_LOC =  PgiUtil.getSolsticeParameter(getCtx(), "PayStubPDFPath");
+
+			xmlStr = xmlStr.append( "<Holidays>");
+
+	        ResultSet rs = stmt.executeQuery();
+	        while(rs.next())
+	        {
+				xmlStr = xmlStr.append( "<Holiday>");
+
+				NonBusinessDay = new P_NonBusinessDay( getCtx(), rs, null);
+
+				xmlStr = xmlStr.append(  addElement("id" , String.valueOf( NonBusinessDay.getP_NonBusinessDay_ID() ) ) );
+				xmlStr = xmlStr.append( addElement("Description" , NonBusinessDay.getName() )) ;
+				xmlStr = xmlStr.append( addElement("Date" , String.valueOf( NonBusinessDay.getNonBusinessDate() ).substring(0,10)  )) ;
+
+				xmlStr = xmlStr.append( addElement("recurring" , "0" )) ;
+				xmlStr = xmlStr.append( addElement("length" ,  "1")) ;
+				xmlStr = xmlStr.append( addElement("operational_country_id" , "109" )) ;
+
+
+				xmlStr = xmlStr.append( "</Holiday>");
+	        }
+
+	        xmlStr = xmlStr.append( "</Holidays>");
+
+	        rs.close();
+	        stmt.close();
+
+			String xmlFileName =  "ohrm_holiday.xml" ;
+    		File xmlFile = new File( EXPORT_LOC + xmlFileName );
+    		FileOutputStream out = new FileOutputStream(xmlFile, false);
+    		PrintStream p = new PrintStream(out); 
+    		p.println(xmlStr);
+    		p.close();
+    		
+			SendFileFTP( EXPORT_LOC,  xmlFileName  );
+        }
+        catch (Exception e)
+        {
+        	log.log (Level.SEVERE,"ExportToOrangeHrm - " + sql, e);
+        }
+
+    	
+    }
+
+    
+    private void sendProvince()
+    {
+    	StringBuffer xmlStr = new StringBuffer( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+    	
+    	String sql = "Select * from c_region" ;
+    	PreparedStatement stmt = DB.prepareStatement(sql, null);
+        try
+        {
+        	MRegion Region = null;
+        	
+			String EXPORT_LOC =  PgiUtil.getSolsticeParameter(getCtx(), "PayStubPDFPath");
+
+			xmlStr = xmlStr.append( "<Provinces>");
+
+	        ResultSet rs = stmt.executeQuery();
+	        while(rs.next())
+	        {
+				xmlStr = xmlStr.append( "<Province>");
+
+				Region = new MRegion( getCtx(), rs, null);
+				MCountry Country = new MCountry( getCtx(), Region.getC_Country_ID(), null);
+
+				xmlStr = xmlStr.append(  addElement("id" , String.valueOf( Region.getC_Region_ID() ) ) );
+				xmlStr = xmlStr.append( addElement("Province_name" , Region.getDescription() )) ;
+				xmlStr = xmlStr.append( addElement("Province_code" , Region.getName() )) ;
+				xmlStr = xmlStr.append( addElement("Cou_code" , Country.getCountryCode() )) ;
+
+
+				xmlStr = xmlStr.append( "</Province>");
+	        }
+
+	        xmlStr = xmlStr.append( "</Province>");
+
+	        rs.close();
+	        stmt.close();
+
+	        // Create an instance of SimpleDateFormat used for formatting 
+			// the string representation of date (month/day/year)
+			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+
+			// Get the date today using Calendar object.
+			Date today = Calendar.getInstance().getTime();        
+			// Using DateFormat format method we can create a string 
+			// representation of a date with the defined format.
+			String reportDate = df.format(today);
+			
+			String xmlFileName =  "hs_hr_province.xml" ;
+    		File xmlFile = new File( EXPORT_LOC + xmlFileName );
+    		FileOutputStream out = new FileOutputStream(xmlFile, false);
+    		PrintStream p = new PrintStream(out); 
+    		p.println(xmlStr);
+    		p.close();
+    		
+			SendFileFTP( EXPORT_LOC,  xmlFileName  );
+        }
+        catch (Exception e)
+        {
+        	log.log (Level.SEVERE,"ExportToOrangeHrm - " + sql, e);
+        }
+
+    	
+    }
+   
+    
+    
+	private String getIP_Address() 
+	{
+		return  "ftp.solsticeplus.ca";
+    }
+
+	private String getUserName() 
+	{
+		return "hclPayStub@solsticeplus.ca";
+    }
+
+	private String getPassword() 
+	{
+		return "THCXMMSlGeu8";
+    }
+
+	
+	private boolean SendFileSFTP( String path, String fileName) throws Exception
+	{
+		boolean success = true;
+		
+		String hostname = getIP_Address() ;
+		String username = getUserName();
+		String password = getPassword();
+
+		String cmd = null;
+//		SshConnectionProperties properties;
+		SshClient ssh = new SshClient();
+		
+		try {
+		  // Connect to the host
+		  ssh.connect(hostname,new AlwaysAllowingConsoleKnownHostsKeyVerification());
+		  // Create a password authentication instance
+		  PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
+		  // Get the users name
+		  pwd.setUsername(username);
+		  // Get the password
+		  pwd.setPassword(password);
+		  // Try the authentication
+		  int result = ssh.authenticate(pwd);
+		  // Evaluate the result
+		  if (result == AuthenticationProtocolState.COMPLETE) 
+		  {
+				log.info("Connected to " + getIP_Address() + " as " + getUserName());
+	
+			    // The connection is authenticated we can now do some real work!
+			    SftpClient sftp = ssh.openSftpClient();
+	
+			    // Change directory
+//			    cmd = "cd /" + getCornerstoneServerPath();
+//			    sftp.cd("/" + getCornerstoneServerPath());
+	
+			    // Change the local directory
+			    cmd = "lcd " + path;
+			    sftp.lcd(path);
+	
+			    // Upload a file
+				log.info("Upload file " + fileName);
+				cmd = "put " + fileName;
+				sftp.put(fileName);
+		        // Quit
+		        sftp.quit();
+		        ssh.disconnect();
+	      }
+		  else
+		  {
+				log.warning("Could NOT connect to " + getIP_Address() + " as " + getUserName());
+		  }
+		}
+		catch (Exception e) {
+			log.log(Level.SEVERE, cmd, e);
+			success = false;
+			throw new CompiereUserError( "Export to Cornerstone error : " + e.toString());
+		}
+		return success;
+		
+	}
+
+	public class AlwaysAllowingConsoleKnownHostsKeyVerification extends
+    ConsoleKnownHostsKeyVerification {
+
+		public AlwaysAllowingConsoleKnownHostsKeyVerification()
+		        throws InvalidHostFileException {
+		    super();
+		    // Don't not do anything else
+		}
+	
+		@Override
+		public void onHostKeyMismatch(String s, SshPublicKey sshpublickey,
+		        SshPublicKey sshpublickey1) {
+		    try
+		    {
+		        System.out.println("The host key supplied by " + s + " is: " + sshpublickey1.getFingerprint());
+		        System.out.println("The current allowed key for " + s + " is: " + sshpublickey.getFingerprint());
+		        System.out.println("~~~Using Custom Key verification, allowing to pass through~~~");
+		        allowHost(s, sshpublickey, true);
+		    }
+		    catch(Exception exception)
+		    {
+		        exception.printStackTrace();
+		    }
+		}
+	
+		@Override
+		public void onUnknownHost(String s, SshPublicKey sshpublickey) {
+		    try
+		    {
+		        System.out.println("The host " + s + " is currently unknown to the system");
+		        System.out.println("The host key fingerprint is: " + sshpublickey.getFingerprint());
+		        System.out.println("~~~Using Custom Key verification, allowing to pass through~~~");
+		        allowHost(s, sshpublickey, true);
+		    }
+		    catch(Exception exception)
+		    {
+		        exception.printStackTrace();
+		    }
+		}
+	
+	}	
+
+	private boolean SendFileFTP( String path, String fileName)
+	{
+		boolean success = true;
+		
+		FTPClient ftp = new FTPClient();
+		try
+		{
+			ftp.connect (getIP_Address());
+			if (ftp.login (getUserName(), getPassword()))
+				log.info("Connected to " + getIP_Address() + " as " + getUserName());
+			else
+			{
+				log.warning("Could NOT connect to " + getIP_Address() + " as " + getUserName());
+				return false;
+			}
+		}
+		catch (Exception e)
+		{
+			log.log(Level.SEVERE, "Could NOT connect to " + getIP_Address() 
+				+ " as " + getUserName(), e);
+			return false;
+		}
+
+		String cmd = null;
+
+		try
+		{
+			cmd = "BINARY";
+			ftp.setFileType(FTP.BINARY_FILE_TYPE);
+			// Open the file and output streams
+			InputStream input;
+			input = new FileInputStream( path + fileName );
+
+			cmd = "put " + fileName;
+			
+			ftp.deleteFile(fileName);
+			ftp.remoteStore(fileName);
+			ftp.storeFile(fileName, input);
+			
+			input.close();
+
+		}
+		catch (Exception e)
+		{
+			log.log(Level.SEVERE, cmd, e);
+			success = false;
+		}
+
+		//	Logout from the FTP Server and disconnect
+		try
+		{
+			cmd = "logout";
+			ftp.logout();
+			log.log(Level.FINE, " FTP logged out");
+			cmd = "disconnect";
+			ftp.disconnect();
+		}
+		catch (Exception e)
+		{
+			log.log(Level.SEVERE, cmd, e);
+		}
+		ftp = null;
+		return success;
+
+	}
+
+	Properties ctx = Env.getCtx();
+	
+	public ExportToOrangeHRM( boolean standalone ) throws Exception
+	{
+		Env.setContext( ctx, "#AD_Client_ID", 1000004);
+		Env.setContext( ctx, "#AD_Org_ID", 0);
+		this.doIt();
+	}
+
+    private Properties getCtx()
+    {
+    	return Env.getCtx();
+    }
+
+	
+	/**************************************************************************
+	 * 	Export Data
+	 */
+		public static void main(String[] args) throws Exception{
+			System.out.println("Export To OrangeHRM Solutions");
+			System.out.println("----------------------------------");
+
+			Compiere.startup(true);
+			//
+			String postdata = null;
+			try
+			{
+			
+				ExportToOrangeHRM exp = new ExportToOrangeHRM( true );
+//				postdata = exp.getPostdata();
+			}
+			catch (Exception e) {
+				log.log(Level.SEVERE, "*ERROR export to TicTac Solutions Fail", e);
+			}
+			System.out.println("Export To TicTac Solutions = " + postdata );
+		}
+			
+
+
+
+}
+
+

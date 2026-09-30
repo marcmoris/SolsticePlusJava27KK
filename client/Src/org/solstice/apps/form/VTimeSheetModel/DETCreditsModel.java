@@ -1,0 +1,114 @@
+/*
+ * Created on 1 sept. 2005
+ *
+ */
+package org.solstice.apps.form.VTimeSheetModel;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Vector;
+
+import javax.swing.JLabel;
+
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupCMDescription;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupCredits;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupVariationType;
+
+public class DETCreditsModel extends DETableModel {
+	
+    private static final String[] COLUMN_NAMES = { 
+        Msg.translate(Env.getCtx(), "Origine" ),
+        Msg.translate(Env.getCtx(), "Credits" ), 
+        Msg.translate(Env.getCtx(), "MovementDate" ), 
+        Msg.translate(Env.getCtx(), "Type" ), 
+        Msg.translate(Env.getCtx(), "Variation" ), 
+        Msg.translate(Env.getCtx(), "Amt_Reserve" ), 
+        Msg.translate(Env.getCtx(), "Description" ),
+//        Msg.translate(Env.getCtx(), "Description" ),
+        ""
+    };
+    
+    public static final int[] COLUMN_WIDTHS = {
+    	30, 200, 150, 40, 88, 88, 250, 20		
+    };
+
+    public int[] getColumnWidths() { return COLUMN_WIDTHS; }
+    
+    public static final int COL_ORIGINE = 0;
+    public static final int COL_CREDITS = 1;
+    public static final int COL_DATE = 2;
+    public static final int COL_TYPE = 3;
+    public static final int COL_VARIATION = 4;
+    public static final int COL_DESCRIPTION = 6;
+    public static final int COL_AMTRESERVE = 5;
+//    public static final int COL_CB_DESCRIPTION = 6;
+    public static final int COL_DELETE = 7;
+    public static final int COL_ID = 8;
+    public static final int COL_UNITS = 9;
+    public static final int COL_VALEUR_INIT = 10;
+    
+    public DETCreditsModel( Vector data, 
+            LookupCredits credits, 
+//            LookupCMDescription descriptions,
+            LookupVariationType typeVariation) {
+    	super( data, COLUMN_NAMES, true );
+    	
+        setAlignment( new int[] {COL_VARIATION}, JLabel.RIGHT );
+        setAlignment( new int[] {COL_DELETE}, JLabel.CENTER );
+        setAlignment( new int[] {COL_AMTRESERVE}, JLabel.RIGHT );
+        
+        setComboData( COL_CREDITS, credits );
+ //       setComboData( COL_CB_DESCRIPTION, descriptions );
+        setComboData( COL_TYPE, typeVariation );
+    }
+    
+	public boolean hasUnits( int col ) { return col == COL_VARIATION; }
+	public String getUnits( int row, int col ) { return col == COL_VARIATION ? (String)getValueAt(row, COL_UNITS) : null; }
+	
+	public Object[] newRow() {
+		Object[] row = new Object[getColumnCount()+4];
+		row[COL_ORIGINE] = "AJT";
+		row[COL_DATE] = "AAAA-MM-JJ";
+		row[COL_VALEUR_INIT] = BigDecimal.valueOf(0);
+		row[COL_TYPE] = "AJ";
+		return row;
+	}
+
+    public boolean isCellEditable(int row, int col) {
+/*        if( col == COL_ORIGINE ) return false;
+        if( col == COL_TYPE ) return false;
+        return super.isCellEditable(row, col);
+        */
+        if( col == COL_ORIGINE ) return false;
+        if( col == COL_TYPE ) return true;
+        if( col == COL_AMTRESERVE ) return false;
+
+        Object val = getValueAt(row, COL_ORIGINE);
+        if ( val == null ) val = "AJT";
+        if( indexNewRow() == row ) return super.isCellEditable(row, col);
+        if( isDataRow(row) && "AJT".equals(val) ) return super.isCellEditable(row, col);
+        return false;
+    	
+    }
+	
+	public Class getColumnClass(int col) {
+		if( col == COL_DATE ) return Date.class;
+		if( col == COL_VARIATION ) return BigDecimal.class;
+		if( col == COL_AMTRESERVE ) return BigDecimal.class;
+		if( col == COL_DELETE ) return Boolean.class;
+		return super.getColumnClass(col);
+	}
+	
+    public void setValueAt(Object val, int row, int col) {
+        super.setValueAt(val, row, col);
+//        if( col == COL_CB_DESCRIPTION && val != null ) {
+//            super.setValueAt(((KeyNamePair)val).getName(), row, COL_DESCRIPTION);
+//        }
+    }
+	
+	public int indexDeleteColumn() { return COL_DELETE; }
+
+
+}

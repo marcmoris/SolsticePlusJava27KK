@@ -1,0 +1,162 @@
+<!-- BEGIN: main --> 
+<html>
+	<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<link rel="stylesheet" type="text/css" href="styles/siq.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="https://rh-essai.soquij.local/solstice/soquij/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/thickbox.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/corpo.css" />
+
+	<!--[if IE]>
+		<link rel="stylesheet" type="text/css" media="screen" href="/solstice/soquij/css/principal_ie.css" />
+	<![endif]-->
+	
+	<!--[if IE 6]>
+		<script type="text/javascript" src="/js/iepngfix_tilebg.js" media="screen"></script>
+		<link rel="stylesheet" type="text/css" media="screen" href="/solstice/soquij/css/principal_ie6.css" />
+	<![endif]-->
+
+	<!--[if IE 8]>
+		<style type="text/css">
+			#sous_navig_catalogue ul ul li {
+				display:inline-block;
+			}
+		</style>
+	<![endif]-->
+
+	<link rel="stylesheet" type="text/css" media="print" href="/solstice/soquij/css/print.css" />
+
+<script type="text/javascript">
+		var section_id = 1;
+		var langue = 'fr';
+		var no_focus_on_load = false;
+	</script>
+	<style>
+		/*li {line-height: 1.2}
+		label {display:inline;font-size: 12px;}
+		#login_azimut_rapide input[type=text] {
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+		.contenu_padding .bloc_deroulant {
+			margin: 0;
+		}	*/		
+	</style>
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="/solstice/soquij/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/solstice/soquij/js/jquery-cookie.js"></script>
+	<script type="text/javascript" src="/solstice/soquij/js/taille_police.js"></script>
+	<script type="text/javascript" src="/solstice/soquij/js/swfobject.js"></script>
+	<script type="text/javascript" src="/solstice/soquij/js/thickbox.js"></script>
+	<script type="text/javascript" src="/solstice/soquij/js/fonctions.js?v=3"></script>
+
+	
+	<link rel="shortcut icon" href="/solstice/soquij/favicon.ico?v=3" />
+
+			<link rel="alternate" type="application/rss+xml" title="SOQUIJ - Nouvelles et communiqu&eacute;s" href="/fr/fils-rss/nouvelles-et-communiques.xml" />
+
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-3760448-1']);
+	_gaq.push(['_setDomainName', '.soquij.qc.ca']);
+			_gaq.push(['_trackPageview']);
+	
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+
+</script>
+		<title>Menu principal</title>
+	</head>
+	<body>
+		<div id="fond_site">
+			<div id="wrapper">
+			<div id="utilitaires">
+						
+			<ul>
+					
+					<li style="display:inline;"><a href="/solstice/soquij/fr/nous-joindre" >Nous joindre</a>&nbsp;<strong>|</strong>&nbsp;</li>
+					<li style="display:inline;"><a href="/solstice/soquij/fr/english" >English</a>&nbsp;<strong>|</strong>&nbsp;</li>
+				</ul>
+	
+					
+					<span id="taille_police">
+						<a href="#" id="augmenter"><img src="/solstice/soquij/images/ul/graphiques/police_plus.gif" width="9" height="9" alt="Agrandir la police" title="Agrandir la police" /></a>&nbsp; A &nbsp;<a href="#" id="diminuer"><img src="/solstice/soquij/images/ul/graphiques/police_moins.gif" width="9" height="9" alt="Diminuer la police" title="Diminuer la police" /></a>
+					</span>
+					
+					<form method="get" class="form_recherche" action="/solstice/soquij/fr/recherche">						<input type="text" id="mots_cles" class="mots_cles" value="Recherche" />
+						<input type="image" class="btn_recherche_rapide" src="/solstice/soquij/images/soquij2013/fleche_recherche_top.gif" />
+					</form>
+				</div>
+				
+				<div id="entete">
+		<div id="slogan"><img src="/solstice/soquij/images/fr/titrages/slogan.gif" width="93" height="31" alt="Complice de vos succ&egrave;s" /></div>
+<h1><a href="/solstice/soquij/fr"><img src="/solstice/soquij/images/soquij2013/logo2013.png" width="352" height="54" alt="Soci&eacute;t&eacute; qu&eacute;b&eacute;coise d'information juridique" title="Soci&eacute;t&eacute; qu&eacute;b&eacute;coise d'information juridique" /></a></h1>											
+<ul id="navig_corpo">
+			<li style="display:inline;"><a href="/solstice/soquij/fr">{CIE_NAME}</a></li>
+	</ul>
+	<!-- M&eacute;dias sociaux -->
+	<div id="medias_sociaux">
+		<a href="http://facebook.com/soquij" name="Facebook" target="_blank"><img src="/solstice/soquij/images/ul/icones/facebook.png" width="16" height="16" alt="Facebook. S'ouvrira dans une nouvelle fenêtre." title="Facebook" /></a>
+		<a href="http://twitter.com/soquij" name="Twitter" target="_blank"><img src="/solstice/soquij/images/ul/icones/twitter.png" width="16" height="16" alt="Twitter. S'ouvrira dans une nouvelle fenêtre." title="Twitter" /></a>
+		<a href="http://www.linkedin.com/company/soquij" name="LinkedIn" target="_blank"><img src="/solstice/soquij/images/ul/icones/linkedin.png" width="16" height="16" alt="LinkedIn. S'ouvrira dans une nouvelle fenêtre." title="LinkedIn" /></a>
+	</div>
+	<script type="text/javascript">
+		$('#medias_sociaux a').click(function(){
+			if (_gaq) {
+				_gaq.push(['_trackEvent', 'Social', document.title.split(' - ')[0], $(this).attr('name')]);
+			}
+		});
+	</script>
+
+</div>
+<div id="colonne_principale">
+<div id="conteneur_colonnes">
+
+
+
+		<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+				<td colspan="2"><H3 align="right">{welcome}</H3></td>
+			</tr>
+			<tr>
+				<td colspan="2"><H5 align="right">{welcome2}</H5></td>
+			</tr>
+			<tr>
+				<td colspan="2"><H5 align="right">{newEmail}</H5></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="pagetitle">Liste des applications disponibles</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				   <ul>
+				   	{listeApplications}
+				   </ul>
+				</td>
+			</tr>	
+			<tr>
+			{FOOTING}	
+			</tr>
+		</table>
+</div>		
+</div>	
+</div>	
+	</body>
+</html>
+<!-- END: main -->

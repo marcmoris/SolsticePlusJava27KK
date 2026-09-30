@@ -1,0 +1,34 @@
+/.metadata/
+/bin/
+*.class
+*.zip
+client/build/
+dbPort/build/
+lib/
+looks/build/
+print/build/
+tools/build/
+print/Print.jar
+looks/CLooks.jar
+extend/build/
+base/Base.jar
+dbPort/dbPort.jar
+extend/Extend.jar
+install/
+serverApps/build/
+serverRoot/build/
+solsticeWebModules/build/
+utils_dev/build.log
+webCM/deploy/compiereWebCMbase.war
+webStore/build/deploy/compiereWebStoreBase.war
+
+# Node.js dependencies and build output
+**/node_modules/
+**/dist/
+npm-debug.log*
+
+# Temporary files and OS artifacts
+/tmp/
+*.tar.gz
+.DS_Store
+Thumbs.db

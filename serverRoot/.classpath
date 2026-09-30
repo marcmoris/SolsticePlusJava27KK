@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/server"/>
+	<classpathentry kind="src" path="src/main/servlet"/>
+	<classpathentry kind="src" path="src/main/ejb"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="add-exports" value="java.naming/com.sun.jndi.ldap=ALL-UNNAMED"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="accessible" pattern="com/sun/jndi/ldap/**"/>
+			<accessrule kind="accessible" pattern="com/sun/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="/tools"/>
+	<classpathentry kind="src" path="/dbPort"/>
+	<classpathentry kind="src" path="/base"/>
+	<classpathentry kind="src" path="/looks"/>
+	<classpathentry kind="lib" path="/interfaces/Interfaces.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/print"/>
+	<classpathentry kind="output" path="lib"/>
+</classpath>

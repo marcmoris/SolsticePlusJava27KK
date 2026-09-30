@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du T4 fédéral
+-->
+<report view="RV_P_P_FORM_T4" fontFamily="Serif" fontSize="10" fontStyle="plain" recordPerPage="2" marginX="24" marginY="20" deltaY="402">
+   <field id="Note"   x="150" y="67" align="currency" />
+   <field id="Case14" x="405" y="67" align="currency" />
+   <field id="Case22" x="535" y="67" align="currency" />
+   <field id="EmployerValue" x="42" y="104" displayAccess="2" />
+   <field id="Case10" x="295" y="104" align="currency" />
+   <field id="Case16" x="405" y="104" align="currency" />
+   <field id="Case24" x="535" y="104" align="currency" />
+   <field id="Case12" x="42" y="141" />
+   <field id="Case28" x="218" y="141" align="center" />
+   <field id="Case29" x="295" y="141" align="center" />
+   <field id="Case17" x="405" y="141" align="currency" />
+   <field id="Case26" x="535" y="141" align="currency" />
+   <field id="Case18" x="405" y="174" align="currency" />
+   <field id="Case44" x="535" y="174" align="currency" />
+   <field id="Case20" x="405" y="211" align="currency" />
+   <field id="Case46" x="535" y="211" align="currency" />
+   <field id="Case52" x="405" y="248" align="currency" />
+   <field id="Case50" x="470" y="248" />
+   <field id="Case55" x="405" y="284" align="currency" />
+   <field id="Case56" x="535" y="284" align="currency" />
+   <field id="Year" x="360" y="31" fontSize="12" align="center" />
+   <field id="DescriptionCompagnie" x="22" y="22" />
+   <field id="EmployerAdresse1" x="22" y="34" />
+   <field id="EmployerAdresse2" x="22" y="45" />
+   <field id="EmployerVille" x="22" y="56" />
+   <field id="EmployeeName" x="36" y="188" />
+   <field id="EmployeeAdresse" x="36" y="202" />
+   <field id="EmployeeAdresse2" x="36" y="214" />
+   <field id="EmployeeVille" x="36" y="225" />
+   <field id="DistributionValue" x="177" y="188" />
+   <fieldTable>
+      <addField labelX="107" labelY="318" x="211" y="318" align="currency" labelAlign="center" />
+      <addField labelX="267" labelY="318" x="371" y="318" align="currency" labelAlign="center" />
+      <addField labelX="428" labelY="318" x="532" y="318" align="currency" labelAlign="center" />
+      <addField labelX="107" labelY="349" x="211" y="349" align="currency" labelAlign="center" />
+      <addField labelX="267" labelY="349" x="371" y="349" align="currency" labelAlign="center" />
+      <addField labelX="428" labelY="349" x="532" y="349" align="currency" labelAlign="center" />
+      <addValue id="Case30" label="30" />
+      <addValue id="Case32" label="32" />
+      <addValue id="Case34" label="34" />
+      <addValue id="Case36" label="36" />
+      <addValue id="Case38" label="38" />
+      <addValue id="Case40" label="40" />
+      <addValue id="Case42" label="42" />
+      <addValue id="Case74" label="74" />
+      <addValue id="Case77" label="77" />
+      <addValue id="Case84" label="84" />
+</fieldTable>
+</report>

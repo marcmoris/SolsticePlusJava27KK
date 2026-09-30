@@ -1,0 +1,209 @@
+/******************************************************************************
+ * Product: Compiere ERP & CRM Smart Business Solution                        *
+ * Copyright (C) 1999-2007 ComPiere, Inc. All Rights Reserved.                *
+ * This program is free software;
+ you can redistribute it and/or modify it    *
+ * under the terms version 2 of the GNU General Public License as published   *
+ * by the Free Software Foundation. This program is distributed in the hope   *
+ * that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied *
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.           *
+ * See the GNU General Public License for more details.                       *
+ * You should have received a copy of the GNU General Public License along    *
+ * with this program;
+ if not, write to the Free Software Foundation, Inc.,    *
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.                     *
+ * For the text or an alternative of this public license, you may reach us    *
+ * ComPiere, Inc., 2620 Augustine Dr. #245, Santa Clara, CA 95054, USA        *
+ * or via info@compiere.org or http://www.compiere.org/license.html           *
+ *****************************************************************************/
+package org.compiere.model;
+
+/** Generated Model - DO NOT CHANGE */
+import java.util.*;
+import java.sql.*;
+import java.math.*;
+import org.compiere.util.*;
+/** Generated Model for C_OrgAssignment
+ *  @author Jorg Janke (generated) 
+ *  @version Release 2.6.1 - $Id: X_C_OrgAssignment.java,v 1.1 2007/07/18 14:42:35 marmor01 Exp $ */
+public class X_C_OrgAssignment extends PO
+{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/** Standard Constructor
+@param ctx context
+@param C_OrgAssignment_ID id
+@param trxName transaction
+*/
+public X_C_OrgAssignment (Properties ctx, int C_OrgAssignment_ID, String trxName)
+{
+super (ctx, C_OrgAssignment_ID, trxName);
+/** if (C_OrgAssignment_ID == 0)
+{
+setAD_User_ID (0);
+setC_OrgAssignment_ID (0);
+setOrgAssignmentType (null);
+setValidFrom (new Timestamp(System.currentTimeMillis()));
+setValidTo (new Timestamp(System.currentTimeMillis()));
+}
+ */
+}
+/** Load Constructor 
+@param ctx context
+@param rs result set 
+@param trxName transaction
+*/
+public X_C_OrgAssignment (Properties ctx, ResultSet rs, String trxName)
+{
+super (ctx, rs, trxName);
+}
+/** AD_Table_ID=585 */
+public static final int Table_ID=585;
+
+/** TableName=C_OrgAssignment */
+public static final String Table_Name="C_OrgAssignment";
+
+protected static KeyNamePair Model = new KeyNamePair(585,"C_OrgAssignment");
+
+protected BigDecimal accessLevel = new BigDecimal(2);
+/** AccessLevel
+@return 2 - Client 
+*/
+protected int get_AccessLevel()
+{
+return accessLevel.intValue();
+}
+/** Load Meta Data
+@param ctx context
+@return PO Info
+*/
+protected POInfo initPO (Properties ctx)
+{
+POInfo poi = POInfo.getPOInfo (ctx, Table_ID);
+return poi;
+}
+/** Info
+@return info
+*/
+public String toString()
+{
+StringBuffer sb = new StringBuffer ("X_C_OrgAssignment[").append(get_ID()).append("]");
+return sb.toString();
+}
+/** Set User/Contact.
+@param AD_User_ID User within the system - Internal or Business Partner Contact */
+public void setAD_User_ID (int AD_User_ID)
+{
+if (AD_User_ID < 1) throw new IllegalArgumentException ("AD_User_ID is mandatory.");
+set_Value ("AD_User_ID", new Integer(AD_User_ID));
+}
+/** Get User/Contact.
+@return User within the system - Internal or Business Partner Contact */
+public int getAD_User_ID() 
+{
+Integer ii = (Integer)get_Value("AD_User_ID");
+if (ii == null) return 0;
+return ii.intValue();
+}
+/** Set Org Assignment.
+@param C_OrgAssignment_ID Assigment to (transaction) Organization */
+public void setC_OrgAssignment_ID (int C_OrgAssignment_ID)
+{
+if (C_OrgAssignment_ID < 1) throw new IllegalArgumentException ("C_OrgAssignment_ID is mandatory.");
+set_ValueNoCheck ("C_OrgAssignment_ID", new Integer(C_OrgAssignment_ID));
+}
+/** Get Org Assignment.
+@return Assigment to (transaction) Organization */
+public int getC_OrgAssignment_ID() 
+{
+Integer ii = (Integer)get_Value("C_OrgAssignment_ID");
+if (ii == null) return 0;
+return ii.intValue();
+}
+/** Set Description.
+@param Description Optional short description of the record */
+public void setDescription (String Description)
+{
+if (Description != null && Description.length() > 255)
+{
+log.warning("Length > 255 - truncated");
+Description = Description.substring(0,254);
+}
+set_Value ("Description", Description);
+}
+/** Get Description.
+@return Optional short description of the record */
+public String getDescription() 
+{
+return (String)get_Value("Description");
+}
+
+/** OrgAssignmentType AD_Reference_ID=401 */
+public static final int ORGASSIGNMENTTYPE_AD_Reference_ID=401;
+/** Matrix = M */
+public static final String ORGASSIGNMENTTYPE_Matrix = "M";
+/** Other = O */
+public static final String ORGASSIGNMENTTYPE_Other = "O";
+/** Primary = P */
+public static final String ORGASSIGNMENTTYPE_Primary = "P";
+/** Secondary = S */
+public static final String ORGASSIGNMENTTYPE_Secondary = "S";
+/** Temporary = T */
+public static final String ORGASSIGNMENTTYPE_Temporary = "T";
+/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+public boolean isOrgAssignmentTypeValid (String test)
+{
+return test.equals("M") || test.equals("O") || test.equals("P") || test.equals("S") || test.equals("T");
+}
+/** Set Assignment Type.
+@param OrgAssignmentType Organization Assignment Type */
+public void setOrgAssignmentType (String OrgAssignmentType)
+{
+if (OrgAssignmentType == null) throw new IllegalArgumentException ("OrgAssignmentType is mandatory");
+if (!isOrgAssignmentTypeValid(OrgAssignmentType))
+throw new IllegalArgumentException ("OrgAssignmentType Invalid value - " + OrgAssignmentType + " - Reference_ID=401 - M - O - P - S - T");
+if (OrgAssignmentType.length() > 1)
+{
+log.warning("Length > 1 - truncated");
+OrgAssignmentType = OrgAssignmentType.substring(0,0);
+}
+set_Value ("OrgAssignmentType", OrgAssignmentType);
+}
+/** Get Assignment Type.
+@return Organization Assignment Type */
+public String getOrgAssignmentType() 
+{
+return (String)get_Value("OrgAssignmentType");
+}
+/** Set Valid from.
+@param ValidFrom Valid from including this date (first day) */
+public void setValidFrom (Timestamp ValidFrom)
+{
+if (ValidFrom == null) throw new IllegalArgumentException ("ValidFrom is mandatory.");
+set_Value ("ValidFrom", ValidFrom);
+}
+/** Get Valid from.
+@return Valid from including this date (first day) */
+public Timestamp getValidFrom() 
+{
+return (Timestamp)get_Value("ValidFrom");
+}
+/** Set Valid to.
+@param ValidTo Valid to including this date (last day) */
+public void setValidTo (Timestamp ValidTo)
+{
+if (ValidTo == null) throw new IllegalArgumentException ("ValidTo is mandatory.");
+set_Value ("ValidTo", ValidTo);
+}
+/** Get Valid to.
+@return Valid to including this date (last day) */
+public Timestamp getValidTo() 
+{
+return (Timestamp)get_Value("ValidTo");
+}
+}

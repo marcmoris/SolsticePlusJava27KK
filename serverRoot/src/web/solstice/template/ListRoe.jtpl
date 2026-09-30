@@ -1,0 +1,83 @@
+<!-- BEGIN: main -->
+<html>
+<script type="text/javascript" src="scripts/comboBoxAutoComplete.js"></script>
+<!-- HEADING: -->
+
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> </td>
+	</tr>
+	<tr>
+		<td colspan="2"><div class="pagetitle">{TITLE}</div></td>
+	</tr>
+	<tr>
+		<td colspan="2">	</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+	<script language="JavaScript">
+		function search()
+		{
+			document.mainForm.action.value = 'search';
+			document.mainForm.submit();
+		}
+	</script> 
+
+	<form name="mainForm" method="post">
+
+		<input type="hidden" name="action">
+		<p class="sectitle">Recherche</p>
+		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			<tr>
+				<td class="tdlabel">Employ&eacute;</td>
+
+			</tr>
+			<tr>
+				<td class="tdfield">{ComboBoxEmployee}</td>
+			</tr>
+</table>
+	<div align="right">
+		<input type="button" onClick="search();" value="Lancer la recherche">
+	</div>
+<p class="sectitle">R&eacute;sultats de la recherche</p>
+<table border="0" width="100%">
+<tr>
+<td class="tdlabel">N&deg; de s&eacute;rie</td>
+<td class="tdlabel">Premier jour de travail</td>
+<td class="tdlabel">Dernier jour pay&eacute;</td>
+<td class="tdlabel">Date de fin de la derni&egrave;re p&eacute;riode de paie</td>
+</tr>
+
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}"><a href="{RELEVE}.jsp?employeeRoeId={NOSERIE}">{NOSERIE}</a></td>
+<td class="{CELLCLASS}">{DATE1}</td>
+<td class="{CELLCLASS}">{DATE2}</td>
+<td class="{CELLCLASS}">{DATE3}</td>
+</tr>
+<!-- END: line --> 
+</table>
+<!-- BEGIN: new --> 
+  <p align="right">
+      <input type="button" value="Nouveau" onClick="document.location = 'releve.jsp?employeeId={EMPLOYEE_ID}';">
+  </p>
+<!-- END: new --> 
+
+</form>
+</td>
+</tr>
+<tr>
+{FOOTING}
+</tr>
+
+</table>
+</div>		
+</div>	
+</div>	
+</body>
+</html>
+
+<!-- END: main -->

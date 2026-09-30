@@ -1,0 +1,218 @@
+/*
+ * Created on 31 août 2005
+ *
+ */
+package org.solstice.apps.form.VTimeSheetModel;
+
+import java.sql.Timestamp;
+
+import org.compiere.model.Lookup;
+import org.compiere.util.CLogger;
+import org.compiere.util.KeyNamePair;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.AbstractKNPModel;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.AbstractKNPModelPeriod;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupActivity;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupAssignment;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupCMDescription;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupCredits;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupDeduction;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupGain;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupOrganization;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupPeriod;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupPeriodOrigin;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupPeriodSubsequent;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupSalesRegion;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupSchedule;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupTaxableBenefit;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupVariationType;
+import org.solstice.apps.form.VTimeSheetModel.Lookup.LookupWeek;
+
+import solstice.model.P_Period;
+
+
+public class ModelLookup {
+
+	protected CLogger s_log = CLogger.getCLogger (this.getClass());
+	
+	private LookupAssignment m_assignment;
+	private LookupActivity m_activity;
+	private LookupPeriod m_period;
+	private LookupPeriodOrigin m_periodOrigin;
+	private LookupPeriodSubsequent m_periodSubsequent;
+	private LookupGain m_gain;
+	private LookupWeek m_week;
+	private LookupSchedule m_schedule;
+	private LookupDeduction m_deduction;
+	private LookupCredits m_credits;
+	private LookupTaxableBenefit m_taxableBenefit;
+	private LookupCMDescription m_cmDescription;
+	private LookupVariationType m_variationType;
+	private LookupSalesRegion m_salesRegion;
+	private LookupOrganization m_org;
+	private static int numberOfWeek = 2;
+
+	public ModelLookup( ) {
+		m_assignment = new LookupAssignment();
+		m_activity = new LookupActivity();
+		m_period = new LookupPeriod();
+		m_periodOrigin = new LookupPeriodOrigin();
+		m_periodSubsequent = new LookupPeriodSubsequent();
+		m_gain = new LookupGain();
+		m_schedule = new LookupSchedule();
+		m_deduction = new LookupDeduction();
+		m_credits = new LookupCredits();
+		m_taxableBenefit = new LookupTaxableBenefit();
+		m_cmDescription = new LookupCMDescription();
+		m_variationType = new LookupVariationType();
+		m_week = new LookupWeek( numberOfWeek);
+		m_salesRegion = new LookupSalesRegion();
+		m_org = new LookupOrganization();
+		
+	}
+
+	public ModelLookup( int numberOfWeek ) 
+	{
+		this.setNumberOfWeek(numberOfWeek);
+		m_assignment = new LookupAssignment();
+		m_activity = new LookupActivity();
+		m_period = new LookupPeriod();
+		m_periodOrigin = new LookupPeriodOrigin();
+		m_periodSubsequent = new LookupPeriodSubsequent();
+		m_gain = new LookupGain();
+		m_schedule = new LookupSchedule();
+		m_deduction = new LookupDeduction();
+		m_credits = new LookupCredits();
+		m_taxableBenefit = new LookupTaxableBenefit();
+		m_cmDescription = new LookupCMDescription();
+		m_variationType = new LookupVariationType();
+		m_week = new LookupWeek( numberOfWeek);
+		m_salesRegion = new LookupSalesRegion();
+		m_org = new LookupOrganization();
+	}
+	
+	public void setNumberOfWeek( int numberOfWeek ) {
+		ModelLookup.numberOfWeek = numberOfWeek;
+		m_week = new LookupWeek( numberOfWeek);
+	}
+	
+	private int m_lastEmployeeId = -1;
+	private Timestamp m_lastEffectIn = null;
+
+	public void invalidateCache() {
+		m_lastEmployeeId = -1;
+		m_lastEffectIn = null;
+	}
+
+	public void setEmployeeId( final int employeeId, final Timestamp effectIn) {
+		if (employeeId == m_lastEmployeeId && effectIn != null && effectIn.equals(m_lastEffectIn)) {
+			return;
+		}
+		m_lastEmployeeId = employeeId;
+		m_lastEffectIn = effectIn;
+		try (java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
+			executor.submit(() -> m_assignment.load(employeeId, effectIn));
+			executor.submit(() -> m_deduction.load(employeeId, effectIn));
+			executor.submit(() -> m_credits.load(employeeId));
+			executor.submit(() -> m_taxableBenefit.load(employeeId));
+		}
+	}
+	
+	public void setPeriod( P_Period period ) {
+		m_period.load(period);
+	}
+
+	public void setPeriodOrigin( P_Period period ) {
+		m_periodOrigin.load(period);
+	}
+
+	public void setPeriodSubsequent( P_Period period ) {
+		m_periodSubsequent.load(period);
+	}
+
+    public AbstractKNPModel getAssignmentModel() { return m_assignment; }
+    public String lookupAssignmentPoste( String assignment ) { return m_assignment.lookupPoste(assignment); }
+    public KeyNamePair lookupAssignment( int key ) { return m_assignment.lookup(key); }
+    public int lookupAssignment( Object obj ) { return m_assignment.lookup(obj); }
+
+    public AbstractKNPModel getActivityModel() { return m_activity; }
+    public KeyNamePair lookupActivity( int key ) { return m_activity.lookup(key); } 
+    public int lookupActivity( Object obj ) { return m_activity.lookup(obj); }
+
+    public AbstractKNPModel getPeriodModel() { return m_period; }
+    public KeyNamePair lookupPeriod( int key ) { return m_period.lookup(key); } 
+    public int lookupPeriod( Object obj ) { return m_period.lookup(obj); }
+
+    public AbstractKNPModelPeriod getPeriodModelOrigin() { return m_periodOrigin; }
+    public KeyNamePair lookupPeriodOrigin( int key ) { return m_periodOrigin.lookup(key); } 
+    public int lookupPeriodOrigin( Object obj ) { return m_periodOrigin.lookup(obj); }
+
+    public AbstractKNPModelPeriod getPeriodModelSubsequent() { return m_periodSubsequent; }
+    public KeyNamePair lookupPeriodSubsequent( int key ) { return m_periodSubsequent.lookup(key); } 
+    public int lookupPeriodSubsequent( Object obj ) { return m_periodSubsequent.lookup(obj); }
+
+    public AbstractKNPModel getGainModel() { return m_gain; }
+    public KeyNamePair lookupGain( int key ) { return m_gain.lookup(key); } 
+    public int lookupGain( Object obj ) { return m_gain.lookup(obj); }
+    public boolean isGainMonetaire( Object obj ) { return m_gain.isMonetaire(obj); }
+    public boolean isGainSansValeur( Object obj ) { return m_gain.isSansValeur(obj); }
+    public boolean isHourlyRateSansValeur( Object obj) {return m_gain.isHourlyRateSansValeur(obj);}
+
+    public AbstractKNPModel getWeekModel() { return m_week; } 
+ 
+    
+    public AbstractKNPModel getScheduleModel() { return m_schedule; }
+    public KeyNamePair lookupSchedule( int key ) { return m_schedule.lookup(key); }
+    public int lookupSchedule( Object obj ) { return m_schedule.lookup(obj); }
+    
+    
+    public AbstractKNPModel getDeductionModel() { return m_deduction; }
+    public KeyNamePair lookupDeduction( int key ) { return m_deduction.lookup(key); } 
+    public int lookupDeduction( Object obj ) { return m_deduction.lookup(obj); }
+
+    public AbstractKNPModel getCreditsModel() { return m_credits; }
+    public KeyNamePair lookupCredits( int key ) { return m_credits.lookup(key); } 
+    public int lookupCredits( Object obj ) { return m_credits.lookup(obj); }
+
+    public AbstractKNPModel getTaxableBenefitModel() { return m_taxableBenefit; }
+    public KeyNamePair lookupTaxableBenefit( int key ) { return m_taxableBenefit.lookup(key); } 
+    public int lookupTaxableBenefit( Object obj ) { return m_taxableBenefit.lookup(obj); }
+    
+    public AbstractKNPModel getCMDescriptionModel() { return m_cmDescription; }
+
+    public AbstractKNPModel getVarationTypeModel() { return m_variationType; }
+    public KeyNamePair lookupVariationType( String key ) { return m_variationType.lookup( key ); }
+
+	
+	
+	public KeyNamePair lookupSalesRegion (int key){
+		return m_salesRegion.lookup(key);
+	}
+	
+	public AbstractKNPModel getSalesRegionModel() {
+		return m_salesRegion;
+	}
+	
+	public int lookupSalesRegion (Object obj) {
+		return m_salesRegion.lookup(obj);
+	}
+
+	public void setSalesRegion(LookupSalesRegion region) {
+		m_salesRegion = region;
+	}
+
+	public KeyNamePair lookupOrg(int key) {
+		return m_org.lookup(key);
+	}
+	
+	public AbstractKNPModel getOrgModel() {
+		return m_org;
+	}
+	
+	public int lookupOrg( Object obj){
+		return m_org.lookup(obj);
+	}
+
+	public void setOrg(LookupOrganization m_org) {
+		this.m_org = m_org;
+	}
+}

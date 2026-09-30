@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du T4A fédéral
+-->
+<report view="RV_P_P_FORM_T4A" fontFamily="Serif" fontSize="10" fontStyle="plain" paperHeight="14" recordPerPage="3" marginX="20" marginY="20" deltaY="287">
+   <field id="Year" x="250" y="14" fontSize="12" />
+   <field id="Case16" x="72" y="43" align="currency" />
+   <field id="Case18" x="150" y="43" align="currency" />
+   <field id="Case20" x="228" y="43" align="currency" />
+   <field id="Case22" x="307" y="43" align="currency" />
+   <field id="Case24" x="386" y="43" align="currency" />
+   <field id="Case26" x="456" y="43" align="currency" />
+   <field id="Case27" x="529" y="43" align="currency" />
+   <field id="Case28" x="72" y="79" align="currency" />
+   <field id="Case30" x="150" y="79" align="currency" />
+   <field id="Case32" x="228" y="79" align="currency" />
+   <field id="Case34" x="307" y="79" align="currency" />
+   <field id="Case36" x="369" y="79" align="center" />
+   <field id="Case40" x="456" y="79" align="currency" />
+   <field id="Case42" x="529" y="79" align="currency" />
+   <field id="Case46" x="72" y="115" align="currency" />
+   <field id="Case12" x="136" y="115" align="center" />
+   <field id="Case38" x="219" y="115" align="center" />
+   <field id="Case13" x="290" y="115" align="center" />
+   <field id="Case14" x="380" y="107" align="center" />
+   <field id="EmployerValue" x="484" y="107" align="center" />
+   <field id="DescriptionEntreprise" x="436" y="135" />
+   <field id="EmployeeName" x="36" y="152" />
+   <field id="EmployeeAdresse" x="36" y="163" />
+   <field id="EmployeeAdresse2" x="36" y="174" />
+   <field id="EmployeeVille" x="36" y="186" />
+   <field id="DistributionValue" x="177" y="152" />
+   <field id="NameNote" x="329" y="174" width="212" />
+</report>

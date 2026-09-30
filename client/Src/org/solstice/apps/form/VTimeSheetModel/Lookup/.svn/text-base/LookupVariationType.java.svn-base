@@ -1,0 +1,38 @@
+/*
+ * Created on 3 oct. 2005
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package org.solstice.apps.form.VTimeSheetModel.Lookup;
+
+import java.util.ArrayList;
+
+import org.compiere.util.KeyNamePair;
+
+/**
+ * @author jeacat01
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class LookupVariationType extends AbstractKNPModel {
+    public LookupVariationType() {
+        ArrayList<KeyNamePair> liste = new ArrayList<KeyNamePair>();
+        liste.add( new KeyNamePair(0, "AJ   ") );
+        liste.add( new KeyNamePair(1, "V+   ") );
+        liste.add( new KeyNamePair(2, "V-   ") );
+        setData( liste );
+    }
+    
+    public KeyNamePair lookup( String key ) {
+        for( int i=0; i<getSize(); i++ ) {
+            KeyNamePair knp = (KeyNamePair)getElementAt(i);
+            if( knp.getName().equals(key) ) return knp;
+        }
+        
+        KeyNamePair knp = new KeyNamePair(getSize(), key);
+        addExceptionData( knp );
+        return knp;
+    }
+}

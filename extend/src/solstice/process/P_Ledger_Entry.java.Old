@@ -1,0 +1,67 @@
+/*
+ * Created on 2005-03-23
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package solstice.process;
+
+import java.util.logging.Level;
+
+import org.compiere.process.ProcessInfoParameter;
+import org.compiere.process.SvrProcess;
+import solstice.model.P_Payment;
+
+
+/**
+ * @author frabou01
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class P_Ledger_Entry extends SvrProcess {
+
+	int payment_ID;
+
+	/* (non-Javadoc)
+	 * @see org.compiere.process.SvrProcess#prepare()
+	 */
+	protected void prepare() {
+
+		ProcessInfoParameter[] para = getParameter();
+		for (int i = 0; i < para.length; i++) {
+			String name = para[i].getParameterName();
+			if (para[i].getParameter() == null)
+				;
+			else if (name.equals("P_Payment_ID"))
+				payment_ID = para[i].getParameterAsInt();
+			else
+				log.log (Level.SEVERE,"prepare - Unknown Parameter: " + name);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.compiere.process.SvrProcess#doIt()
+	 */
+	protected String doIt() throws Exception {
+		
+		String trxName = null ; //Trx.createTrxName();
+
+        P_Payment Payment = new P_Payment( getCtx(), payment_ID, trxName);
+
+		Ledger_Entry gb = new Ledger_Entry(Payment, trxName);
+
+		//Delete all current marginal benefits for this payment
+		Ledger_Entry.Undo(payment_ID, trxName);
+
+		//Recreate MP
+//		gb.WriteMargnalProfitByPayment();
+
+		//Write accounting Entry
+		gb.WriteAccountingEntryByPayment();
+
+		return null;
+	}
+
+
+}

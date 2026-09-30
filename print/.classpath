@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/dbPort"/>
+	<classpathentry kind="src" path="/tools"/>
+	<classpathentry kind="src" path="/looks"/>
+	<classpathentry kind="lib" path="/tools/lib/barbecue-1.0.6d.jar"/>
+	<classpathentry kind="lib" path="/lib/CCTools.jar"/>
+	<classpathentry kind="lib" path="/lib/jPDF.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/poi-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/poi-ooxml-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/poi-ooxml-lite-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/xmlbeans-5.0.3.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-compress-1.21.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-io-2.15.0.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/SparseBitSet-1.2.jar"/>
+	<classpathentry kind="output" path="lib"/>
+</classpath>

@@ -1,0 +1,211 @@
+package org.compiere.test;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import solstice.model.P_Assignment;
+import solstice.model.P_Employee;
+import solstice.model.P_Gain;
+import solstice.model.P_Post;
+import solstice.model.X_I_Driver_Sheet;
+import okhttp3.*;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Base64;
+import java.util.Map;
+//import java.util.concurrent.Timeunit;
+import java.util.logging.Level;
+
+import org.compiere.util.TimeUtil;
+
+public class OAuthClientSample
+{
+/*	public static String TEST_API_URL = "https://apigw-pod1.dm-us.informaticacloud.com/t/apim.usw1.com/get_employee_details";
+	public static String OAUTH_SERVER_URL = "https://dm-us.informaticacloud.com/authz-service/oauth/token";
+	public static String CLIENT_CREDENTIALS = "YwliT1ZlMWJGRUpsOOhftenFFM8dZdjpRUjQzQXcwbes-";
+*/	
+	
+	public static void main(String [] args) throws Exception
+	{
+		new OAuthClientSample().runApi();		
+	}
+
+	OkHttpClient client = new OkHttpClient();
+	//
+	//  run an OAuth 2.0 in a loop
+	//
+	
+	
+	public void runApi() throws Exception
+	{
+
+		//
+		//  obtain an OAuth 2.0 token for running the API
+		//
+		 String grant_type = "client_credentials";
+		 String clientId = "e8e66c0a-28fe-4edb-8e77-cbecc3e22e35";
+		 String client_secret= "72b8Q~A5fw7Nt69TgZSXTxFqAOxRFoTCe_L5_dBG";
+		 String scope = "https://orgd2519c1d.crm3.dynamics.com/.default";
+
+		 okhttp3.RequestBody formBody = new okhttp3.FormBody.Builder()
+	                .add("grant_type", grant_type)
+	       	        .add("client_secret", client_secret)
+	                .add("client_id", clientId)
+	                .add("scope", scope)
+	                .build();
+		 
+		 String ur = "https://login.microsoftonline.com/eb58acc3-69a7-4abd-988c-acd12198c58b/oauth2/v2.0/token";
+		 String token = "";
+		 
+		 Request request = new Request.Builder()
+	    		    .url(ur)
+	    		    .post(formBody)
+	                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+	                .build();
+	                
+	     okhttp3.Response respnse = null;
+		 
+	     try {
+	            
+	            respnse = client.newCall(request).execute();
+	            
+	            String resp = respnse.body().string();
+	            JsonElement jsonElement = JsonParser.parseString(resp);
+	            JsonObject jsonObject = jsonElement.getAsJsonObject();
+	            
+	            token = jsonObject.get("access_token").getAsString();    
+	     }
+		 catch (Exception e)
+		 {
+				System.out.println ("* Error * " + " - " + e);
+		 }	     
+	
+	 
+//	     MediaType mediaType = MediaType.parse( "application/json" );
+	     
+	     okhttp3.RequestBody formBody2 = new okhttp3.FormBody.Builder()
+	                .add("grant_type", "Bearer")
+	    		 
+	                .build();
+		 
+		 Request request2 = new Request.Builder()
+	    		 	.addHeader("Authorization", "Bearer " + token)
+	    		 	.addHeader("Content-Type", "application/json;")
+				    .url("https://orgd2519c1d.crm3.dynamics.com/api/data/v9.2/crf06_transport_transaction_detail2s")
+	    		    .post(formBody2)
+	    		    .get()
+				    .build();
+	
+	     okhttp3.Response respnse2 = null;
+
+	     String json = "";
+	     try {
+	            
+	            respnse2 = client.newCall(request2).execute();
+	            
+	            String resp = respnse2.body().string();
+	            JsonElement jsonElement = JsonParser.parseString(resp);
+	            JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+	            JsonArray jarray  = jsonObject.getAsJsonArray("value");
+	            for (int i = 0; i < jarray.size(); i++)
+	            {
+	            	
+		            JsonObject jobject = jarray.get(i).getAsJsonObject();
+
+		            JsonElement numEmp = jobject.get("crf06_emp_no");
+		            JsonElement crf06_paye_soumis = jobject.get("crf06_paye_soumis");
+		            
+		            if ( numEmp.isJsonNull() == false)
+		            {
+		              System.out.println( jobject );
+
+		            	String sPaye_soumis = crf06_paye_soumis.getAsString();
+			            String sNumEmp = numEmp.getAsString();
+			            
+			            String crf06_trans_date = jobject.get("crf06_trans_date").getAsString();
+
+			            int year = Integer.parseInt( crf06_trans_date.substring(0,4) );
+			            int month = Integer.parseInt( crf06_trans_date.substring(5,7) );
+			            int day = Integer.parseInt( crf06_trans_date.substring(8,10) );
+			            Timestamp transdate = TimeUtil.getDay( year, month, day);
+/*
+			            if ( transdate.compareTo( Period.getStartDate() ) >= 0 &&
+		            		 transdate.compareTo( Period.getEndDate() ) <= 0 &&
+		            		 sNumEmp.compareTo("99999") != 0 && 
+		            		 ( sPaye_soumis.equals("O"))    // sPaye_soumis.equals("P") ||  
+			            	)
+			            {
+				            JsonElement crf06_trans_montant = jobject.get("crf06_trans_montant");
+				            JsonElement crf06_poste_paye_no = jobject.get("crf06_poste_paye_no");
+//				            JsonElement TRANS_SUPP = jobject.get("crf06_poste_paye_no");
+*/
+/*				            String Earning = "GA06";
+				            P_Employee Employee = this.EmployeeGetWithValue( ctx, sNumEmp, null );
+				            P_Gain Gain = P_Gain.getWithValue(ctx, Earning, null);
+				            
+				            String sPost = crf06_poste_paye_no.getAsString();
+				            P_Post Post = PostGetWithValue( ctx, sPost, null );
+				            P_Assignment Assignment = AssignmentGetWithValue( ctx, Employee, Post, null);
+				            BigDecimal amt = crf06_trans_montant.getAsBigDecimal() ;
+
+//				            X_I_Driver_Sheet Result = new X_I_Driver_Sheet( ctx, -1, null );
+				            X_I_Driver_Sheet Result = getDriver_Sheet( ctx, Employee, Post, null);
+							Result.setP_Employee_ID( Employee.getP_Employee_ID() );
+							Result.setP_Assignment_ID( Assignment.getP_Assignment_ID() );
+							Result.setP_Gain_ID( Gain.getP_Gain_ID());
+							Result.setEmployé( Employee.getValue() );
+							Result.setPosition( Post.getValue() );
+							Result.setP_Post_ID( Post.getP_Post_ID());
+							Result.setEarning( Earning);
+//							Result.setP_Period_ID( rs.getInt("P_Period_ID") );
+//							Result.setDay( rs.getTimestamp("Trans_Date") );
+							Result.setMontant( Result.getAmt().add( amt ) );
+							Result.setAmt( Result.getAmt().add( amt ) );
+							Result.setIsActive(true);
+//							Result.setC_Activity_ID(rs.getInt("C_Activity_ID"));
+//							Result.setP_Department_ID(rs.getInt("P_Department_ID"));
+							Result.setDay( transdate );
+//							Result.save();
+							
+//							m_inserted++;
+	            	
+			            }
+	*/			            	
+		            }
+		            
+
+	            }
+	            
+	     }
+		 catch (Exception e)
+		 {
+				System.out.println ("* Error * " + " - " + e);
+		 }	     
+		 
+		 
+		 
+	}
+	 
+	
+	 String run(String url) throws IOException {
+	   Request request = new Request.Builder()
+	       .url(url)
+	       .build();
+	
+	   try (Response response = client.newCall(request).execute()) {
+	     return response.body().string();
+	   }
+	 }
+
+}

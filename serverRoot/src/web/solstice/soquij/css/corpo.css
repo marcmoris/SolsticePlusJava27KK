@@ -1,0 +1,789 @@
+h1 {
+	background: url("/solstice/soquij/images/ul/graphiques/bande_titre_corpo.gif") no-repeat left top rgb(218, 218, 218); font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 15px; padding: 7px 10px 7px 20px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#recherche_globale h3 {
+	background: url("/solstice/soquij/images/ul/graphiques/bande_titre_corpo.gif") no-repeat left top rgb(218, 218, 218); font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 15px; padding: 7px 10px 7px 20px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#recherche_globale h3 {
+	background: url("/solstice/soquij/images/ul/graphiques/bande_titre_recherche.gif") no-repeat left top rgb(134, 151, 174); margin: 22px 0px 12px; color: rgb(255, 255, 255);
+}
+h2 {
+	font: bold 1.5em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 10px; color: rgb(37, 37, 37); font-size-adjust: none; font-stretch: normal;
+}
+h3 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 10px; color: rgb(37, 37, 37); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre h3 {
+	color: rgb(37, 37, 37);
+}
+#accueil {
+	margin-top: 20px;
+}
+#accueil ul#clienteles {
+	background: url("/solstice/soquij/images/ul/tuiles/acc_citoyens.gif") repeat-y left top; margin: 0px; padding: 0px; width: 593px; overflow: hidden; list-style-type: none; position: relative;
+}
+#accueil ul#clienteles li {
+	width: 191px; margin-right: 10px; float: left;
+}
+#accueil ul#clienteles a.lien_intro {
+	text-decoration: none;
+}
+#accueil ul#clienteles .intro {
+	height: 191px; color: rgb(102, 102, 102); line-height: 1.1em; font-size: 0.92em; display: block; background-repeat: no-repeat;
+}
+#accueil ul#clienteles h2 {
+	margin: 0px; padding: 13px 0px 0px 18px;
+}
+#accueil ul#clienteles .intro span {
+	margin: 12px 0px 0px 18px; width: 90px; display: block;
+}
+#accueil ul#clienteles .services {
+	margin: 8px 10px 0px 18px;
+}
+#accueil ul#clienteles .services ul {
+	margin: 4px 0px 50px; padding: 0px; list-style-type: none;
+}
+#accueil ul#clienteles .services li {
+	background: url("/solstice/soquij/images/ul/graphiques/puce_acc_citoyens_services.gif") no-repeat 0px 4px; padding: 3px 0px 3px 16px; width: auto; line-height: 1.1em; margin-right: 0px; float: none;
+}
+#accueil ul#clienteles .services li a {
+	color: rgb(68, 68, 68); font-weight: bold; text-decoration: none;
+}
+#accueil ul#clienteles .services li a:hover {
+	color: rgb(68, 68, 68); text-decoration: underline;
+}
+#accueil ul#clienteles a.plus {
+	background-position: 159px 4px; padding: 3px 18px 3px 5px; left: 0px; width: 150px; text-align: right; bottom: 9px; color: rgb(68, 68, 68); line-height: 1.1em; font-size: 0.92em; text-decoration: none; position: absolute; background-repeat: no-repeat;
+}
+#accueil ul#clienteles a.plus:hover {
+	background-position: 159px -35px; text-decoration: underline;
+}
+#accueil ul#clienteles li.etudiants {
+	margin-right: 0px;
+}
+#accueil ul#clienteles li.citoyens a.plus {
+	left: 9px; background-image: url("/solstice/soquij/images/ul/graphiques/plus_citoyens.gif"); background-color: rgb(211, 231, 203);
+}
+#accueil ul#clienteles li.pros a.plus {
+	left: 210px; background-image: url("/solstice/soquij/images/ul/graphiques/plus_pros.gif"); background-color: rgb(205, 223, 238);
+}
+#accueil ul#clienteles li.etudiants a.plus {
+	left: 412px; background-image: url("/solstice/soquij/images/ul/graphiques/plus_etudiants.gif"); background-color: rgb(244, 230, 194);
+}
+#accueil #a_signaler {
+	margin-top: 14px;
+}
+#accueil #a_signaler .titre {
+	margin: 0px 0px 10px 18px; display: block;
+}
+#accueil #a_signaler ul {
+	background: url("/solstice/soquij/images/ul/tuiles/acc_a_signaler.gif") no-repeat left bottom; margin: 0px; padding: 0px; width: 593px; overflow: hidden; list-style-type: none;
+}
+#accueil #a_signaler li {
+	background: url("/solstice/soquij/images/ul/tuiles/acc_a_signaler_haut.gif") no-repeat left top; padding: 10px 18px; width: 155px; margin-right: 10px; float: left;
+}
+#accueil #a_signaler li.dernier {
+	margin-right: 0px;
+}
+#accueil #a_signaler li span {
+	color: rgb(0, 175, 212); line-height: 1.2em; font-size: 0.92em;
+}
+#accueil #a_signaler li h3 {
+	font: bold 1em/1.2em Arial, Verdana, sans-serif; margin: 0px; font-size-adjust: none; font-stretch: normal;
+}
+#accueil #a_signaler li h3 a {
+	color: rgb(0, 64, 114);
+}
+#accueil #a_signaler li h3 a:hover {
+	color: rgb(64, 112, 150);
+}
+#accueil #encadre_intro {
+	background: url("/solstice/soquij/images/ul/tuiles/acc_encadre_intro_haut.gif") no-repeat left top; color: rgb(64, 112, 150); line-height: 1.3em; font-size: 1.17em; margin-top: 14px;
+}
+#accueil #encadre_intro div {
+	background: url("/solstice/soquij/images/ul/tuiles/acc_encadre_intro_bas.gif") no-repeat left bottom; padding: 22px 18px;
+}
+#recherche_globale h1 {
+	margin-bottom: 10px;
+}
+#recherche_globale #autre_recherche_container {
+	width: 574px; padding-left: 20px; border-bottom-color: rgb(218, 218, 218); border-bottom-width: 1px; border-bottom-style: solid; position: relative; z-index: 1;
+}
+#recherche_globale #autre_recherche_container #form_autre_recherche {
+	border: 4px solid rgb(0, 64, 114); top: 24px; width: 300px; height: 42px; right: 0px; position: absolute; z-index: 2; background-color: rgb(255, 255, 255);
+}
+#recherche_globale #autre_recherche_container h2 {
+	margin: 0px; padding: 0px; color: rgb(0, 0, 0); line-height: 1.6em; font-size: 1.5em; display: inline;
+}
+#recherche_globale #autre_recherche_container a.autre_recherche {
+	background: url("/solstice/soquij/images/ul/boutons/rehercher.gif") no-repeat left top; padding: 6px 0px 4px; width: 156px; height: 14px; text-align: center; color: rgb(255, 255, 255); line-height: 1em; font-size: 0.92em; text-decoration: none; float: right; display: block;
+}
+#recherche_globale #autre_recherche_container a.autre_recherche:hover {
+	color: rgb(218, 218, 218);
+}
+#recherche_globale ul.type {
+	margin: 0px; padding: 0px 20px 10px; list-style-type: none;
+}
+#recherche_globale ul.type li {
+	padding: 0px 0px 5px;
+}
+#recherche_globale ul.type li a {
+	color: rgb(0, 64, 114);
+}
+#recherche_globale ul.type li a:hover {
+	color: rgb(14, 47, 93);
+}
+#recherche_globale .pager {
+	padding: 2px 10px; width: 574px; color: rgb(68, 68, 68); font-size: 0.92em; background-color: rgb(237, 237, 237);
+}
+#recherche_globale .pager .pages {
+	float: right;
+}
+#recherche_globale .pager a {
+	color: rgb(102, 102, 102); text-decoration: underline;
+}
+#recherche_globale .pager span {
+	font-weight: bold;
+}
+#recherche_globale .pager a:hover {
+	color: rgb(68, 68, 68);
+}
+#recherche_globale .pager span {
+	color: rgb(68, 68, 68);
+}
+#recherche_globale .recherche_type_container {
+	position: relative;
+}
+#recherche_globale .recherche_type_container .img_loading {
+	left: 200px; top: 100px; display: none; position: absolute;
+}
+#recherche_globale ul.type li .extrait {
+	padding: 3px 0px;
+}
+#recherche_globale #criteres_recherche {
+	padding: 15px 0px 0px 20px; font-weight: bold;
+}
+#repertoire #criteres_recherche {
+	padding: 0px 0px 15px; font-weight: bold;
+}
+#emplois ul.listing {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+#emplois ul.listing li {
+	margin-bottom: 7px;
+}
+#emplois ul.listing .titre {
+	width: 558px; position: relative;
+}
+#emplois ul.listing a.postuler {
+	background: url("/solstice/soquij/images/ul/boutons/postuler.gif") no-repeat left; padding: 4px 8px; right: 5px; bottom: 0px; color: rgb(14, 47, 93); line-height: 1.2em; font-size: 0.92em; font-weight: bold; text-decoration: none; display: block; position: absolute;
+}
+#emplois ul.listing a.postuler:hover {
+	background-position: right; color: rgb(255, 255, 255);
+}
+#emplois ul.listing h4 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px; font-size-adjust: none; font-stretch: normal;
+}
+#emplois ul.listing h4 a {
+	background: url("/solstice/soquij/images/ul/graphiques/lien_deroulant.gif") no-repeat 7px 7px rgb(236, 236, 236); padding: 4px 128px 4px 23px; width: 407px; color: rgb(37, 37, 37); text-decoration: none; display: block;
+}
+#emplois ul.listing h4 a:hover {
+	background-position: 7px -87px;
+}
+#emplois ul.listing .titre_selected h4 a {
+	background-position: 7px -183px; color: rgb(255, 255, 255); background-color: rgb(70, 70, 70);
+}
+#emplois ul.listing .titre_selected h4 a:hover {
+	background-position: 7px -183px; color: rgb(255, 255, 255); background-color: rgb(70, 70, 70);
+}
+#emplois ul.listing .detail {
+	padding: 10px 23px; width: 512px; position: relative; background-color: rgb(246, 246, 246);
+}
+#emplois ul.listing ul {
+	width: 100%;
+}
+#emplois ul.listing ul li {
+	margin-bottom: 0px;
+}
+#emplois form {
+	margin: 0px 5px; padding: 6px 15px 15px; left: 0px; top: 0px; width: 518px; position: absolute; background-color: rgb(134, 151, 174);
+}
+#emplois #spontannee form {
+	margin: 0px; width: 523px;
+}
+#emplois form .fermer {
+	text-align: right; margin-bottom: 2px;
+}
+#emplois form .fermer a {
+	background: url("/solstice/soquij/images/ul/icones/fermer.gif") no-repeat right 1px; color: rgb(255, 255, 255); line-height: 1.2em; padding-right: 15px; font-size: 0.83em; text-decoration: none;
+}
+#emplois form .fermer a:hover {
+	text-decoration: underline;
+}
+#emplois form .action_nom {
+	color: rgb(14, 47, 93); line-height: 1.2em; font-size: 1.17em; margin-bottom: 2px;
+}
+#emplois form .note {
+	color: rgb(255, 255, 255); line-height: 1.2em; font-size: 0.92em;
+}
+#emplois form table {
+	border: 0px currentColor; width: 100%;
+}
+#emplois form fieldset {
+	margin: 12px 0px; color: rgb(14, 47, 93);
+}
+#emplois form td {
+	padding-bottom: 10px;
+}
+#emplois form label {
+	color: rgb(14, 47, 93); line-height: 1.2em; font-size: 0.92em; font-weight: bold;
+}
+#emplois form input {
+	font: 1em/1.2em Arial; padding: 2px; border: 1px solid rgb(64, 112, 150); width: 240px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal; background-color: rgb(242, 249, 251);
+}
+#emplois form li input {
+	font: 1em/1.2em Arial; padding: 2px; border: 1px solid rgb(64, 112, 150); width: 240px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal; background-color: rgb(242, 249, 251);
+}
+#emplois form textarea {
+	font: 1em/1.2em Arial; padding: 2px; border: 1px solid rgb(64, 112, 150); width: 240px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal; background-color: rgb(242, 249, 251);
+}
+#emplois form li textarea {
+	font: 1em/1.2em Arial; padding: 2px; border: 1px solid rgb(64, 112, 150); width: 240px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal; background-color: rgb(242, 249, 251);
+}
+#emplois form ul.checkbox_list {
+	list-style: none; margin: 0px; padding: 0px; overflow: hidden;
+}
+#emplois form ul.checkbox_list li {
+	width: 164px; float: left;
+}
+#emplois form ul.checkbox_list li input {
+	border: 0px currentColor; width: auto;
+}
+#emplois form ul.checkbox_list li span {
+	display: none;
+}
+#emplois form textarea {
+	width: 500px;
+}
+#emplois form select {
+	width: 246px;
+}
+#emplois form .bouton {
+	margin: 5px 0px 0px 430px;
+}
+#emplois form .bouton input {
+	padding: 0px; border: 0px currentColor; width: 80px;
+}
+#emplois .login_form_rh {
+	padding: 10px 0px 0px;
+}
+#emplois .login_form_rh p {
+	padding: 0px 0px 10px; color: rgb(255, 255, 255);
+}
+#emplois .soumettre_form_login_rh {
+	border: currentColor; width: auto !important; margin-right: 10px !important;
+}
+#emplois #spontannee {
+	margin-top: 20px;
+}
+#emplois #spontannee .aucun {
+	padding: 14px 20px; margin-bottom: 2px; vertical-align: top; background-color: rgb(231, 235, 239);
+}
+#emplois #spontannee h5 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 5px; color: rgb(74, 99, 134); font-size-adjust: none; font-stretch: normal;
+}
+#emplois #spontannee table {
+	border: 0px currentColor;
+}
+#emplois #spontannee td.methode {
+	padding: 14px 20px; width: 156px; vertical-align: top; border-right-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); border-right-width: 1px; border-left-width: 1px; border-right-style: solid; border-left-style: solid; background-color: rgb(231, 235, 239);
+}
+#emplois #spontannee a.postuler {
+	background: url("/solstice/soquij/images/ul/boutons/faire_parvenir_cv.gif") repeat-x left; font: bold 0.92em/1.5em Arial, Verdana, sans-serif; padding: 2px 8px; border: 1px solid rgb(64, 112, 150); color: rgb(255, 255, 255); text-decoration: none; font-size-adjust: none; font-stretch: normal;
+}
+#emplois #spontannee a.postuler:hover {
+	background-position: right;
+}
+#emplois #spontannee a.postuler_selected {
+	background: rgb(135, 149, 172); border: 1px solid rgb(135, 149, 172); color: rgb(255, 255, 255);
+}
+#emplois #spontannee .formulaire {
+	position: relative;
+}
+#nouvelles ul.listing {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+#nouvelles ul.listing li {
+	padding-bottom: 11px;
+}
+#nouvelles .date {
+	color: rgb(0, 175, 212); line-height: 1.2em; font-size: 0.92em;
+}
+#nouvelles ul.listing h3 {
+	font: bold 1em/1.2em Arial, Verdana, sans-serif; margin: 0px; color: rgb(0, 64, 114); font-size-adjust: none; font-stretch: normal;
+}
+#nouvelles ul.listing h3 a {
+	color: rgb(0, 64, 114);
+}
+#nouvelles ul.listing h3 a:hover {
+	color: rgb(64, 112, 150);
+}
+#nouvelles #archives ul#annees {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+#nouvelles #archives ul#annees li {
+	padding-bottom: 6px;
+}
+#nouvelles #archives ul#annees a.annee {
+	background: url("/solstice/soquij/images/ul/graphiques/lien_deroulant_niveau2.gif") no-repeat 5px 5px rgb(218, 218, 218); font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px 10px 3px 19px; color: rgb(68, 68, 68); text-decoration: none; display: block; font-size-adjust: none; font-stretch: normal;
+}
+#nouvelles #archives ul#annees a.annee:hover {
+	background-position: 5px -89px; color: rgb(68, 68, 68); background-color: rgb(218, 218, 218);
+}
+#nouvelles #archives ul#annees li.selected a.annee {
+	background-position: 5px -186px; color: rgb(14, 47, 93); font-weight: bold; background-color: rgb(255, 255, 255);
+}
+#nouvelles #archives ul#annees li.selected a.annee:hover {
+	background-position: 5px -186px; color: rgb(14, 47, 93); font-weight: bold; background-color: rgb(255, 255, 255);
+}
+#nouvelles #archives ul.listing {
+	padding: 10px 19px; background-color: rgb(255, 255, 255);
+}
+#nouvelles a.retour {
+	background: url("/solstice/soquij/images/ul/graphiques/retour_nouvelles.gif") no-repeat left 4px; color: rgb(102, 102, 102); line-height: 1.2em; padding-left: 8px; font-size: 0.92em; float: right;
+}
+#nouvelles a.retour:hover {
+	background-position: left -11px; color: rgb(14, 47, 93);
+}
+#repertoire #recherche h2 {
+	margin-bottom: 5px;
+}
+#repertoire #recherche #par_domaine {
+	background: rgb(246, 246, 246); width: 292px; float: left;
+}
+#repertoire #recherche #par_titre {
+	background: rgb(246, 246, 246); width: 292px; float: right;
+}
+#repertoire #recherche h3 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 7px 10px 7px 8px; color: rgb(255, 255, 255); border-left-color: rgb(78, 98, 132); border-left-width: 12px; border-left-style: solid; font-size-adjust: none; font-stretch: normal; background-color: rgb(134, 151, 174);
+}
+#repertoire #recherche #par_domaine ul {
+	margin: 10px 0px; padding: 0px; width: 120px; line-height: 1.2em; font-size: 0.92em; list-style-type: none;
+}
+#repertoire #recherche #par_domaine ul.gauche {
+	padding-left: 18px; float: left;
+}
+#repertoire #recherche #par_domaine ul.droite {
+	padding-right: 18px; float: right;
+}
+#repertoire #recherche #par_domaine li {
+	padding: 2px 0px; border-bottom-color: rgb(218, 218, 218); border-bottom-width: 1px; border-bottom-style: solid;
+}
+#repertoire #recherche #par_domaine li a {
+	color: rgb(0, 64, 114); text-decoration: none;
+}
+#repertoire #recherche #par_titre form {
+	margin: 0px; padding: 12px 18px;
+}
+#repertoire #recherche #par_titre input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 254px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#repertoire #recherche #par_titre .bouton {
+	text-align: right; margin-top: 8px;
+}
+#repertoire #recherche #par_titre .bouton input {
+	border: 0px currentColor; width: 82px;
+}
+#repertoire #recherche .note {
+	margin-top: 15px;
+}
+#chroniques #conteneur_recherche {
+	background: url("/solstice/soquij/images/ul/tuiles/chroniques_conteneur_recherche.gif") repeat-y right top; width: 594px; margin-top: 10px;
+}
+#chroniques #vedette {
+	width: 393px; float: left;
+}
+#chroniques #recherche {
+	width: 191px; float: right;
+}
+#chroniques #vedette h3 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 7px 10px 7px 8px; color: rgb(255, 255, 255); border-left-color: rgb(78, 98, 132); border-left-width: 12px; border-left-style: solid; font-size-adjust: none; font-stretch: normal; background-color: rgb(134, 151, 174);
+}
+#chroniques #recherche h3 {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 7px 10px 7px 8px; color: rgb(255, 255, 255); border-left-color: rgb(78, 98, 132); border-left-width: 12px; border-left-style: solid; font-size-adjust: none; font-stretch: normal; background-color: rgb(134, 151, 174);
+}
+#chroniques #vedette .padding {
+	padding: 12px 18px;
+}
+#chroniques #vedette h4 {
+	font: bold 1.5em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 2px; color: rgb(14, 47, 93); font-size-adjust: none; font-stretch: normal;
+}
+#chroniques #vedette h5 {
+	font: 1.17em/1.2em Arial, Verdana, sans-serif; margin: 0px 0px 5px; color: rgb(104, 175, 212); font-size-adjust: none; font-stretch: normal;
+}
+#chroniques #vedette .fcktexte {
+	line-height: 1.7em;
+}
+#chroniques #recherche form {
+	margin: 0px; padding: 8px 18px;
+}
+#chroniques #recherche ul {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+#chroniques #recherche li {
+	padding: 4px 0px;
+}
+#chroniques #recherche input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#agenda {
+	position: relative;
+}
+#agenda a#btn_rechercher_calendrier {
+	background: url("/solstice/soquij/images/ul/boutons/calendrier_recherche.jpg") repeat-x left top; padding: 4px 15px; top: 3px; right: 3px; color: rgb(68, 68, 68); font-size: 0.92em; font-weight: bold; text-decoration: none; display: block; position: absolute;
+}
+#agenda a#btn_rechercher_calendrier:hover {
+	color: rgb(0, 0, 0);
+}
+#agenda a.selected#btn_rechercher_calendrier {
+	background: rgb(255, 255, 255); color: rgb(0, 0, 0); padding-bottom: 11px;
+}
+#agenda #container_form_recherche {
+	padding: 20px; border: 4px solid rgb(237, 237, 237); width: 546px; background-color: rgb(255, 255, 255);
+}
+#agenda #container_form_recherche form {
+	margin: 0px;
+}
+#agenda #container_form_recherche .calendrier_recherche_champs {
+	width: 208px; padding-right: 20px; float: left;
+}
+#agenda #container_form_recherche .calendrier_recherche_champs label {
+	color: rgb(68, 68, 68); font-size: 0.92em; font-weight: bold;
+}
+#agenda #container_form_recherche .calendrier_recherche_champs input {
+	font: 11px/13px Arial, Verdana, sans-serif; padding: 0px; width: 100%; font-size-adjust: none; font-stretch: normal;
+}
+#agenda #container_form_recherche .calendrier_recherche_champs select {
+	font: 11px/13px Arial, Verdana, sans-serif; padding: 0px; width: 100%; font-size-adjust: none; font-stretch: normal;
+}
+#agenda #container_form_recherche .calendrier_recherche_champs select {
+	color: rgb(255, 255, 255); background-color: rgb(125, 127, 130);
+}
+#agenda #container_form_recherche .bouton {
+	margin: 12px 0px 0px; float: right;
+}
+#agenda ul#navig_types {
+	margin: 10px auto 0px; padding: 5px 0px 0px 6px; width: 582px; line-height: 1.1em; overflow: hidden; font-size: 0.92em; list-style-type: none; background-color: rgb(237, 237, 237);
+}
+#agenda ul#navig_types li {
+	display: inline;
+}
+#agenda ul#navig_types a {
+	margin: 0px 5px 5px 0px; padding: 5px 15px 5px 6px; color: rgb(102, 102, 102); text-decoration: none; border-left-width: 4px; border-left-style: solid; float: left; background-color: rgb(255, 255, 255);
+}
+#agenda ul#navig_types li.type_tous a {
+	border-left-color: currentColor; border-left-width: 0px; border-left-style: none;
+}
+#agenda ul#navig_types a.selected {
+	color: rgb(255, 255, 255); padding-bottom: 10px; font-weight: bold; margin-bottom: 0px; background-color: rgb(102, 102, 102);
+}
+#agenda #calendrier_actions {
+	margin: 0px auto; padding: 6px; width: 575px; position: relative; background-color: rgb(102, 102, 102);
+}
+#agenda #calendrier_actions #selecteurs {
+	left: 6px; top: 6px; position: absolute;
+}
+#agenda #calendrier_actions #pagination {
+	text-align: center;
+}
+#agenda #calendrier_actions #versions {
+	top: 6px; right: 6px; position: absolute;
+}
+#agenda #calendrier_actions select {
+	font: 0.83em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(152, 152, 152); color: rgb(255, 255, 255); font-size-adjust: none; font-stretch: normal; background-color: rgb(125, 127, 130);
+}
+#agenda #calendrier_actions #pagination a {
+	top: 8px; position: absolute;
+}
+#agenda #calendrier_actions #pagination a.precedent {
+	left: 219px;
+}
+#agenda #calendrier_actions #pagination a.suivant {
+	left: 363px;
+}
+#agenda #calendrier_actions #pagination h2 {
+	font: bold 1.25em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 0px 10px; color: rgb(255, 255, 255); display: inline; font-size-adjust: none; font-stretch: normal;
+}
+#agenda #calendrier_actions #versions a {
+	background: url("/solstice/soquij/images/ul/boutons/calendrier_version.gif") repeat-y left top; padding: 2px 6px; border: 1px solid rgb(37, 37, 37); color: rgb(204, 204, 204); line-height: 1.2em; font-size: 0.83em; text-decoration: none; float: left;
+}
+#agenda #calendrier_actions #versions a:hover {
+	color: rgb(255, 255, 255);
+}
+#agenda #calendrier_actions #versions a.selected {
+	background-position: right top; color: rgb(255, 255, 255);
+}
+#agenda table#calendrier_normal {
+	margin: 0px auto; width: 589px; border-collapse: collapse;
+}
+#agenda table#calendrier_normal th {
+	padding: 7px; border: 1px solid rgb(255, 255, 255); width: 69px; text-align: left; line-height: 1.2em; font-size: 0.92em; font-weight: normal; background-color: rgb(204, 204, 204);
+}
+#agenda table#calendrier_normal td {
+	background: url("/solstice/soquij/images/ul/tuiles/calendrier_jour.jpg") repeat-y left top rgb(246, 246, 246); padding: 0px; border: 1px solid rgb(255, 255, 255); width: 83px; height: 83px; vertical-align: top;
+}
+#agenda table#calendrier_normal td.autre {
+	background: rgb(237, 237, 237);
+}
+#agenda table#calendrier_normal td .jour {
+	padding: 2px 7px; line-height: 1.2em; font-size: 0.92em; font-weight: bold; background-color: rgb(218, 218, 218);
+}
+#agenda table#calendrier_normal td.autre .jour {
+	color: rgb(204, 204, 204); background-color: transparent;
+}
+#agenda table#calendrier_normal td ul {
+	margin: 0px 1px; padding: 0px; line-height: 1.2em; font-size: 0.83em; list-style-type: none;
+}
+#agenda table#calendrier_normal td li {
+	margin: 3px 0px; padding: 2px 0px 2px 3px; border-left-width: 4px; border-left-style: solid;
+}
+#agenda table#calendrier_normal .lieu {
+	color: rgb(80, 80, 83); text-transform: uppercase; text-decoration: none;
+}
+#agenda table#calendrier_normal .titre {
+	margin: 2px 0px; color: rgb(68, 68, 68); font-weight: bold;
+}
+#agenda table#calendrier_normal .titre a {
+	color: rgb(68, 68, 68); text-decoration: underline;
+}
+#agenda table#calendrier_normal .heure {
+	color: rgb(152, 152, 152);
+}
+#agenda ul#navig_types li.type_15 a {
+	border-color: rgb(231, 96, 230);
+}
+#agenda table#calendrier_normal td li.type_15 {
+	border-color: rgb(231, 96, 230);
+}
+#agenda ul#navig_types li.type_1 a {
+	border-color: rgb(0, 237, 227);
+}
+#agenda table#calendrier_normal td li.type_1 {
+	border-color: rgb(0, 237, 227);
+}
+#agenda ul#navig_types li.type_2 a {
+	border-color: rgb(255, 174, 30);
+}
+#agenda table#calendrier_normal td li.type_2 {
+	border-color: rgb(255, 174, 30);
+}
+#agenda ul#navig_types li.type_16 a {
+	border-color: rgb(63, 255, 114);
+}
+#agenda table#calendrier_normal td li.type_16 {
+	border-color: rgb(63, 255, 114);
+}
+#agenda table#calendrier_texte {
+	margin: 0px auto; width: 589px; border-collapse: collapse;
+}
+#agenda table#calendrier_texte th {
+	border-width: 1px 1px 4px; border-style: solid; border-color: rgb(255, 255, 255); padding: 7px; text-align: left; line-height: 1.2em; font-size: 0.92em; font-weight: normal; background-color: rgb(204, 204, 204);
+}
+#agenda table#calendrier_texte .bande {
+	padding: 0px; width: 4px;
+}
+#agenda table#calendrier_texte .date {
+	width: 67px;
+}
+#agenda table#calendrier_texte .heure {
+	width: 50px;
+}
+#agenda table#calendrier_texte .plus {
+	padding: 0px; width: 10px;
+}
+#agenda table#calendrier_texte td {
+	border-width: 1px 1px 4px; border-style: solid; border-color: rgb(255, 255, 255); padding: 7px; text-align: left; line-height: 1.2em; font-size: 0.83em; font-weight: normal; vertical-align: top;
+}
+#agenda table#calendrier_texte td.liste_vide {
+	font-size: 1.1em;
+}
+#agenda table#calendrier_texte td.lieu a {
+	color: rgb(80, 80, 83); text-decoration: none;
+}
+#agenda table#calendrier_texte td.lieu a:hover {
+	text-decoration: underline;
+}
+#agenda table#calendrier_texte td.titre {
+	font-weight: bold;
+}
+#agenda table#calendrier_texte td.titre a {
+	color: rgb(37, 37, 37);
+}
+#agenda table#calendrier_texte tr.type_15 td.bande {
+	background-color: rgb(231, 96, 230);
+}
+#agenda table#calendrier_texte tr.type_15 td {
+	background-color: rgb(251, 234, 252);
+}
+#agenda table#calendrier_texte tr.type_1 td.bande {
+	background-color: rgb(0, 237, 227);
+}
+#agenda table#calendrier_texte tr.type_1 td {
+	background-color: rgb(234, 249, 248);
+}
+#agenda table#calendrier_texte tr.type_2 td.bande {
+	background-color: rgb(255, 174, 29);
+}
+#agenda table#calendrier_texte tr.type_2 td {
+	background-color: rgb(249, 243, 234);
+}
+#agenda table#calendrier_texte tr.type_16 td.bande {
+	background-color: rgb(63, 255, 114);
+}
+#agenda table#calendrier_texte tr.type_16 td {
+	background-color: rgb(234, 249, 238);
+}
+#evenement_detail #prochaines .nouveau {
+	margin: 0px 3px; padding: 1px 2px; color: rgb(255, 255, 255); text-transform: uppercase; line-height: 1.2em; font-size: 0.9em; float: right; background-color: rgb(220, 50, 66);
+}
+#evenement_detail #prochaines .complet {
+	padding: 1px 2px; color: rgb(255, 255, 255); text-transform: uppercase; line-height: 1.2em; font-size: 0.9em; float: right; background-color: rgb(80, 80, 83);
+}
+#agenda .retour {
+	text-align: right;
+}
+#agenda .retour a {
+	background: url("..//solstice/soquij/images/ul/graphiques/retour_nouvelles.gif") no-repeat left 4px; color: rgb(102, 102, 102); line-height: 1.2em; padding-left: 8px; font-size: 0.92em;
+}
+#agenda .retour a:hover {
+	background-position: left -11px; color: rgb(14, 47, 93);
+}
+#agenda #parametres {
+	margin: 8px 0px 12px; background-color: rgb(246, 246, 246);
+}
+#agenda #parametres a#inscription {
+	background: url("/solstice/soquij/images/ul/boutons/agenda_inscription.gif") no-repeat left; margin: 6px 5px 0px 0px; padding: 3px 8px; border: 1px solid rgb(14, 47, 93); color: rgb(255, 255, 255); font-weight: bold; text-decoration: none; float: right;
+}
+#agenda #parametres a#inscription:hover {
+	background-position: right;
+}
+#agenda #parametres table {
+	line-height: 1.2em; font-size: 0.92em; margin-left: 10px;
+}
+#agenda #parametres th {
+	padding: 4px 9px 1px; text-align: left; color: rgb(152, 152, 152); font-weight: normal; border-right-color: rgb(255, 255, 255); border-right-width: 2px; border-right-style: solid;
+}
+#agenda #parametres td {
+	padding: 0px 9px 4px; font-weight: bold; border-right-color: rgb(255, 255, 255); border-right-width: 2px; border-right-style: solid;
+}
+#agenda #parametres td a {
+	color: rgb(68, 68, 68);
+}
+#agenda #evenement_detail h2 {
+	margin: 0px;
+}
+#agenda #evenement_detail .date {
+	color: rgb(0, 175, 212); line-height: 1.2em; font-size: 0.92em;
+}
+#agenda #evenement_detail .fcktexte {
+	margin-top: 5px;
+}
+#agenda #evenement_detail #prochaines {
+	margin-top: 20px;
+}
+#agenda #evenement_detail #prochaines ul {
+	margin: 2px 0px 0px; padding: 0px; line-height: 1.2em; font-size: 0.92em; list-style-type: none;
+}
+#agenda #evenement_detail #prochaines li {
+	background: url("..//solstice/soquij/images/ul/graphiques/pointilles_panier_quantite.gif") repeat-x left bottom; padding: 4px 0px 5px;
+}
+#agenda #evenement_detail #prochaines .date {
+	color: rgb(0, 175, 212); line-height: 1.2em; font-size: 1em;
+}
+#agenda #evenement_detail #prochaines .lieu {
+	color: rgb(14, 47, 93); text-transform: uppercase;
+}
+#agenda #evenement_detail #prochaines .lieu a {
+	color: rgb(0, 64, 114);
+}
+#liens_utiles div.fcktexte ul {
+	margin: 0px;
+}
+#liste_article div.fcktexte ul {
+	margin: 0px;
+}
+#article_doctrine h3 {
+	color: rgb(14, 47, 93); line-height: 1.58em; padding-top: 0px; padding-bottom: 0px; font-size: 1.33em; margin-top: 0px; margin-bottom: 0px;
+}
+#article_doctrine h4 {
+	color: rgb(14, 47, 93); line-height: 1.42em; font-size: 1.17em; margin-bottom: 12px;
+}
+#article_doctrine span.redige {
+	color: rgb(14, 47, 93);
+}
+#article_doctrine div.auteur {
+	color: rgb(0, 175, 212); line-height: 1.2em; padding-top: 0px; font-size: 0.92em; margin-top: 0px; margin-bottom: 18px;
+}
+#article_doctrine div.citer {
+	padding: 8px 18px 3px; width: 559px; color: rgb(37, 37, 37); background-color: rgb(231, 231, 231);
+}
+#article_doctrine a.retour {
+	background: url("/solstice/soquij/images/ul/graphiques/retour_nouvelles.gif") no-repeat left 4px; color: rgb(102, 102, 102); line-height: 1.2em; padding-left: 8px; font-size: 0.92em; float: right;
+}
+#nousjoindre h2 {
+	color: rgb(14, 47, 93); line-height: 1.42em; font-size: 1.17em;
+}
+#nousjoindre form {
+	margin: 10px 0px 0px;
+}
+#nousjoindre form .gauche {
+	width: 250px; float: left;
+}
+#nousjoindre form .droite {
+	width: 250px; float: right;
+}
+#nousjoindre form ul {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+#nousjoindre form li {
+	color: rgb(68, 68, 68); padding-bottom: 6px; padding-left: 0px;
+}
+#nousjoindre form input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form li input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form select {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form li select {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form textarea {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form li textarea {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 246px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre form .bouton {
+	text-align: right; padding-top: 10px;
+}
+#nousjoindre form .bouton input {
+	border: 0px currentColor; width: auto !important;
+}
+#nousjoindre #actions {
+	margin: 10px 0px 0px 20px; text-align: right; padding-top: 5px;
+}
+#nousjoindre #actions a {
+	background: url("/solstice/soquij/images/ul/icones/imprimer.gif") no-repeat 0px 0px; font: 0.92em/1.2em Arial, Verdana, sans-serif; color: rgb(0, 64, 114); padding-left: 17px; font-size-adjust: none; font-stretch: normal;
+}
+#nousjoindre #actions a:hover {
+	color: rgb(64, 112, 150); text-decoration: none;
+}
+#nousjoindre #logo {
+	display: none;
+}
+#nousjoindre a.lien_deroulant {
+	line-height: 1.2em; padding-top: 6px; font-size: 1em;
+}

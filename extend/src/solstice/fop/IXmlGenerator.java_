@@ -1,0 +1,36 @@
+package solstice.fop;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.SQLException;
+
+/**
+ * Cet interface sert à définir les méthodes nécessaires pour qu'un XML générateur
+ * puisse être utilisé par l'outil de génération FOP
+ * @author frafor01
+ */
+public interface IXmlGenerator
+{
+	/**
+	 * Cette méthode sert à générer le XML
+	 * @param outputStream Un flux de sortie ouvert
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	public void generateXml(OutputStream outputStream) throws IOException, SQLException;
+	
+	/**
+	 * Cette méthode indique si le XML contient des données
+	 * @return VRAI si le XML contient des données
+	 */
+	public boolean containsData();
+	
+	/**
+	 * Cette méthode sert à définir l'url de base qui doit être inscrite dans le XML 
+	 * pour faire les liens avec les images. L'url doit obligatoirement se terminer 
+	 * par un caractère /
+	 * @param baseUrl
+	 */
+	public void setBaseUrl(String baseUrl);
+	
+}

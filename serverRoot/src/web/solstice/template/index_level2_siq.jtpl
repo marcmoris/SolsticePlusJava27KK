@@ -1,0 +1,44 @@
+	<!-- BEGIN: main --> 
+<html>
+	<head>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<link rel="stylesheet" type="text/css" href="styles/siq.css">
+		<title>Menu principal</title>
+	</head>
+	<body>
+		<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+				<td align="center" valign="middle">{HEADING1}</td>
+				<td align="center" valign="middle">{HEADING2}</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center" valign="middle">
+					<div class="apptitle">{CIE_NAME}</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> </td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<div class="pagetitle">Liste des applications disponibles</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				   <ul>
+				   	{listeApplications}
+				   </ul>
+				</td>
+			</tr>	
+			<tr>
+			{FOOTING}	
+			</tr>
+		</table>
+	</body>
+</html>
+<!-- END: main -->

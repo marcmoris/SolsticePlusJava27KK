@@ -1,0 +1,75 @@
+<!-- BEGIN: main -->
+<html>
+<head>
+<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+<script language="JavaScript" src="scripts/overlib_mini.js"></script>
+<title>{TITLE}</title>
+</head>
+<body>
+<script language="javascript">
+		function sendAction(action, id)
+	        {
+				document.mainForm.act.value = action;
+				document.mainForm.absenceId.value = id;
+				
+				document.mainForm.submit();
+	        }
+
+        function sendGlobalAction(action)
+	        {
+	            document.mainForm.act.value = action;
+				document.mainForm.submit();
+	        }
+</script>
+	<table width="300" align="center" border="0" cellspacing="2" cellpadding="0">
+		<tr>
+			<td>
+				<form name="mainForm" method="post">
+        		<input type="hidden" name="absenceId">
+        		<input type="hidden" name="act">
+				<table border="1" cellspacing="2" cellpadding="0"  align="center">
+				<!-- BEGIN: line -->
+				<tr>
+				<td>
+				<table width="275" align="center" cellspacing="1" cellpadding="1" border="0">
+					<tr>
+						<td><b><u>{LabelApplicant}</u></b> {Applicant}</td>
+					</tr>
+					<tr>
+						<td><b><u>{LabelReason}</u></b> {Reason}</td>
+					</tr>
+					<tr>
+						<td><b><u>{LabelStartDate}</u></b> {StartDate}</td>
+					</tr>
+					<tr>
+						<td><b><u>{LabelEndDate}</u></b> {EndDate}</td>
+					</tr>
+					<tr>
+						<td><b><u>{LabelTime}</u></b> {Time}</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="left" >{ACCEPT}&nbsp;&nbsp;{REFUS}</td>						
+					</tr>
+					</table>
+					</td>
+					</tr>
+				
+					<!-- END: line --> 
+				</table>
+				</form>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<table border="0">
+	<tr>
+	<td><a href="/solstice/autorisationAbsence/index.jsp"> Retour </a></td>
+	</tr>
+	<tr>
+	<td><font size="3">{FOOTING}</font> </td>
+	</tr>
+	</table>
+</body>
+</html>
+<!-- END: main -->

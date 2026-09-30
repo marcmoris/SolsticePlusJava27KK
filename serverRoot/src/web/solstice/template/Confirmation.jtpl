@@ -1,0 +1,75 @@
+<!-- BEGIN: main --> 
+<html>
+<!-- HEADING: -->
+
+<script language="javascript">
+		function sendAction(action)
+	        {
+				document.mainForm.action.value = action;
+				document.mainForm.submit();
+	        }
+
+</script>
+
+
+		<form name="mainForm" method="post">
+	    <input type="hidden" name="action">
+
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+
+	<tr>
+		<td colspan="2" class="line"></td>
+
+	</tr>
+	<tr>
+		<td colspan="2">
+			<a href="/solstice/index.jsp" class="path">Menu principal</a> &middot;&gt;
+		</td>
+	</tr>
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+			<tr >
+				<td colspan="2">&nbsp;</td>
+			</tr>	
+
+			<tr>
+				<td colspan="2">
+					<div class="pagetitle"><center><b>Autorisation</b></center></div>
+				</td>
+			</tr>
+
+			<tr >
+				<td colspan="2">&nbsp;</td>
+			</tr>	
+
+			<tr>
+				<td colspan="2">{Information}</td>
+			</tr>	
+			<tr>	
+				<td  colspan="2">&nbsp;</td>
+			</tr>	
+
+			<tr>
+				<td colspan="2"><b>{Question}</b></td>
+
+			</tr>	
+			<tr >
+				<td colspan="2">&nbsp;</td>
+			</tr>	
+
+			<tr >
+				<td colspan="2">{Accept} {Reject}</td>
+			</tr>	
+			{FOOTING}	
+		</table>
+	</form>
+	
+{FOOTING}
+</table>
+</div>		
+</div>	
+</div>		
+	</body>
+</html>
+<!-- END: main -->

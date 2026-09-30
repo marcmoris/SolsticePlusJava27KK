@@ -1,0 +1,2273 @@
+@import url( //hello.myfonts.net/count/265413 );
+@font-face {
+	font-family: NewsGothic;
+	src: url(/css/fonts/265413_0_0.eot?#iefix) format("embedded-opentype"), url(/css/fonts/265413_0_0.woff) format("woff"), url(/css/fonts/265413_0_0.ttf) format("truetype");
+}
+@font-face {
+	font-family: DroidSansRegular;
+	src: url(/css/fonts/DroidSans-webfont.eot?#iefix) format("embedded-opentype"), url(/css/fonts/DroidSans-webfont.woff) format("woff"), url(/css/fonts/DroidSans-webfont.ttf) format("truetype"), url(/css/fonts/DroidSans-webfont.svg#DroidSansRegular) format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: DroidSansBold;
+	src: url(/css/fonts/DroidSans-Bold-webfont.eot?#iefix) format("embedded-opentype"), url(/css/fonts/DroidSans-Bold-webfont.woff) format("woff"), url(/css/fonts/DroidSans-Bold-webfont.ttf) format("truetype"), url(/css/fonts/DroidSans-Bold-webfont.svg#DroidSansBold) format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	font: 75%/140% Arial, Verdana, sans-serif; margin: 0px 0px 5px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+p {
+	margin: 0px; padding: 0px;
+}
+form {
+	margin: 0px; padding: 0px;
+}
+ol {
+	margin: 0px; padding: 0px 0px 0px 22px;
+}
+a {
+	color: rgb(0, 64, 114); text-decoration: underline; cursor: pointer;
+}
+a:hover {
+	color: rgb(64, 112, 150);
+}
+img {
+	border: 0px currentColor;
+}
+#fond_site {
+	
+}
+#wrapper {
+	margin: 0px auto; width: 960px;
+}
+input:focus {
+	outline: rgb(1, 64, 115) dotted 1px;
+}
+select:focus {
+	outline: rgb(1, 64, 115) dotted 1px;
+}
+textarea:focus {
+	outline: rgb(1, 64, 115) dotted 1px;
+}
+#utilitaires {
+	padding: 9px 10px 0px; width: 940px; height: 21px; text-align: right; line-height: 1.2em; font-size: 0.92em; list-style-type: none; position: relative; background-color: rgb(255, 255, 255);
+}
+#utilitaires ul {
+	margin: 0px; padding: 0px; display: inline; list-style-type: none;
+}
+#utilitaires li {
+	display: inline;
+}
+#utilitaires ul a {
+	color: rgb(0, 64, 114); text-decoration: none;
+}
+#utilitaires ul a:hover {
+	text-decoration: underline;
+}
+#utilitaires #taille_police {
+	color: rgb(0, 64, 114); padding-right: 180px;
+}
+#utilitaires #taille_police img {
+	top: 1px; position: relative;
+}
+#utilitaires input.mots_cles {
+	font: 11px/15px Arial, Verdana, sans-serif; padding: 2px 4px; border: 1px solid rgb(123, 123, 123); top: 5px; width: 140px; height: 14px; right: 28px; color: rgb(68, 68, 68); position: absolute; font-size-adjust: none; font-stretch: normal;
+}
+#recherche_globale input.mots_cles {
+	font: 11px/15px Arial, Verdana, sans-serif; padding: 2px 4px; border: 1px solid rgb(123, 123, 123); top: 5px; width: 140px; height: 14px; right: 28px; color: rgb(68, 68, 68); position: absolute; font-size-adjust: none; font-stretch: normal;
+}
+#utilitaires input.btn_recherche_rapide {
+	top: 5px; right: 10px; position: absolute;
+}
+#recherche_globale input.btn_recherche_rapide {
+	top: 5px; right: 10px; position: absolute;
+}
+#recherche_globale input.mots_cles {
+	top: 12px; right: 10px;
+}
+#recherche_globale input.btn_recherche_rapide {
+	top: 12px; right: 10px;
+}
+#recherche_globale input.mots_cles {
+	width: 254px; right: 28px;
+}
+#entete {
+	clear: right; position: relative;
+}
+#entete .fetes {
+	left: 0px; top: 0px; width: 100%; height: 125px; display: none; position: absolute; z-index: 0;
+}
+.seq1 {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/site-fetes2.jpg") no-repeat left top;
+}
+.seq2 {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/site-fetes3.jpg") no-repeat left top;
+}
+.seq3 {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/site-fetes4.jpg") no-repeat left top;
+}
+.seq4 {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/site-fetes5.jpg") no-repeat left top;
+}
+#entete h1 {
+	margin: 0px; padding: 19px 0px 0px 19px;
+}
+#entete #slogan {
+	margin: 48px 40px 0px 0px; float: right; display: inline;
+}
+#entete #promo_entete {
+	left: 210px; top: 4px; position: absolute; z-index: 3;
+}
+ul#navig_corpo {
+	font: bold 0.92em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 0px; left: 198px; bottom: 0px; list-style-type: none; position: absolute; z-index: 3000; font-size-adjust: none; font-stretch: normal;
+}
+ul#navig_corpo li {
+	display: inline;
+}
+ul#navig_corpo a {
+	background: url("http://soquij.qc.ca/images/ul/boutons/navig_corpo.gif") no-repeat right 0px; padding: 4px 20px 4px 10px; color: rgb(14, 47, 93); text-decoration: none; margin-right: 4px; float: left;
+}
+ul#navig_corpo a:hover {
+	background-position: right -44px;
+}
+ul#navig_corpo a.selected {
+	background-position: right -88px;
+}
+#conteneur_colonnes {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/conteneur_colonnes.gif") repeat-y left top rgb(255, 255, 255); width: 960px;
+}
+#conteneur_colonnes #fond_colonne_navig {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/fond_colonne_navig.jpg") no-repeat left bottom;
+}
+#conteneur_colonnes #fade_colonne_navig {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/fade_colonne_navig.png") no-repeat left top; width: 960px; padding-bottom: 20px;
+}
+#conteneur_colonnes #colonne_navig {
+	width: 180px; margin-right: 18px; float: left;
+}
+#conteneur_colonnes #colonne_principale {
+	width: 594px; float: left; min-height: 500px;
+}
+#conteneur_colonnes #colonne_complements {
+	width: 150px; float: right;
+}
+#colonne_principale .contenu_padding {
+	padding: 0px 18px;
+}
+ul#ariane {
+	margin: 12px 0px 5px; padding: 0px; line-height: 1.2em; font-size: 0.92em; list-style-type: none;
+}
+ul#ariane li {
+	color: rgb(104, 175, 212); display: inline;
+}
+ul#ariane a {
+	color: rgb(104, 175, 212);
+}
+ul#ariane span {
+	color: rgb(0, 73, 78);
+}
+ul#ariane a:hover {
+	color: rgb(0, 73, 78);
+}
+#actions {
+	position: relative;
+}
+#actions #bulle_imprimer {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/bulle_imprimer.png") no-repeat left top; padding: 3px 7px 0px; top: -54px; width: 102px; height: 55px; right: -68px; color: rgb(255, 255, 255); line-height: 1.1em; font-size: 0.83em; display: none; position: absolute;
+}
+#actions #bulle_imprimer div {
+	font-weight: bold; margin-top: 4px;
+}
+#actions ul {
+	margin: 20px 0px 0px; padding: 9px 12px; text-align: right; line-height: 1.2em; font-size: 0.83em; list-style-type: none; background-color: rgb(246, 246, 246);
+}
+#actions li {
+	padding-left: 18px; display: inline;
+}
+#actions a {
+	color: rgb(80, 80, 83); padding-left: 18px; text-decoration: none;
+}
+#actions a:hover {
+	text-decoration: underline;
+}
+#actions a#envoyer_ami {
+	background: url("http://soquij.qc.ca/images/ul/icones/envoyer_ami.gif") no-repeat left 0px;
+}
+#actions a#imprimer {
+	background: url("http://soquij.qc.ca/images/ul/icones/imprimer.gif") no-repeat left 0px;
+}
+#actions a#rss {
+	background: url("http://soquij.qc.ca/images/ul/icones/rss.gif") no-repeat left 0px;
+}
+ul#navigation {
+	margin: 0px; padding: 0px; width: 175px; list-style-type: none;
+}
+ul#navigation li {
+	display: inline;
+}
+ul#navigation a {
+	display: block;
+}
+ul#navigation a img {
+	margin-top: 5px;
+}
+ul#navigation a img.over {
+	visibility: hidden; position: absolute;
+}
+ul#navigation a:hover {
+	background-color: transparent;
+}
+ul#navigation a:hover img.over {
+	visibility: visible;
+}
+ul#navigation > li > a {
+	width: 175px; height: 60px; text-indent: -9999px; margin-top: 5px;
+}
+ul#navigation li.citoyens > a {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_citoyens_off.gif") no-repeat;
+}
+ul#navigation li.citoyens > a:hover {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_citoyens_over.gif") no-repeat;
+}
+ul#navigation li.citoyens > a.actif {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_citoyens_on.gif") no-repeat;
+}
+ul#navigation li.pros > a {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_pros_off.gif") no-repeat;
+}
+ul#navigation li.pros > a:hover {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_pros_over.gif") no-repeat;
+}
+ul#navigation li.pros > a.actif {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_pros_on.gif") no-repeat;
+}
+ul#navigation li.etudiants > a {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_etudiants_off.gif") no-repeat;
+}
+ul#navigation li.etudiants > a:hover {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_etudiants_over.gif") no-repeat;
+}
+ul#navigation li.etudiants > a.actif {
+	background: url("http://soquij.qc.ca/images/fr/boutons/navig_etudiants_on.gif") no-repeat;
+}
+ul#navigation ul.niveau2 {
+	margin: 0px; padding: 0px 1px 5px 5px; line-height: 1.1em; font-size: 0.92em; list-style-type: none;
+}
+ul#navigation ul.niveau2 a {
+	background-position: right 0px; padding: 2px 15px 2px 14px; width: 140px; color: rgb(37, 37, 37); text-decoration: none; border-bottom-width: 1px; border-bottom-style: solid; display: block; background-repeat: no-repeat;
+}
+ul#navigation ul.niveau2 li.selected {
+	padding: 4px 0px; width: 169px; display: block;
+}
+ul#navigation ul.niveau2 a.selected {
+	background-position: right -60px;
+}
+ul#navigation ul.niveau2 a.selected:hover {
+	background-position: right -60px;
+}
+ul#navigation ul.niveau3 {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+ul#navigation ul.niveau3 a.selected {
+	font-weight: bold;
+}
+ul#navigation ul.niveau3 a.selected:hover {
+	font-weight: bold;
+}
+#login_azimut_rapide {
+	border-width: 0px 5px 5px; border-style: none solid solid; width: 165px; border-top-color: currentColor; background-color: rgb(255, 255, 255);
+}
+#login_azimut_rapide .titre {
+	background-position: 156px 4px; padding: 6px 15px; color: rgb(255, 255, 255); font-weight: bold; border-bottom-width: 1px; border-bottom-style: solid; background-repeat: no-repeat;
+}
+#login_azimut_rapide form {
+	margin: 5px 15px; color: rgb(37, 37, 37); line-height: 1.1em; font-size: 0.92em;
+}
+#login_azimut_rapide input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(204, 204, 204); width: 130px; color: rgb(68, 68, 68); margin-bottom: 2px; font-size-adjust: none; font-stretch: normal;
+}
+#login_azimut_rapide input.radio {
+	padding: 0px; border: currentColor; width: auto;
+}
+#login_azimut_rapide input#utilisateur_rapide {
+	margin-top: 6px;
+}
+#login_azimut_rapide #conteneur_bulle_info_azimut {
+	width: 1px; height: 1px; position: relative;
+}
+#login_azimut_rapide #info_login_azimut {
+	margin: 0px 10px 0px 0px; padding: 0px; width: 26px; float: right; display: block; background-color: transparent;
+}
+#login_azimut_rapide #bulle_info_login_azimut {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/bulle_info_login_azimut.png") no-repeat left top; padding: 3px 7px 0px; left: 105px; top: -80px; width: 102px; height: 55px; color: rgb(255, 255, 255); line-height: 1.1em; font-size: 0.92em; font-weight: bold; display: none; position: absolute;
+}
+#login_azimut_rapide #bulle_info_login_azimut div {
+	font-weight: normal; margin-top: 2px;
+}
+#login_azimut_rapide .bouton {
+	width: 100px; margin-top: 4px; float: right;
+}
+#login_azimut_rapide .bouton a {
+	padding: 3px 0px; width: 50px; text-align: center; color: rgb(255, 255, 255); line-height: 1em; font-size: 0.92em; text-decoration: none; margin-top: 7px; float: right; display: block;
+}
+#login_azimut_rapide .pros .bouton a {
+	background-color: rgb(14, 47, 93);
+}
+#login_azimut_rapide .pros .bouton a:hover {
+	background-color: rgb(50, 130, 190);
+}
+#login_azimut_rapide .etudiants .bouton a {
+	background-color: rgb(149, 86, 0);
+}
+#login_azimut_rapide .etudiants .bouton a:hover {
+	background-color: rgb(221, 174, 67);
+}
+#login_azimut_rapide input#caijconfirm {
+	margin: 5px 0px 0px; padding: 0px; border: currentColor; width: auto; float: left;
+}
+#login_azimut_rapide #label_caijconfirm {
+	margin: 5px 0px; width: 112px; float: right;
+}
+#message_erreur_login {
+	margin: 10px auto; padding: 8px; width: 80%; color: rgb(255, 255, 255); line-height: 1em; font-size: 0.92em; font-weight: bold; display: none; background-color: rgb(214, 36, 36);
+}
+ul#navigation li.citoyens ul.niveau2 {
+	background-color: rgb(80, 160, 50);
+}
+ul#navigation li.pros ul.niveau2 {
+	background-color: rgb(50, 130, 190);
+}
+ul#navigation li.etudiants ul.niveau2 {
+	background-color: rgb(221, 174, 67);
+}
+ul#navigation li.citoyens ul.niveau2 a {
+	border-color: rgb(80, 160, 50); background-image: url("http://soquij.qc.ca/images/ul/graphiques/sous_navig_citoyens.gif"); background-color: rgb(211, 231, 203);
+}
+ul#navigation li.pros ul.niveau2 a {
+	border-color: rgb(50, 130, 190); background-image: url("http://soquij.qc.ca/images/ul/graphiques/sous_navig_pros.gif"); background-color: rgb(186, 210, 230);
+}
+ul#navigation li.etudiants ul.niveau2 a {
+	border-color: rgb(221, 174, 67); background-image: url("http://soquij.qc.ca/images/ul/graphiques/sous_navig_etudiants.gif"); background-color: rgb(243, 225, 167);
+}
+ul#navigation li.citoyens ul.niveau2 a:hover {
+	background-color: rgb(168, 208, 152);
+}
+ul#navigation li.pros ul.niveau2 a:hover {
+	background-color: rgb(125, 171, 205);
+}
+ul#navigation li.etudiants ul.niveau2 a:hover {
+	background-color: rgb(236, 208, 121);
+}
+ul#navigation li.citoyens ul.niveau2 a.selected {
+	color: rgb(255, 255, 255); background-color: rgb(10, 100, 0);
+}
+ul#navigation li.citoyens ul.niveau2 a.selected:hover {
+	color: rgb(255, 255, 255); background-color: rgb(10, 100, 0);
+}
+ul#navigation li.pros ul.niveau2 a.selected {
+	color: rgb(255, 255, 255); background-color: rgb(14, 47, 93);
+}
+ul#navigation li.pros ul.niveau2 a.selected:hover {
+	color: rgb(255, 255, 255); background-color: rgb(14, 47, 93);
+}
+ul#navigation li.etudiants ul.niveau2 a.selected {
+	color: rgb(255, 255, 255); background-color: rgb(149, 86, 0);
+}
+ul#navigation li.etudiants ul.niveau2 a.selected:hover {
+	color: rgb(255, 255, 255); background-color: rgb(149, 86, 0);
+}
+ul#navigation li.citoyens ul.niveau3 a {
+	background: rgb(255, 255, 255);
+}
+ul#navigation li.pros ul.niveau3 a {
+	background: rgb(255, 255, 255);
+}
+ul#navigation li.etudiants ul.niveau3 a {
+	background: rgb(255, 255, 255);
+}
+ul#navigation li.citoyens ul.niveau3 a:hover {
+	color: rgb(37, 37, 37); background-color: rgb(211, 231, 203);
+}
+ul#navigation li.pros ul.niveau3 a:hover {
+	color: rgb(37, 37, 37); background-color: rgb(186, 210, 230);
+}
+ul#navigation li.etudiants ul.niveau3 a:hover {
+	color: rgb(37, 37, 37); background-color: rgb(243, 225, 167);
+}
+ul#navigation li.citoyens ul.niveau3 a.selected {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.citoyens ul.niveau3 a.selected:hover {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.pros ul.niveau3 a.selected {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.pros ul.niveau3 a.selected:hover {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.etudiants ul.niveau3 a.selected {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.etudiants ul.niveau3 a.selected:hover {
+	background: rgb(255, 255, 255); color: rgb(37, 37, 37);
+}
+ul#navigation li.pros #login_azimut_rapide {
+	border-color: rgb(50, 130, 190);
+}
+ul#navigation li.etudiants #login_azimut_rapide {
+	border-color: rgb(221, 174, 67);
+}
+ul#navigation li.pros #login_azimut_rapide .titre {
+	border-color: rgb(50, 130, 190); background-image: url("http://soquij.qc.ca/images/ul/graphiques/login_azimut_rapide_pros.gif"); background-color: rgb(28, 80, 128);
+}
+ul#navigation li.etudiants #login_azimut_rapide .titre {
+	border-color: rgb(221, 174, 67); padding: 6px 0px 6px 10px; background-image: url("http://soquij.qc.ca/images/ul/graphiques/login_azimut_rapide_etudiants.gif"); background-color: rgb(144, 87, 19);
+}
+ul#navigation li.pros .alerte#login_azimut_rapide .titre {
+	background-color: rgb(220, 50, 66);
+}
+ul#navigation li.etudiants .alerte#login_azimut_rapide .titre {
+	background-color: rgb(220, 50, 66);
+}
+#login_azimut_rapide #message_alerte {
+	padding: 10px 15px; line-height: 1.1em; font-size: 0.92em;
+}
+#login_azimut_rapide #message_alerte strong {
+	color: rgb(220, 50, 66);
+}
+ul#sous_navig_corpo {
+	margin: 5px 0px 0px; padding: 5px 1px 5px 5px; width: 169px; line-height: 1.1em; font-size: 0.92em; list-style-type: none; background-color: rgb(78, 98, 132);
+}
+ul#sous_navig_corpo ul.niveau3 {
+	margin: 0px; padding: 0px; list-style-type: none;
+}
+ul#sous_navig_corpo li {
+	display: inline;
+}
+ul#sous_navig_corpo a {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/sous_navig_corpo.gif") no-repeat right 0px rgb(231, 234, 238); padding: 2px 15px 2px 14px; width: 140px; color: rgb(37, 37, 37); text-decoration: none; border-bottom-color: rgb(78, 98, 132); border-bottom-width: 1px; border-bottom-style: solid; display: block;
+}
+ul#sous_navig_corpo a:hover {
+	background-color: rgb(194, 201, 213);
+}
+ul#sous_navig_corpo a.selected {
+	color: rgb(255, 255, 255); font-weight: bold; background-color: rgb(134, 151, 174);
+}
+ul#sous_navig_corpo a.selected:hover {
+	color: rgb(255, 255, 255); font-weight: bold; background-color: rgb(134, 151, 174);
+}
+ul#sous_navig_corpo li.selected {
+	padding: 4px 0px; width: 169px; display: block;
+}
+ul#sous_navig_corpo a.selected {
+	background-position: right -60px;
+}
+ul#sous_navig_corpo a.selected:hover {
+	background-position: right -60px;
+}
+ul#sous_navig_corpo li.selected ul li a.selected {
+	background: rgb(255, 255, 255); color: rgb(0, 0, 0);
+}
+ul#sous_navig_corpo li.selected ul li a:hover {
+	background: rgb(255, 255, 255); color: rgb(0, 0, 0);
+}
+#medias_sociaux {
+	left: 845px; bottom: 0px; position: absolute; z-index: 30000;
+}
+#medias_sociaux a {
+	margin-left: 7px; display: inline-block;
+}
+.note {
+	line-height: 1.2em; font-size: 0.92em;
+}
+.fcktexte {
+	padding: 0px 0px 10px;
+}
+.fcktexte p {
+	padding: 0px 0px 10px; line-height: 1.6em;
+}
+.fcktexte ul {
+	margin: 5px 20px; padding: 0px; list-style-type: none;
+}
+.fcktexte li {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/liste_corpo.gif") no-repeat 0px 7px; padding: 2px 0px 5px 13px;
+}
+.fcktexte ol {
+	margin: 5px 0px; padding: 0px 0px 0px 18px;
+}
+.fcktexte ol li {
+	margin: 0px; padding: 2px 0px; background-image: none;
+}
+.fcktexte li a {
+	color: rgb(74, 99, 134);
+}
+.fcktexte li a:hover {
+	color: rgb(14, 47, 93);
+}
+.fcktexte ol.citation {
+	margin: 0px 0px 0px 18px; padding: 0px; list-style-type: decimal;
+}
+.fcktexte li.citation {
+	padding: 0px; color: rgb(0, 175, 212); background-image: none;
+}
+.fcktexte span.citation_texte {
+	color: rgb(0, 0, 0) !important;
+}
+.fcktexte h3 {
+	margin: 10px 0px;
+}
+.fcktexte a.fichier {
+	padding: 2px 0px 0px 22px; display: inline-block;
+}
+.fcktexte a.fichier_pdf {
+	background: url("http://soquij.qc.ca/images/ul/icones/pdf.gif") no-repeat 0px 0px;
+}
+.fcktexte a.fichier_doc {
+	background: url("http://soquij.qc.ca/images/ul/icones/doc.gif") no-repeat 0px 0px;
+}
+.bloc_deroulant {
+	margin: 7px 0px;
+}
+.bloc_deroulant a.lien_deroulant {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/lien_deroulant.gif") no-repeat 7px 7px rgb(236, 236, 236); font: bold 1.17em/1.2em Arial, Verdana, sans-serif; padding: 4px 10px 4px 23px; width: 525px; color: rgb(68, 68, 68); text-decoration: none; display: block; position: relative; font-size-adjust: none; font-stretch: normal;
+}
+.faq .bloc_deroulant a.lien_deroulant {
+	line-height: 1.2em; padding-top: 6px; font-size: 1em;
+}
+.bloc_deroulant a.lien_deroulant:hover {
+	background-position: 7px -87px;
+}
+.bloc_deroulant_selected a.lien_deroulant {
+	background-position: 7px -183px; color: rgb(255, 255, 255); background-color: rgb(70, 70, 70);
+}
+.bloc_deroulant_selected a.lien_deroulant:hover {
+	background-position: 7px -183px; color: rgb(255, 255, 255); background-color: rgb(70, 70, 70);
+}
+.bloc_deroulant .zone_deroulante {
+	padding: 10px 23px; background-color: rgb(246, 246, 246);
+}
+.bloc_deroulant .bloc_deroulant a.lien_deroulant {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/lien_deroulant_niveau2.gif") no-repeat 5px 5px rgb(218, 218, 218); font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px 10px 3px 19px; color: rgb(68, 68, 68); text-decoration: none; display: block; font-size-adjust: none; font-stretch: normal;
+}
+.bloc_deroulant .bloc_deroulant a.lien_deroulant:hover {
+	background-position: 5px -89px; color: rgb(68, 68, 68); background-color: rgb(218, 218, 218);
+}
+.bloc_deroulant_selected .bloc_deroulant_selected a.lien_deroulant {
+	background-position: 5px -186px; color: rgb(14, 47, 93); font-weight: bold; background-color: rgb(255, 255, 255);
+}
+.bloc_deroulant_selected .bloc_deroulant_selected a.lien_deroulant:hover {
+	background-position: 5px -186px; color: rgb(14, 47, 93); font-weight: bold; background-color: rgb(255, 255, 255);
+}
+.bloc_deroulant .bloc_deroulant .zone_deroulante {
+	padding: 10px 19px; color: rgb(102, 102, 102); line-height: 1.2em; font-size: 0.92em; background-color: rgb(255, 255, 255);
+}
+.bloc_deroulant .bloc_deroulant .encadre {
+	padding: 10px; border: 1px solid rgb(204, 204, 204);
+}
+.tmpl_tableau_colore {
+	line-height: 1.2em; font-size: 0.92em; margin-bottom: 15px; border-collapse: collapse;
+}
+.tmpl_tableau_colore th {
+	padding: 4px 8px; border: 2px solid rgb(255, 255, 255); text-align: left; font-weight: normal; background-color: rgb(204, 204, 204);
+}
+.tmpl_tableau_colore tr {
+	vertical-align: top;
+}
+.tmpl_tableau_colore td {
+	padding: 4px 8px; border: 2px solid rgb(255, 255, 255); background-color: rgb(246, 246, 246);
+}
+a.tmpl_plus {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/plus_corpo.gif") no-repeat 142px 4px rgb(204, 224, 239); margin: 5px 0px 0px; padding: 3px 18px 3px 5px; width: 132px; text-align: right; color: rgb(68, 68, 68); line-height: 1.3em; font-size: 0.92em; text-decoration: none; display: block;
+}
+#presentation a.plus {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/plus_corpo.gif") no-repeat 142px 4px rgb(204, 224, 239); margin: 5px 0px 0px; padding: 3px 18px 3px 5px; width: 132px; text-align: right; color: rgb(68, 68, 68); line-height: 1.3em; font-size: 0.92em; text-decoration: none; display: block;
+}
+a.tmpl_plus:hover {
+	background-position: 142px -35px; text-decoration: underline;
+}
+#presentation a.tmpl_plus {
+	display: inline-block;
+}
+#map_container {
+	width: 558px; padding-top: 40px;
+}
+#utilisateurs #map_container {
+	padding-left: 20px;
+}
+#map {
+	width: 558px; height: 286px;
+}
+#map_container h2 {
+	margin: 3px 0px 0px; padding: 0px; color: rgb(14, 47, 93); float: left;
+}
+#directionsForm {
+	margin: 0px !important; padding: 0px 0px 4px; text-align: right; color: rgb(37, 37, 37); float: right;
+}
+#directions {
+	width: 548px; color: rgb(37, 37, 37) !important; display: none;
+}
+#utilisateurs #directions {
+	margin-left: 20px;
+}
+#infobulle {
+	margin: 0px 0px 10px; color: rgb(37, 37, 37); display: none;
+}
+#fromAddress {
+	margin: 2px 0px 0px 7px; padding: 2px; border: 1px solid rgb(153, 153, 153); width: 55px; color: rgb(37, 37, 37); font-size: 11px;
+}
+#go {
+	margin: 2px 0px 0px 7px; padding: 2px; border: 1px solid rgb(153, 153, 153); width: 55px; color: rgb(37, 37, 37); font-size: 11px;
+}
+#go {
+	margin-left: 5px;
+}
+#fromAddress {
+	border: 1px solid rgb(102, 102, 102); width: 80px !important;
+}
+#go {
+	padding: 1px 0px 0px; width: auto !important; height: 20px;
+}
+#colonne_complements .pub {
+	margin: 20px 0px 0px; width: 100%; text-align: center; display: inline-block;
+}
+#pied {
+	line-height: 1.2em; font-size: 0.92em; margin-top: 1px;
+}
+#pied ul {
+	background: url("http://soquij.qc.ca/images/ul/tuiles/navig_pied.gif") no-repeat left bottom; margin: 0px; padding: 8px 18px 6px; color: rgb(104, 175, 212); list-style-type: none;
+}
+#pied li {
+	display: inline;
+}
+#pied ul a {
+	color: rgb(104, 175, 212);
+}
+#pied ul a:hover {
+	color: rgb(0, 64, 114);
+}
+#pied ul a.selected {
+	color: rgb(0, 64, 114);
+}
+#pied #signature {
+	margin: 4px 18px 0px; width: 924px; color: rgb(255, 255, 255); position: relative;
+}
+#pied #signature a {
+	color: rgb(255, 255, 255);
+}
+#pied #signature #ministere {
+	left: 0px; top: 0px; width: 100%; text-align: center; position: absolute;
+}
+#pied #signature #ministere a:hover {
+	color: rgb(104, 175, 212);
+}
+#pied #signature a#egzakt {
+	top: 0px; right: 0px; text-transform: uppercase; line-height: 1.2em; font-size: 0.83em; text-decoration: none; position: absolute;
+}
+#pied #signature a#egzakt:hover {
+	text-decoration: underline;
+}
+#message_erreur {
+	background: url("http://soquij.qc.ca/images/admin/icones/erreur.gif") no-repeat 4px rgb(214, 36, 36); margin: 5px auto 20px; padding: 8px; width: 80%; color: rgb(255, 255, 255); font-weight: bold;
+}
+#message_succes {
+	background: url("http://soquij.qc.ca/images/admin/icones/erreur.gif") no-repeat 4px rgb(214, 36, 36); margin: 5px auto 20px; padding: 8px; width: 80%; color: rgb(255, 255, 255); font-weight: bold;
+}
+.message_erreur {
+	background: url("http://soquij.qc.ca/images/admin/icones/erreur.gif") no-repeat 4px rgb(214, 36, 36); margin: 5px auto 20px; padding: 8px; width: 80%; color: rgb(255, 255, 255); font-weight: bold;
+}
+#message_erreur ul {
+	margin: 0px; padding: 0px 0px 0px 28px;
+}
+#message_succes ul {
+	margin: 0px; padding: 0px 0px 0px 28px;
+}
+.message_erreur ul {
+	margin: 0px; padding: 0px 0px 0px 28px;
+}
+#message_succes ul li {
+	list-style-type: none;
+}
+#message_erreur ul li {
+	list-style-type: none;
+}
+#message_succes {
+	background: url("http://soquij.qc.ca/images/admin/icones/succes.gif") no-repeat 4px rgb(58, 158, 47);
+}
+label.erreur {
+	background: white !important; border: 1px solid red; color: rgb(217, 37, 37) !important;
+}
+.erreur {
+	background: white !important; border: 1px solid red; color: rgb(217, 37, 37) !important;
+}
+.champs_requis {
+	font-size: 0.92em;
+}
+#envoyer_ami label {
+	margin-top: 8px; display: block;
+}
+#envoyer_ami .bouton {
+	float: right;
+}
+#envoyer_ami input.texte {
+	width: 200px;
+}
+#envoyer_ami textarea {
+	width: 330px; margin-bottom: 8px;
+}
+#envoyer_ami #message_erreur {
+	width: 90%;
+}
+#plan_du_site ul {
+	list-style-type: none;
+}
+#plan_du_site a.section {
+	color: rgb(14, 47, 93); line-height: 1.58em; font-size: 1.33em; display: block;
+}
+#plan_du_site a.sous_section {
+	color: rgb(0, 175, 212); line-height: 1.42em; font-size: 1.17em;
+}
+#plan_du_site a.page {
+	color: rgb(14, 47, 93); line-height: 1.25em; font-size: 1em; display: block;
+}
+.spyform_builder {
+	padding: 10px 0px 15px;
+}
+.spyform_builder input {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 264px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+.spyform_builder select {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 264px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+.spyform_builder textarea {
+	font: 1em/1.2em Arial, Verdana, sans-serif; border: 1px solid rgb(102, 102, 102); width: 264px; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+.spyform_builder input.soumettre_spyform {
+	width: auto; margin-top: 10px; float: right;
+}
+.spyform_builder th {
+	text-align: right;
+}
+.spyform_builder tr {
+	vertical-align: top;
+}
+.spyform_builder td {
+	padding: 0px 0px 5px 5px;
+}
+.spyform_builder li {
+	
+}
+body#popup {
+	background: rgb(255, 255, 255); margin: 20px;
+}
+body.nous_joindre#popup {
+	width: 558px;
+}
+body#popup #nousjoindre h2 {
+	float: left;
+}
+body#popup a#fermer {
+	background: url("http://soquij.qc.ca/images/ul/icones/supprimer_produit.gif") no-repeat right 1px; top: 30px; right: 30px; color: rgb(68, 68, 68); line-height: 1.2em; padding-right: 15px; font-size: 0.83em; text-decoration: none; position: absolute;
+}
+#video_accueil a#fermer_tb {
+	background: url("http://soquij.qc.ca/images/ul/icones/supprimer_produit.gif") no-repeat right 1px; top: 30px; right: 30px; color: rgb(68, 68, 68); line-height: 1.2em; padding-right: 15px; font-size: 0.83em; text-decoration: none; position: absolute;
+}
+body#popup a#fermer:hover {
+	text-decoration: underline;
+}
+body.nous_joindre#popup a#fermer {
+	left: 520px; width: 35px;
+}
+#video_accueil a#fermer_tb {
+	background: url("http://soquij.qc.ca/images/ul/boutons/fermer.gif") no-repeat right 1px; top: 3px; right: 5px; display: block;
+}
+#video_accueil a#fermer_tb:hover {
+	background-position: right -29px; text-decoration: none;
+}
+#video_promo {
+	margin: 17px auto 0px; width: 400px; height: 270px;
+}
+#EGZ_decider_popup {
+	padding: 27px 20px 20px; border: 10px solid rgb(230, 230, 230); width: 520px; color: rgb(77, 77, 77); position: absolute; background-color: rgb(255, 255, 255);
+}
+#EGZ_decider_popup h1 {
+	margin: 0px; padding: 16px 0px 10px 10px; color: rgb(0, 0, 0); line-height: 1.2em; font-size: 1.5em;
+}
+#EGZ_decider_popup .contenu_popup {
+	padding: 18px; line-height: 1.2em; font-size: 1.16em; border-top-color: rgb(230, 230, 230); border-bottom-color: rgb(230, 230, 230); border-top-width: 2px; border-bottom-width: 2px; border-top-style: solid; border-bottom-style: solid; background-color: rgb(242, 242, 242);
+}
+#EGZ_decider_popup #wrapper_lien_fermer {
+	padding-right: 10px; float: right;
+}
+#EGZ_decider_popup #logo_popup {
+	padding: 0px 0px 15px 10px; float: left;
+}
+#EGZ_decider_popup a#lien_fermer {
+	padding: 2px 25px 2px 0px; height: 16px; color: rgb(0, 129, 133); line-height: 1.2em; font-size: 1.16em; font-weight: bold; text-decoration: none; display: inline-block;
+}
+#EGZ_decider_popup a#lien_fermer:hover {
+	background-position: right -20px !important; color: rgb(77, 77, 77);
+}
+#EGZ_decider_popup ul {
+	margin: 0px 0px 10px; padding: 0px; line-height: 1.2em; font-size: 1.16em; list-style-type: none;
+}
+#EGZ_decider_popup ul li {
+	padding: 12px 25px 11px 28px; border-bottom-color: rgb(255, 255, 255); border-bottom-width: 2px; border-bottom-style: solid;
+}
+#EGZ_decider_popup .instructions {
+	padding: 0px 10px 15px; line-height: 1.2em; font-size: 1.16em; border-bottom-color: rgb(230, 230, 230); border-bottom-width: 2px; border-bottom-style: solid;
+}
+#EGZ_decider_popup #boutons {
+	margin: 0px auto; width: 120px; padding-top: 22px;
+}
+#EGZ_decider_popup a#oui {
+	margin: 0px 2px 0px 0px; padding: 8px 0px 0px; width: 56px; height: 26px; text-align: center; color: rgb(255, 255, 255); text-transform: uppercase; line-height: 1.3em; font-size: 1.16em; font-weight: bold; text-decoration: none; float: left; display: block;
+}
+#EGZ_decider_popup a#non {
+	margin: 0px 2px 0px 0px; padding: 8px 0px 0px; width: 56px; height: 26px; text-align: center; color: rgb(255, 255, 255); text-transform: uppercase; line-height: 1.3em; font-size: 1.16em; font-weight: bold; text-decoration: none; float: left; display: block;
+}
+#EGZ_decider_popup a#non {
+	margin-right: 0px;
+}
+#EGZ_decider_popup a#oui:hover {
+	background-position: right -34px !important; height: 25px; color: rgb(255, 255, 255); padding-top: 9px; text-decoration: none;
+}
+#EGZ_decider_popup a#non:hover {
+	background-position: right -34px !important; height: 25px; color: rgb(255, 255, 255); padding-top: 9px; text-decoration: none;
+}
+.special {
+	display: none;
+}
+input.radio {
+	margin: 0px; border: currentColor; width: auto;
+}
+caption {
+	font-weight: bold;
+}
+.message_alerte {
+	margin: 15px auto; padding: 7px; border: 2px solid rgb(80, 160, 50); width: 85%;
+}
+.fermer_tb_wrapper {
+	padding: 0px 0px 5px; text-align: right;
+}
+a.fermer_tb {
+	background: url("http://soquij.qc.ca/images/ul/boutons/fermer.gif") no-repeat right 1px; color: rgb(68, 68, 68); line-height: 1.2em; padding-right: 15px; font-size: 0.83em; text-decoration: none; display: inline-block;
+}
+a.fermer_tb:hover {
+	background-position: right -29px; text-decoration: none;
+}
+a span.changementcontexte {
+	left: -900%; width: 1px; height: 1px; overflow: hidden; position: absolute;
+}
+a span.accessible {
+	left: -900%; width: 1px; height: 1px; overflow: hidden; position: absolute;
+}
+body {
+	background: url("http://soquij.qc.ca/images/soquij2013/fond.png") !important;
+}
+#fond_site {
+	background: url("http://soquij.qc.ca/images/soquij2013/fond.png") !important;
+}
+h1 {
+	font-family: NewsGothic, verdana, arial, sans-serif !important;
+}
+h2 {
+	font-family: NewsGothic, verdana, arial, sans-serif !important;
+}
+#accueil #clientele_entete h1 {
+	margin: 0px !important; padding: 0px; font-family: NewsGothic, verdana, arial, sans-serif !important; font-size: 25px;
+}
+h1.titrepage {
+	margin: 0px !important; padding: 0px; font-family: NewsGothic, verdana, arial, sans-serif !important; font-size: 25px;
+}
+h1.titrepage {
+	margin-bottom: 18px !important;
+}
+.services-aux-professionnels h1.titrepage {
+	color: rgb(0, 125, 183);
+}
+h2 {
+	margin: 0px 0px 15px !important; color: rgb(68, 68, 68); font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+#decision_recherche h2 {
+	margin: 0px 0px 15px !important; color: rgb(68, 68, 68); font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+h2 {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-asterisque.png") no-repeat 0px 0px !important; padding: 8px 0px 0px 13px !important;
+}
+h2.pas-etoiles {
+	padding: 0px !important;
+}
+.contenu_padding h2 {
+	padding: 0px !important;
+}
+h2.titrepage2 {
+	padding: 0px !important;
+}
+h2.titrepage2 {
+	padding: 2px 0px 2px 10px !important; border-left-color: rgb(78, 98, 132); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-professionnels .titrepage2 {
+	border-left-color: rgb(0, 125, 183); border-left-width: 1px; border-left-style: solid;
+}
+#services_trouver h2 {
+	margin: 0px 0px 10px !important; padding: 0px !important;
+}
+#translation h2 {
+	margin: 0px 0px 10px !important; padding: 0px !important;
+}
+.code_ga h2 {
+	display: none;
+}
+#colonne_vedettes h2 {
+	margin-left: 10px !important;
+}
+.accueil h2 {
+	padding: 0px !important; height: auto; line-height: 1 !important; font-size: 24px !important; margin-bottom: -5px !important;
+}
+.accueil #accueil #a_signaler h2.a_signaler {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-asterisque.png") no-repeat 0px 0px !important; margin: 30px 0px 15px !important; padding: 8px 0px 0px 13px !important; font-size: 24px !important;
+}
+#accueil #a_signaler h2 {
+	margin-bottom: 10px !important;
+}
+#accueil #a_signaler ul {
+	margin: 0px 10px 20px 0px !important; padding: 0px !important;
+}
+span.date {
+	color: rgb(115, 115, 115) !important; line-height: 1 !important;
+}
+h3 a {
+	color: rgb(0, 0, 19) !important; text-decoration: none !important;
+}
+#actions {
+	clear: both;
+}
+#wrapper {
+	margin-top: -27px;
+}
+#utilitaires {
+	width: 1026px; max-width: 1026px;
+}
+#conteneur_colonnes {
+	width: 1026px; max-width: 1026px;
+}
+#wrapper {
+	width: 1026px; max-width: 1026px;
+}
+ul#navig_corpo {
+	width: 1026px; max-width: 1026px;
+}
+#conteneur_colonnes #colonne_complements {
+	width: 160px; margin-right: 15px;
+}
+#medias_sociaux a {
+	width: 20px; height: 20px; margin-left: 5px;
+}
+#medias_sociaux a img {
+	display: none;
+}
+#medias_sociaux a[name=Facebook] {
+	background: url("http://soquij.qc.ca/images/soquij2013/facebook.png") no-repeat;
+}
+#medias_sociaux a[name=Twitter] {
+	background: url("http://soquij.qc.ca/images/soquij2013/twitter.png") no-repeat;
+}
+#medias_sociaux a[name=LinkedIn] {
+	background: url("http://soquij.qc.ca/images/soquij2013/linkedin.png") no-repeat;
+}
+#utilitaires {
+	padding: 6px 0px 0px; top: 27px; z-index: 2; background-color: transparent;
+}
+#utilitaires ul {
+	top: 3px; color: rgb(102, 102, 102); position: relative;
+}
+#utilitaires ul li:first-child {
+	display: none;
+}
+#utilitaires ul li:last-child strong {
+	display: none;
+}
+#utilitaires ul a {
+	color: rgb(102, 102, 102);
+}
+#utilitaires ul a {
+	color: rgb(102, 102, 102);
+}
+#utilitaires input.mots_cles {
+	padding: 3px 5px; border: currentColor; top: 130px; right: 26px; z-index: 100;
+}
+#recherche_globale input.mots_cles {
+	padding: 3px 5px; border: currentColor; top: 130px; right: 26px; z-index: 100;
+}
+#utilitaires input.btn_recherche_rapide {
+	top: 130px; right: 5px; z-index: 100;
+}
+#recherche_globale input.btn_recherche_rapide {
+	top: 130px; right: 5px; z-index: 100;
+}
+#utilitaires #taille_police {
+	display: none;
+}
+#medias_sociaux {
+	margin-top: -13px; margin-right: 121px; float: right; position: static !important;
+}
+#entete {
+	background: url("http://soquij.qc.ca/images/soquij2013/entete-filigrane.png") no-repeat right 0px top 0% rgb(255, 255, 255) !important; height: 155px !important; -ms-zoom: 1 !important; max-width: 1026px !important;
+}
+#entete #slogan {
+	display: none;
+}
+#entete h1 a {
+	background: url("http://soquij.qc.ca/images/soquij2013/logo2013.png") no-repeat; left: 15px; top: 30px; width: 352px; height: 54px; text-indent: -999999px; display: block; position: absolute;
+}
+#entete h1 a img {
+	display: none;
+}
+#conteneur_colonnes #colonne_navig {
+	margin-top: -5px;
+}
+ul#navig_corpo {
+	background: rgb(206, 75, 19); padding: 0px; left: 0px; bottom: 1px; z-index: 1;
+}
+ul#navig_corpo a {
+	padding: 8px 15px 7px; color: rgb(255, 255, 255); font-size: 13px; margin-right: 0px;
+}
+ul#navig_corpo a.selected {
+	background: rgb(255, 255, 255); padding: 7px 15px 6px; border: 1px solid rgb(206, 75, 19); color: rgb(206, 75, 19);
+}
+ul#navig_corpo a:hover {
+	background: rgb(255, 255, 255); color: rgb(206, 75, 19);
+}
+#conteneur_colonnes #fond_colonne_navig {
+	
+}
+#conteneur_colonnes {
+	background: rgb(255, 255, 255); padding-top: 20px;
+}
+#accueil {
+	margin-top: 0px !important;
+}
+#accueil p {
+	line-height: 1.4 !important; font-size: 12px !important; margin-top: 0px !important;
+}
+#conteneur_colonnes #colonne_principale {
+	width: 604px;
+}
+ul#navigation {
+	width: 212px;
+}
+#conteneur_colonnes #colonne_navig {
+	width: 230px; margin-right: 0px;
+}
+ul#navigation > li > a {
+	width: 212px; height: 55px; text-indent: -9999px; margin-bottom: 0px !important;
+}
+ul#navigation ul.niveau2 {
+	padding: 0px 0px 0px 10px;
+}
+ul#navigation ul.niveau2 a {
+	width: auto;
+}
+ul#navigation li ul.niveau2 > li > a {
+	background-position: 97% 50% !important; padding: 5px 16px 5px 7px; font-size: 12px; border-right-color: rgb(0, 0, 0); border-right-width: 1px; border-right-style: solid;
+}
+body ul#navigation li ul.niveau2 > li.jaja > a {
+	border-bottom-color: currentColor !important; border-bottom-width: medium !important; border-bottom-style: none !important; cursor: default; background-image: none !important;
+}
+ul#navigation ul.niveau2 li.selected {
+	padding: 0px; width: 100%; display: block;
+}
+ul#navigation li ul.niveau2 a.selected {
+	background-color: rgb(255, 255, 255);
+}
+ul#navigation li ul.niveau2 a.selected:hover {
+	background-color: rgb(255, 255, 255);
+}
+body ul#navigation li ul.niveau2 > li.jaja > a:hover {
+	background-color: rgb(255, 255, 255) !important;
+}
+ul#navigation li ul.niveau2 ul a {
+	background: rgb(255, 255, 255) !important; border-width: medium 1px medium medium !important; border-style: none solid none none !important; border-color: currentColor rgb(0, 0, 0) currentColor currentColor !important; padding: 5px 11px 4px 14px;
+}
+ul#navigation ul.niveau3 {
+	
+}
+ul#navigation li ul.niveau2 li ul.niveau3 a {
+	padding: 10px 0px 0px 15px;
+}
+ul#navigation li ul.niveau2 li ul.niveau3 li:last-child a {
+	padding-bottom: 10px;
+}
+ul#navigation li ul.niveau2 li ul.niveau3 a.selected {
+	color: rgb(37, 37, 37); background-image: none !important; background-color: rgb(255, 255, 255) !important;
+}
+ul#navigation li ul.niveau2 li ul.niveau3 a.selected:hover {
+	color: rgb(37, 37, 37); background-image: none !important; background-color: rgb(255, 255, 255) !important;
+}
+#login_azimut_rapide {
+	border-width: medium medium medium 10px !important; border-style: none none none solid !important; border-color: currentColor currentColor currentColor rgb(0, 0, 0) !important; width: 202px !important;
+}
+#login_azimut_rapide .titre {
+	background-position: 94% 50% !important; border-width: 1px 1px 1px medium; border-style: solid solid solid none; border-color: rgb(0, 0, 0) !important; padding: 11px 7px 10px; top: -1px; color: rgb(0, 0, 0); font-size: 14px; position: relative; background-image: none !important; background-color: rgb(213, 213, 213) !important;
+}
+#login_azimut_rapide form {
+	margin: 0px !important; padding: 10px 0px 0px 10px; color: rgb(115, 115, 115); line-height: 1.1em; font-size: 12px; border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-right-width: 1px; border-bottom-width: 1px; border-right-style: solid; border-bottom-style: solid;
+}
+#login_azimut_rapide input {
+	padding: 2px 10px; border: 1px solid rgb(115, 115, 115); width: 159px; color: rgb(0, 0, 22); font-size: 11px; margin-bottom: 5px;
+}
+#login_azimut_rapide .bouton {
+	background: rgb(0, 0, 0); top: 2px; width: 105%; height: 23px; margin-top: 4px; float: right; position: relative;
+}
+.services-aux-professionnels #login_azimut_rapide .bouton:hover {
+	cursor: pointer; background-color: rgb(50, 130, 190);
+}
+.services-aux-etudiants #login_azimut_rapide .bouton:hover {
+	cursor: pointer; background-color: rgb(150, 18, 43);
+}
+.bloc_deroulant {
+	margin: 0px;
+}
+.bloc_deroulant a.lien_deroulant {
+	background-position: 99% 50%; padding: 7px 10px !important; width: auto; color: rgb(255, 255, 255); font-size: 13px !important; text-decoration: none; margin-top: 5px; display: block; position: relative; background-image: url("http://soquij.qc.ca/images/soquij2013/plus.png"); background-repeat: no-repeat; background-color: rgb(206, 75, 19);
+}
+.bloc_deroulant a.lien_deroulant:hover {
+	background-position: 99% 50%; padding: 7px 10px !important; width: auto; color: rgb(255, 255, 255); font-size: 13px !important; text-decoration: none; margin-top: 5px; display: block; position: relative; background-image: url("http://soquij.qc.ca/images/soquij2013/plus.png"); background-repeat: no-repeat; background-color: rgb(206, 75, 19);
+}
+.bloc_deroulant a.selected.lien_deroulant {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/moins.png");
+}
+.bloc_deroulant .zone_deroulante {
+	border-width: medium 1px 1px; border-style: none solid solid; border-color: currentColor rgb(204, 204, 204) rgb(204, 204, 204); padding: 10px 23px; font-size: 12px; background-color: rgb(255, 255, 255);
+}
+.services-aux-professionnels .bloc_deroulant a.lien_deroulant {
+	background-color: rgb(50, 130, 190);
+}
+.services-aux-professionnels .bloc_deroulant .zone_deroulante {
+	border: 1px solid rgb(50, 130, 190);
+}
+.services-aux-citoyens .bloc_deroulant a.lien_deroulant {
+	background-color: rgb(86, 27, 85);
+}
+.services-aux-citoyens .bloc_deroulant .zone_deroulante {
+	border: 1px solid rgb(86, 27, 85);
+}
+.services-aux-etudiants .bloc_deroulant a.lien_deroulant {
+	background-color: rgb(150, 18, 43);
+}
+.services-aux-etudiants .bloc_deroulant .zone_deroulante {
+	border: 1px solid rgb(150, 18, 43);
+}
+#login_azimut_rapide #info_login_azimut {
+	margin: 0px;
+}
+ul#navigation a img {
+	width: 17px !important; height: 13px !important;
+}
+#login_azimut_rapide .bouton a.acceder {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 91% 49% !important; padding: 8px 20px 5px 0px; top: -8px; width: 50px; height: 13px; text-align: left; color: rgb(255, 255, 255); text-transform: uppercase; line-height: 1em; font-size: 10px; text-decoration: none; margin-top: 7px; float: right; display: block; position: relative;
+}
+.conteneur_memoriser {
+	margin-top: 7px;
+}
+.conteneur_memoriser label {
+	top: -2px; color: rgb(0, 0, 0); font-size: 11px; display: inline; position: relative;
+}
+a#acceder_effacer {
+	color: rgb(0, 0, 21); font-size: 11px; text-decoration: underline;
+}
+a#motpasse_recup {
+	color: rgb(0, 0, 21); font-size: 11px; text-decoration: underline;
+}
+a#motpasse_recup {
+	right: 11px; bottom: 29px; position: absolute;
+}
+.conteneur_memoriser a#motpasse_recup {
+	right: 11px; bottom: 33px; padding-left: 0px; display: block !important; position: absolute;
+}
+ul#navigation li.citoyens > a {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_citoyens_off.png") no-repeat rgb(86, 27, 85);
+}
+ul#navigation li.citoyens > a:hover {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_citoyens_hover.png") no-repeat rgb(86, 27, 85);
+}
+ul#navigation li.citoyens > a.actif {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_citoyens_on.png") no-repeat rgb(86, 27, 85);
+}
+ul#navigation li.citoyens ul.niveau2 {
+	background-color: rgb(86, 27, 85) !important;
+}
+ul#navigation li.citoyens ul.niveau2 > li > a {
+	border-color: rgb(86, 27, 85); color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-droit.png"); background-color: rgb(255, 255, 255);
+}
+ul#navigation li.citoyens ul.niveau2 > li > a:hover {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-droit.png"); background-color: rgb(230, 213, 229);
+}
+ul#navigation ul.niveau2 li.selected {
+	padding: 0px; width: 100%; display: block;
+}
+ul#navigation li.citoyens ul.niveau2 a.selected {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-bas.png") !important; background-repeat: no-repeat !important; background-color: rgb(230, 213, 229);
+}
+ul#navigation li.citoyens ul.niveau2 a.selected:hover {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-bas.png") !important; background-repeat: no-repeat !important; background-color: rgb(230, 213, 229);
+}
+ul#navigation li.citoyens ul.niveau2 a.selected {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-bas.png") !important; background-color: rgb(230, 213, 229);
+}
+ul#navigation li.citoyens ul.niveau2 a.selected:hover {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-mauve-bas.png") !important; background-color: rgb(230, 213, 229);
+}
+ul#navigation li.citoyens ul.niveau2 li ul.niveau3 li:last-child a {
+	border-bottom-color: rgb(86, 27, 85) !important; border-bottom-width: 1px !important; border-bottom-style: solid !important;
+}
+ul#navigation li.pros > a {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_pros_off.png") no-repeat;
+}
+ul#navigation li.pros > a:hover {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_pros_hover.png") no-repeat;
+}
+ul#navigation li.pros > a.actif {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_pros_on.png") no-repeat rgb(0, 125, 183);
+}
+ul#navigation li.pros ul.niveau2 {
+	background-color: rgb(0, 125, 183) !important;
+}
+ul#navigation li.pros ul.niveau2 > li > a {
+	border-color: rgb(0, 125, 183); color: rgb(0, 125, 183); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-bleu-droit.png") !important; background-color: rgb(255, 255, 255);
+}
+ul#navigation li.pros ul.niveau2 > li > a:hover {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-bleu-droit.png"); background-repeat: no-repeat !important; background-color: rgb(223, 245, 255);
+}
+ul#navigation li.pros ul.niveau2 a.selected {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-bleu-bas.png") !important; background-color: rgb(223, 245, 255) !important;
+}
+ul#navigation li.pros ul.niveau2 a.selected:hover {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-bleu-bas.png") !important; background-color: rgb(223, 245, 255) !important;
+}
+ul#navigation li.pros ul.niveau2 li ul.niveau3 li:last-child a {
+	border-bottom-color: rgb(0, 125, 183) !important; border-bottom-width: 1px !important; border-bottom-style: solid !important;
+}
+ul#navigation li.pros #login_azimut_rapide {
+	border-left-color: rgb(50, 130, 190) !important; border-left-width: 10px !important; border-left-style: solid !important;
+}
+#login_azimut_rapide {
+	border-width: medium medium medium 10px !important; border-style: none none none solid !important; border-color: currentColor currentColor currentColor rgb(50, 130, 190) !important; position: relative;
+}
+ul#navigation li.etudiants > a {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_etudiants_off.png") no-repeat;
+}
+ul#navigation li.etudiants > a:hover {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_etudiants_off.png") no-repeat;
+}
+ul#navigation li.etudiants > a:hover {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_etudiants_hover.png") no-repeat;
+}
+ul#navigation li.etudiants > a.actif {
+	background: url("http://soquij.qc.ca/images/soquij2013/navig_etudiants_on.png") no-repeat;
+}
+ul#navigation li.etudiants ul.niveau2 {
+	background-color: rgb(150, 18, 43) !important;
+}
+ul#navigation li.etudiants ul.niveau2 > li > a {
+	border-color: rgb(150, 18, 43); color: rgb(150, 18, 43); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-rouge-droit.png") !important; background-color: rgb(255, 255, 255);
+}
+ul#navigation li.etudiants ul.niveau2 > li > a:hover {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-rouge-droit.png"); background-repeat: no-repeat !important; background-color: rgb(244, 215, 220);
+}
+ul#navigation li.etudiants ul.niveau2 a.selected {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-rouge-bas.png") !important; background-color: rgb(244, 215, 220) !important;
+}
+ul#navigation li.etudiants ul.niveau2 a.selected:hover {
+	background-position: 187px 7px; color: rgb(86, 27, 85); background-image: url("http://soquij.qc.ca/images/soquij2013/menu-caret-rouge-bas.png") !important; background-color: rgb(244, 215, 220) !important;
+}
+ul#navigation li.etudiants ul.niveau2 li ul.niveau3 li:last-child a {
+	border-bottom-color: rgb(150, 18, 43) !important; border-bottom-width: 1px !important; border-bottom-style: solid !important;
+}
+ul#navigation li.etudiants #login_azimut_rapide {
+	border-left-color: rgb(150, 18, 43) !important; border-left-width: 10px !important; border-left-style: solid !important;
+}
+#accueil ul#clienteles > li {
+	height: 455px; position: relative;
+}
+#accueil ul#clienteles li {
+	width: 161px !important; padding-right: 20px; margin-right: 20px !important;
+}
+#accueil ul#clienteles li .intro {
+	height: auto !important;
+}
+#accueil ul#clienteles li.etudiants .intro {
+	height: 63px;
+}
+#accueil ul#clienteles li h2 {
+	padding: 0px; margin-left: 10px !important;
+}
+#accueil ul#clienteles .intro span {
+	display: none;
+}
+#accueil ul#clienteles a.plus {
+	background-position: 165px 0px !important; padding: 3px 18px 3px 5px !important; left: 0px !important; width: 158px !important; text-align: right; bottom: 0px !important; color: rgb(255, 255, 255) !important; line-height: 1.1em; font-size: 0.92em; text-decoration: none; position: absolute; background-repeat: no-repeat;
+}
+#accueil ul#clienteles li h2 img {
+	display: none !important;
+}
+#accueil ul#clienteles .services {
+	margin: 8px 0px 0px 10px !important;
+}
+#accueil ul#clienteles p {
+	margin: 0px 0px 10px !important;
+}
+#accueil ul#clienteles services li {
+	padding: 3px 0px 3px 12px !important;
+}
+#accueil ul#clienteles .services li a {
+	color: rgb(0, 0, 0) !important;
+}
+#accueil ul#clienteles li.citoyens {
+	background: url("http://soquij.qc.ca/images/soquij2013/fond-services-citoyens.jpg") no-repeat 0px 311px !important; border-left-color: rgb(87, 26, 85); border-left-width: 1px; border-left-style: solid;
+}
+#accueil ul#clienteles li.citoyens a.plus {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/caret-mauve.gif") !important; background-color: rgb(87, 26, 85) !important;
+}
+#accueil #clientele_entete {
+	padding: 0px 135px 0px 0px !important; height: 124px !important; margin-bottom: 0px !important;
+}
+#accueil #a_signaler ul {
+	margin: 0px 12px; padding: 0px; list-style-type: none;
+}
+#colonne_principale .contenu_padding {
+	padding: 0px !important;
+}
+#colonne_principale #decisions h2 {
+	padding-left: 0px !important;
+}
+#colonne_principale #decisions .contenu_padding {
+	padding: 18px 0px !important;
+}
+#accueil #decisions_vedettes ul {
+	margin: 0px 0px 0px 10px !important;
+}
+#accueil #decisions_vedettes_en ul {
+	margin: 0px 0px 0px 10px !important;
+}
+#accueil ul#clienteles li.citoyens h2 {
+	color: rgb(87, 26, 85);
+}
+#accueil a.plus {
+	background-position: 98% 50% !important; margin: 10px 8px 12px 0px !important; padding: 3px 18px 3px 0px !important; width: 93% !important; height: 14px; text-align: right; color: rgb(255, 255, 255) !important; line-height: 1.1em; font-size: 0.92em; text-decoration: none; display: block; background-image: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") !important; background-repeat: no-repeat !important;
+}
+.accueil #accueil a.plus {
+	margin: 0px !important;
+}
+#accueil #services_trouver {
+	background: rgb(213, 213, 213) !important; padding: 10px 10px 0px !important; width: 170px !important; margin-bottom: 22px;
+}
+#accueil #translation {
+	background: rgb(213, 213, 213) !important; padding: 10px 10px 0px !important; width: 170px !important; margin-bottom: 22px;
+}
+.services-aux-citoyens #accueil #decisions_vedettes {
+	border-left-color: rgb(87, 26, 85) !important; border-left-width: 1px !important; border-left-style: solid !important;
+}
+.services-aux-citoyens #accueil #decisions_vedettes_en {
+	border-left-color: rgb(87, 26, 85) !important; border-left-width: 1px !important; border-left-style: solid !important;
+}
+#accueil #decisions_vedettes a.plus {
+	background-color: rgb(87, 26, 85) !important;
+}
+#accueil #decisions_vedettes_en a.plus {
+	background-color: rgb(87, 26, 85) !important;
+}
+#accueil #colonne_aide a.plus {
+	padding: 3px 18px 3px 0px !important; left: -9px; width: 170px !important; position: relative; background-color: rgb(115, 115, 115) !important;
+}
+#accueil #services_trouver .fcktexte {
+	margin: 0px 5px 0px 3px !important;
+}
+#accueil #translation .fcktexte {
+	margin: 0px 5px 0px 3px !important;
+}
+#accueil ul#clienteles li.citoyens .services li {
+	background: url("http://soquij.qc.ca/images/soquij2013/puce-mauve.gif") no-repeat 0px 4px !important;
+}
+#accueil ul#clienteles li.pros {
+	background: url("http://soquij.qc.ca/images/soquij2013/fond-services-pros.jpg") no-repeat 0px 309px !important; border-left-color: rgb(1, 124, 183); border-left-width: 1px; border-left-style: solid;
+}
+#accueil #colonne_aide {
+	width: 199px !important;
+}
+#accueil ul#clienteles li.pros h2 {
+	color: rgb(1, 124, 183);
+}
+#accueil ul#clienteles li.pros .services li {
+	background: url("http://soquij.qc.ca/images/soquij2013/puce-bleue.gif") no-repeat 0px 4px !important;
+}
+#accueil ul#clienteles li.pros a.plus {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/caret-bleu.gif") !important; background-color: rgb(1, 124, 183) !important;
+}
+#accueil ul#clienteles li.etudiants {
+	background: url("http://soquij.qc.ca/images/soquij2013/fond-services-etudiants.jpg") no-repeat 0px 309px !important; margin-right: 0px !important; border-left-color: rgb(150, 18, 42); border-left-width: 1px; border-left-style: solid;
+}
+#accueil ul#clienteles li.etudiants h2 {
+	width: 154px; color: rgb(150, 18, 42); margin-left: 10px;
+}
+#accueil ul#clienteles li.etudiants .services li {
+	background: url("http://soquij.qc.ca/images/soquij2013/puce-rouge.gif") no-repeat 0px 4px !important;
+}
+#accueil ul#clienteles li.etudiants a.plus {
+	background-image: url("http://soquij.qc.ca/images/soquij2013/caret-rouge.gif") !important; background-color: rgb(150, 18, 42) !important;
+}
+#accueil #a_signaler ul li {
+	padding: 5px 0px !important;
+}
+#accueil ul#clienteles {
+	width: 603px !important;
+}
+#accueil #a_signaler ul {
+	
+}
+.accueil #accueil #a_signaler ul {
+	margin: 0px; padding: 0px; width: 593px; overflow: hidden; list-style-type: none;
+}
+.accueil #accueil #a_signaler li {
+	padding: 1px 30px 10px 0px !important; width: 171px !important; height: 75px; margin-right: 0px !important; border-left-color: rgb(210, 86, 34); border-left-width: 1px; border-left-style: solid; float: left; position: relative;
+}
+.services-aux-professionnels #clientele_entete {
+	
+}
+.services-aux-citoyens #accueil #clientele_entete h1 {
+	color: rgb(86, 27, 85); margin-bottom: 13px !important;
+}
+.services-aux-citoyens #accueil #a_signaler li {
+	border-left-color: rgb(87, 26, 85); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-citoyens #accueil .fcktexte li {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-mauve.png") no-repeat 0px 4px !important;
+}
+.services-aux-citoyens #accueil .fcktexte li a[target=_blank] {
+	background: url("http://soquij.qc.ca/images/soquij2013/lien-externe.png") no-repeat 100% 48% !important; padding-right: 14px;
+}
+.services-aux-citoyens #accueil .fcktexte li a[target=_blank] img {
+	display: none;
+}
+.services-aux-professionnels #accueil #clientele_entete h1 {
+	color: rgb(0, 125, 183);
+}
+.services-aux-professionnels #accueil #catalogue_apercu {
+	background: rgb(248, 248, 248); border: 1px solid rgb(0, 0, 0); width: 400px; height: auto; margin-bottom: 20px; float: left;
+}
+.services-aux-professionnels #accueil #catalogue_apercu h2 {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-catalogue.png") no-repeat left top rgb(0, 125, 183) !important; padding: 7px 0px 3px 46px !important; height: 30px; color: white !important;
+}
+#azimut h2 {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-catalogue.png") no-repeat left top rgb(0, 125, 183) !important; padding: 7px 0px 3px 46px !important; height: 30px; color: white !important;
+}
+#top h2 {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-catalogue.png") no-repeat left top rgb(0, 125, 183) !important; padding: 7px 0px 3px 46px !important; height: 30px; color: white !important;
+}
+#publications h2 {
+	background: url("http://soquij.qc.ca/images/soquij2013/titre-catalogue.png") no-repeat left top rgb(0, 125, 183) !important; padding: 7px 0px 3px 46px !important; height: 30px; color: white !important;
+}
+.services-aux-professionnels #accueil #catalogue_apercu ul li {
+	background: rgb(255, 255, 255); margin: 0px 10px 10px; padding: 14px 10px 20px !important; border: 1px solid rgb(213, 213, 213); position: relative;
+}
+#catalogue #azimut #presentation li {
+	background: rgb(255, 255, 255); margin: 0px 10px 10px; padding: 14px 10px 20px !important; border: 1px solid rgb(213, 213, 213); position: relative;
+}
+#catalgue-tink #catalogue #azimut #presentation li {
+	background: rgb(255, 255, 255); margin: 0px 10px 10px; padding: 14px 10px 20px !important; border: 1px solid rgb(213, 213, 213); position: relative;
+}
+#catalogue #azimut #presentation li {
+	background: white !important; margin: 0px 0px 10px 10px; padding: 14px 10px 35px !important; width: 357px;
+}
+#catalgue-tink #catalogue #azimut #presentation li {
+	background: white !important; margin: 0px 0px 10px 10px; padding: 14px 10px 35px !important; width: 357px;
+}
+.express-2-0 #catalogue #azimut #presentation li {
+	margin: 18px 0px; padding: 0px !important; border: currentColor; width: auto;
+}
+.collections #catalogue #azimut #presentation li {
+	margin: 18px 0px; padding: 0px !important; border: currentColor; width: auto;
+}
+.banques-de-donnees-azimut #catalogue #azimut #presentation li {
+	margin: 18px 0px; padding: 0px !important; border: currentColor; width: auto;
+}
+.publications-imprimees #catalogue #azimut #presentation li {
+	margin: 18px 0px; padding: 0px !important; border: currentColor; width: auto;
+}
+.services-aux-professionnels #accueil #catalogue_apercu ul li h4 {
+	color: rgb(0, 0, 0) !important;
+}
+#presentation ul li h3 a {
+	font-size: 16px;
+}
+#catalogue #azimut {
+	border: 1px solid rgb(0, 0, 0); width: 400px; margin-bottom: 20px; background-color: rgb(248, 248, 248) !important;
+}
+.collections #catalogue #azimut {
+	border: currentColor; width: auto; background-color: rgb(255, 255, 255) !important;
+}
+.banques-de-donnees-azimut #catalogue #azimut {
+	border: currentColor; width: auto; background-color: rgb(255, 255, 255) !important;
+}
+.publications-imprimees #catalogue #azimut {
+	border: currentColor; width: auto; background-color: rgb(255, 255, 255) !important;
+}
+.express-2-0 #catalogue #azimut {
+	border: currentColor; width: auto; background-color: rgb(255, 255, 255) !important;
+}
+.services-aux-professionnels #accueil #catalogue_apercu ul li a.tmpl_plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(0, 125, 183) !important; padding: 4px 20px 0px 0px; left: -1px; width: 357px; height: 20px; bottom: -1px; color: white !important; display: block; position: absolute;
+}
+#presentation a.plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(0, 125, 183) !important; padding: 4px 20px 0px 0px; left: -1px; width: 357px; height: 20px; bottom: -1px; color: white !important; display: block; position: absolute;
+}
+.banques-de-donnees-azimut #presentation a.plus {
+	position: static;
+}
+#presentation a.plus {
+	width: 359px;
+}
+.services-aux-professionnels #accueil .categorie_vedette {
+	width: auto; float: none;
+}
+.services-aux-professionnels #accueil .coldroite #a_signaler ul {
+	margin: 0px 0px 25px 2px !important;
+}
+.services-aux-professionnels #accueil .coldroite #nouveautes ul {
+	margin: 0px 0px 25px 2px !important;
+}
+.services-aux-etudiants #accueil .coldroiteEtudiant #a_signaler ul {
+	margin: 0px 0px 25px 2px !important;
+}
+.services-aux-etudiants #accueil .coldroiteEtudiant #nouveautes ul {
+	margin: 0px 0px 25px 2px !important;
+}
+.services-aux-professionnels #accueil .categorie_vedette li {
+	margin: 0px !important; border-left-color: rgb(0, 125, 183); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-professionnels #accueil .categorie_vedette a.plus {
+	display: none;
+}
+.coldroite {
+	width: 185px; float: right;
+}
+.services-aux-professionnels #service_utilisateurs {
+	background: rgb(213, 213, 213) !important; left: 1px; position: relative;
+}
+.services-aux-professionnels #service_utilisateurs h2 {
+	padding: 0px;
+}
+.services-aux-professionnels #accueil #service_utilisateurs li {
+	background: url("http://soquij.qc.ca/images/soquij2013/menu-caret-bleu-droit.png") no-repeat 0px 4px; padding: 3px 0px 3px 16px; color: rgb(68, 68, 68); line-height: 1.1em;
+}
+.services-aux-professionnels ul#ariane {
+	margin: 0px 0px 10px;
+}
+.services-aux-professionnels #accueil #a_signaler span {
+	color: rgb(149, 149, 149) !important;
+}
+.services-aux-professionnels #accueil #prochaines_formations span.date {
+	color: rgb(149, 149, 149) !important;
+}
+.services-aux-professionnels #accueil #nouveautes span {
+	color: rgb(149, 149, 149) !important;
+}
+.services-aux-professionnels #accueil #a_signaler ul li {
+	
+}
+.services-aux-professionnels #accueil #prochaines_formations ul li {
+	
+}
+.services-aux-professionnels #accueil #nouveautes ul li {
+	
+}
+.services-aux-etudiants #accueil #a_signaler ul li {
+	
+}
+.services-aux-etudiants #accueil #prochaines_formations ul li {
+	
+}
+.services-aux-etudiants #accueil #nouveautes ul li {
+	
+}
+.services-aux-professionnels #accueil #service_utilisateurs .fcktexte {
+	margin: 0px 20px 18px 16px;
+}
+.services-aux-etudiants #accueil #clientele_entete h1 {
+	margin: 0px 0px 15px !important; color: rgb(150, 18, 43);
+}
+.services-aux-etudiants #accueil #vedettes {
+	margin: 0px; width: 400px; float: left; position: relative;
+}
+.services-aux-etudiants #accueil #vedettes #adhesion_pag {
+	width: 377px !important; padding-bottom: 40px; padding-left: 10px; margin-bottom: 40px; border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid; float: none !important; position: relative;
+}
+.services-aux-etudiants #accueil #vedettes #documentation {
+	width: 377px !important; padding-bottom: 40px; padding-left: 10px; margin-bottom: 40px; border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid; float: none !important; position: relative;
+}
+.services-aux-etudiants #accueil #vedettes #formations {
+	width: 377px !important; padding-bottom: 40px; padding-left: 10px; margin-bottom: 40px; border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid; float: none !important; position: relative;
+}
+.services-aux-etudiants #accueil #vedettes h2 {
+	padding: 0px !important;
+}
+.services-aux-etudiants #accueil #vedettes .fcktexte {
+	padding: 0px !important;
+}
+.services-aux-etudiants #accueil #vedettes p {
+	margin: 0px; padding: 0px;
+}
+.services-aux-etudiants #accueil #conditions {
+	margin: -25px 0px 0px; width: 100%;
+}
+.services-aux-etudiants #accueil #conditions div.cond {
+	width: 100%; padding-left: 10px; border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid; float: none;
+}
+.services-aux-etudiants #accueil #conditions div.cond p {
+	padding: 0px 0px 10px;
+}
+.services-aux-etudiants .coldroiteEtudiant {
+	width: 190px; float: right;
+}
+.services-aux-etudiants #accueil .categorie_vedette {
+	float: none;
+}
+.services-aux-etudiants #accueil #vedettes #adhesion_pag .fcktexte a.tmpl_plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(150, 18, 43) !important; padding: 3px 20px 3px 5px; left: -1px; width: 375px; text-align: right; bottom: 0px; color: rgb(255, 255, 255); text-decoration: none; margin-top: 5px; display: block; position: absolute;
+}
+.services-aux-etudiants #accueil #vedettes #documentation .fcktexte a.tmpl_plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(150, 18, 43) !important; padding: 3px 20px 3px 5px; left: -1px; width: 375px; text-align: right; bottom: 0px; color: rgb(255, 255, 255); text-decoration: none; margin-top: 5px; display: block; position: absolute;
+}
+.services-aux-etudiants #accueil #vedettes #formations .fcktexte a.tmpl_plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(150, 18, 43) !important; padding: 3px 20px 3px 5px; left: -1px; width: 375px; text-align: right; bottom: 0px; color: rgb(255, 255, 255); text-decoration: none; margin-top: 5px; display: block; position: absolute;
+}
+.services-aux-etudiants #accueil #conditions a.plus {
+	background: url("http://soquij.qc.ca/images/soquij2013/caret-blanc.png") no-repeat 98% 50% rgb(150, 18, 43) !important; padding: 3px 20px 3px 5px; left: -1px; width: 375px; text-align: right; bottom: 0px; color: rgb(255, 255, 255); text-decoration: none; margin-top: 5px; display: block; position: absolute;
+}
+.services-aux-etudiants #accueil .coldroiteEtudiant .categorie_vedette a.plus {
+	display: none;
+}
+.services-aux-etudiants #accueil .categorie_vedette li {
+	margin: 0px !important; border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-etudiants #bloc_documentation {
+	background: rgb(213, 213, 213) !important; padding: 10px 10px 0px !important; left: 2px; width: 170px !important; position: relative;
+}
+.services-aux-etudiants #accueil #bloc_documentation h2 {
+	padding: 0px !important; height: auto !important;
+}
+.services-aux-etudiants #accueil #bloc_documentation .fcktexte {
+	padding: 0px 3px 10px 0px; line-height: 1.4em; font-size: 0.92em;
+}
+.services-aux-etudiants .fcktexte li {
+	background: url("http://soquij.qc.ca/images/soquij2013/menu-caret-rouge-droit.png") no-repeat 0px 7px; padding: 2px 20px 2px 0px;
+}
+.services-aux-etudiants .fcktexte a.fichier_pdf {
+	background: url("http://soquij.qc.ca/images/soquij2013/pdf.png") no-repeat 100% 50%; width: 82%; color: rgb(0, 0, 0); padding-right: 23px; font-size: 11px; text-decoration: none;
+}
+#clientele_entete {
+	display: none;
+}
+#accueil #clientele_entete {
+	display: block;
+}
+#accueil #a_signaler li .savoir-plus {
+	width: 100px; bottom: 0px; text-indent: -99999px; display: block; position: absolute;
+}
+#accueil #a_signaler li span {
+	margin-left: 10px !important;
+}
+#accueil #a_signaler li h3 {
+	margin-left: 10px !important;
+}
+body #wrapper #accueil li span {
+	color: rgb(149, 149, 149) !important;
+}
+#accueil #a_signaler li h3 a {
+	color: rgb(51, 51, 51) !important; text-decoration: none !important;
+}
+#accueil #a_signaler li h3 a:hover {
+	text-decoration: underline !important;
+}
+#accueil #a_signaler li.dernier {
+	padding-right: 0px !important;
+}
+#accueil #encadre_intro {
+	margin-top: 40px !important;
+}
+#accueil #encadre_intro div {
+	padding: 14px 12px !important; color: rgb(0, 0, 0) !important; background-image: none !important; background-color: rgb(213, 213, 213) !important;
+}
+#accueil #encadre_intro div h3 {
+	color: rgb(0, 0, 0); margin-bottom: 3px;
+}
+#accueil #encadre_intro div p {
+	font-size: 13px;
+}
+ul#ariane {
+	margin: 0px 0px 15px;
+}
+ul#ariane li {
+	color: rgb(115, 115, 115); display: inline;
+}
+ul#ariane li a {
+	color: rgb(0, 0, 21); text-decoration: none; display: inline;
+}
+ul#ariane li a:hover {
+	color: rgb(0, 0, 21); text-decoration: underline; display: inline;
+}
+ul#sous_navig_corpo {
+	margin: 5px 0px 0px; padding: 5px 0px 0px 10px; width: 202px; line-height: 1.1em; font-size: 0.92em; list-style-type: none; background-color: rgb(78, 98, 132);
+}
+ul#sous_navig_corpo > li:first-child {
+	padding: 0px;
+}
+ul#sous_navig_corpo > li > a {
+	background-position: 97% 50% !important; border-color: rgb(0, 0, 0) !important; padding: 5px 16px 5px 7px; width: auto; color: rgb(0, 0, 0) !important; font-size: 12px; border-right-width: 1px !important; border-bottom-width: 1px !important; border-right-style: solid !important; border-bottom-style: solid !important; background-image: url("http://soquij.qc.ca/images/soquij2013/caret-noir.png"); background-color: rgb(255, 255, 255);
+}
+ul#sous_navig_corpo > li:first-child > a {
+	margin: 0px !important; padding: 12px 40px 0px 9px; border: currentColor !important; left: -5px; top: -5px; width: 158px; height: 43px; color: white !important; text-transform: uppercase !important; line-height: 1.1; font-family: NewsGothic !important; font-size: 18px !important; font-weight: normal !important; position: relative; background-image: none; background-color: rgb(206, 75, 19) !important;
+}
+.a-propos ul#sous_navig_corpo > li:first-child > a {
+	padding: 21px 40px 0px 9px; height: 34px;
+}
+.a-signaler ul#sous_navig_corpo > li:first-child > a {
+	padding: 21px 40px 0px 9px; height: 34px;
+}
+.ressources-pour-tous ul#sous_navig_corpo > li:first-child > a {
+	padding: 12px 75px 0px 9px; width: 123px;
+}
+#sous_navig_corpo {
+	background-color: rgb(206, 75, 19) !important;
+}
+ul#sous_navig_corpo li.selected {
+	padding: 0px;
+}
+ul#sous_navig_corpo a.selected {
+	margin: 0px !important; width: 178px; color: rgb(51, 51, 51); font-weight: bold; background-color: rgb(240, 185, 140);
+}
+ul#sous_navig_corpo a.selected:hover {
+	margin: 0px !important; width: 178px; color: rgb(51, 51, 51); font-weight: bold; background-color: rgb(240, 185, 140);
+}
+ul#sous_navig_corpo > li:first-child > a:hover {
+	background: rgb(206, 75, 19);
+}
+#pied {
+	
+}
+#pied ul {
+	background: rgb(148, 148, 150); margin: 0px; padding: 8px 18px; text-align: center; color: rgb(255, 255, 255); font-size: 12px; list-style-type: none;
+}
+#pied ul a {
+	color: rgb(255, 255, 255); text-decoration: none;
+}
+#pied ul a:hover {
+	color: rgb(255, 255, 255); text-decoration: underline;
+}
+#pied #signature {
+	margin: 10px 0px; width: 100%; text-align: center; color: rgb(0, 0, 0); max-width: 1026px;
+}
+#pied #signature #ministere {
+	width: auto; text-align: left; display: inline; position: static;
+}
+#pied #signature #ministere::before {
+	content: " | ";
+}
+#pied #signature a {
+	color: rgb(0, 0, 0); text-decoration: none;
+}
+#pied #signature a:hover {
+	color: rgb(0, 0, 0) !important; text-decoration: underline;
+}
+#pied #signature a#egzakt {
+	display: none;
+}
+#jugements #jugements_decision #conteneur_colonnes {
+	background: rgb(255, 255, 255) !important; width: 1026px !important;
+}
+body #jugements #jugements_decision #colonne_principale {
+	width: 730px !important;
+}
+#decision_recherche #types h4 {
+	font: bold 1.08em/1.2em Arial, Verdana, sans-serif; margin: 0px; padding: 7px 10px 7px 19px !important; color: rgb(255, 255, 255); border-left-color: currentColor !important; border-left-width: medium !important; border-left-style: none !important; font-size-adjust: none; font-stretch: normal; background-color: rgb(86, 27, 85) !important;
+}
+#decision_recherche h2 {
+	padding: 0px !important;
+}
+.ligne-bouton a {
+	padding: 4px 12px; border: currentColor; text-align: center; color: rgb(51, 51, 51) !important; line-height: 20px; font-size: 12px; margin-bottom: 0px; vertical-align: middle; display: inline-block; cursor: pointer; background-image: none; background-color: rgb(245, 245, 245);
+}
+.ligne-bouton input[type=submit] {
+	padding: 4px 12px; border: currentColor; text-align: center; color: rgb(51, 51, 51) !important; line-height: 20px; font-size: 12px; margin-bottom: 0px; vertical-align: middle; display: inline-block; cursor: pointer; background-image: none; background-color: rgb(245, 245, 245);
+}
+#jugements .ligne-bouton a {
+	color: rgb(255, 255, 255) !important; background-color: rgb(86, 27, 85) !important;
+}
+.services-aux-citoyens .ligne-bouton a {
+	color: rgb(255, 255, 255) !important; background-color: rgb(86, 27, 85) !important;
+}
+#jugements #loginform a.btn-egzakt {
+	color: rgb(255, 255, 255) !important; background-color: rgb(86, 27, 85) !important;
+}
+.services-aux-citoyens .ligne-bouton input[type=submit] {
+	color: rgb(255, 255, 255) !important; background-color: rgb(86, 27, 85) !important;
+}
+body #jugements .ligne-bouton a:hover {
+	background-image: -ms-linear-gradient(bottom, rgb(86, 27, 85) 46%, rgb(143, 43, 141) 87%); background-color: rgb(86, 27, 85);
+}
+.services-aux-citoyens .ligne-bouton a:hover {
+	background-image: -ms-linear-gradient(bottom, rgb(86, 27, 85) 46%, rgb(143, 43, 141) 87%); background-color: rgb(86, 27, 85);
+}
+.services-aux-citoyens .ligne-bouton input[type=submit]:hover {
+	background-image: -ms-linear-gradient(bottom, rgb(86, 27, 85) 46%, rgb(143, 43, 141) 87%); background-color: rgb(86, 27, 85);
+}
+#decision_recherche #info_supp {
+	width: 554px !important;
+}
+#jugements #jugements_resultats #nb_resultats {
+	background: rgb(218, 218, 218) !important; margin: 5px 0px 15px; padding: 2px 10px 0px 0px !important; color: rgb(68, 68, 68);
+}
+#jugements #jugements_resultats #nb_resultats a {
+	color: rgb(0, 0, 0);
+}
+#jugements #jugements_resultats #conteneur_colonnes {
+	background: rgb(255, 255, 255) !important; width: 100% !important;
+}
+#login_azimut_rapide #conteneur_bulle_info_azimut {
+	z-index: 10000 !important;
+}
+.a-propos #colonne_principale h1 {
+	display: none;
+}
+.ressources-pour-tous #colonne_principale h1 {
+	display: none;
+}
+.a-signaler #colonne_principale h1 {
+	display: none;
+}
+#inscription_activite_commentaire {
+	display: block;
+}
+#utilisateurs #contact form .bouton {
+	width: 401px !important;
+}
+#utilisateurs #contact form .gauche {
+	width: 400px !important;
+}
+#utilisateurs #contact form .droite {
+	width: 200px !important; float: none !important; display: block;
+}
+.centre-de-formation #utilisateurs #contact form .droite {
+	float: right !important;
+}
+#utilisateurs #contact form input[type=text] {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form li input[type=text] {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form select {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form li select {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form textarea {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form li textarea {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form option {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form li option {
+	font: 1em/1.2em Arial, Verdana, sans-serif; padding: 3px; width: 390px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal;
+}
+#utilisateurs #contact form textarea {
+	height: 60px; margin-top: 0px;
+}
+#utilisateurs #contact form li textarea {
+	height: 60px; margin-top: 0px;
+}
+#inscription_activite_telephone {
+	margin-bottom: 20px;
+}
+label {
+	color: rgb(0, 0, 21) !important;
+}
+.message_inscription {
+	background: rgb(213, 213, 213); margin: 40px 20px 0px; padding: 15px 10px; border: currentColor !important; top: -80px; color: rgb(0, 0, 0) !important; line-height: 1.2em; font-size: 12px !important; position: relative;
+}
+.message_inscription span {
+	color: rgb(51, 51, 51) !important; font-size: 14px !important; font-weight: bold; margin-bottom: 5px; display: block;
+}
+#utilisateurs #contact form {
+	margin: -10px 0px 0px !important;
+}
+#actions ul {
+	padding: 5px 0px 0px 10px !important; text-align: left; margin-left: 0px !important; border-left-color: rgb(0, 125, 183); border-left-width: 1px; border-left-style: solid; background-color: rgb(255, 255, 255) !important;
+}
+.formulaire-d-inscription #actions ul {
+	margin-left: 20px !important;
+}
+.services-aux-etudiants #actions ul {
+	border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-etudiants #actions ul {
+	border-left-color: rgb(150, 18, 43); border-left-width: 1px; border-left-style: solid;
+}
+.services-aux-citoyens #actions ul {
+	border-left-color: rgb(86, 27, 85); border-left-width: 1px; border-left-style: solid;
+}
+#actions li {
+	margin: 0px 0px 8px; padding-bottom: 8px; padding-left: 0px; display: block;
+}
+#actions a {
+	padding: 5px 0px 5px 25px !important;
+}
+#actions a#envoyer_ami {
+	background: url("http://soquij.qc.ca/images/soquij2013/envoyer.png") no-repeat 0px 6px !important;
+}
+#actions a#imprimer {
+	background: url("http://soquij.qc.ca/images/soquij2013/imprimer.png") no-repeat 0px 3px !important;
+}
+.formulaire-d-inscription #message_erreur {
+	margin: 0px 0px 40px !important; padding: 8px 35px 8px 14px !important; border: 1px solid rgb(238, 211, 215); width: 340px !important; color: rgb(185, 74, 72); text-shadow: 0px 1px 0px rgba(255,255,255,0.5); background-image: none !important; background-color: rgb(242, 222, 222);
+}
+.formulaire-d-inscription #message_erreur ul {
+	padding: 0px !important;
+}
+label.erreur {
+	background: white !important; margin: 0px 0px 20px !important; border: currentColor !important; color: rgb(217, 37, 37) !important; display: block !important;
+}
+span.erreur {
+	background: white !important; margin: 0px 0px 20px !important; border: currentColor !important; color: rgb(217, 37, 37) !important; display: block !important;
+}
+.erreur {
+	background: white !important; margin: 0px 0px 20px !important; border: currentColor !important; color: rgb(217, 37, 37) !important; display: block !important;
+}
+#actions #bulle_imprimer {
+	display: none !important;
+}
+#nouvelles ul.listing h3 a {
+	font-weight: normal; text-decoration: underline !important;
+}
+.nous-joindre h1 {
+	margin: 0px 0px 15px !important; padding: 8px 0px 0px !important; font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+body ul#navigation li ul.niveau2 > li.jaja {
+	display: none;
+}
+#emplois #spontannee a.postuler {
+	background: rgb(206, 75, 19) !important; font: bold 0.92em/1.5em Arial, Verdana, sans-serif; padding: 2px 8px; border: 1px solid rgb(206, 75, 19) !important; color: rgb(255, 255, 255); text-decoration: none; font-size-adjust: none; font-stretch: normal;
+}
+#emplois #spontannee a.postuler:hover {
+	background-color: rgb(102, 102, 102) !important;
+}
+#emplois #spontannee .aucun {
+	background-color: rgb(221, 222, 224) !important;
+}
+#emplois #spontannee .aucun h5 {
+	color: rgb(206, 75, 19) !important;
+}
+#emplois ul.listing a.postuler {
+	background: rgb(206, 75, 19) !important; padding: 4px 8px; border: 1px solid rgb(206, 75, 19) !important; right: 5px; bottom: 0px; color: rgb(255, 255, 255) !important; line-height: 1.2em; font-size: 0.92em; font-weight: bold; text-decoration: none; display: block; position: absolute;
+}
+#emplois ul.listing a.postuler:hover {
+	background-color: rgb(102, 102, 102) !important;
+}
+#emplois form {
+	margin: 0px 5px; padding: 6px 15px 15px; border: 2px dotted rgb(0, 0, 0) !important; left: 0px; top: 0px; width: 518px; position: absolute; background-color: rgb(255, 255, 255) !important;
+}
+#nouvelles ul.listing h3 a {
+	text-decoration: none !important;
+}
+#nouvelles ul.listing h3 a:hover {
+	text-decoration: underline !important;
+}
+#catalogue #azimut #presentation #encadre_abonnement {
+	background: rgb(218, 218, 218) !important; border-radius: 0px !important; top: -57px !important; height: auto !important; right: -15px !important; color: rgb(68, 68, 68); line-height: 1.2em; padding-bottom: 25px; margin-left: 0px; float: none; position: absolute; -moz-border-radius: 0; -webkit-border-radius: 0;
+}
+#aspnetForm #catalogue #azimut #presentation #encadre_abonnement {
+	background: rgb(218, 218, 218) !important; border-radius: 0px !important; top: 0px !important; height: auto !important; right: -15px !important; color: rgb(68, 68, 68); line-height: 1.2em; padding-bottom: 25px; margin-left: 0px; float: none; position: absolute; -moz-border-radius: 0; -webkit-border-radius: 0;
+}
+#catalgue-tink #sousContenu hr {
+	display: none;
+}
+#catalgue-tink .hautPage {
+	display: none;
+}
+#catalgue-tink #sousContenu {
+	margin-top: 10px;
+}
+.collections #catalogue #azimut #presentation #encadre_abonnement {
+	top: 23px !important; right: 0px !important;
+}
+.banques-de-donnees-azimut #catalogue #azimut #presentation #encadre_abonnement {
+	top: 23px !important; right: 0px !important;
+}
+.publications-imprimees #catalogue #azimut #presentation #encadre_abonnement {
+	top: 23px !important; right: 0px !important;
+}
+.express-2-0 #catalogue #azimut #presentation #encadre_abonnement {
+	top: 23px !important; right: 0px !important;
+}
+#encadre_abonnement h4 {
+	margin: 0px 0px 10px; color: rgb(68, 68, 68) !important; font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+#grpLoginDistants h2 {
+	padding: 8px 0px 0px 13px !important;
+}
+.versionmobile {
+	padding-left: 190px;
+}
+.versionmobile a {
+	padding: 5px; background-color: rgb(204, 204, 204);
+}
+ul#navig_catalogue {
+	margin: 0px; padding: 0px !important; width: 602px !important; overflow: auto; list-style-type: none; background-color: rgb(255, 255, 255) !important;
+}
+#catalgue-tink h3 {
+	margin: 20px 0px 0px !important; color: rgb(14, 47, 93) !important; font-family: NewsGothic, arial, verdana, sans-serif !important; font-size: 20px !important; font-weight: normal !important;
+}
+#catalgue-tink #authentification h3 {
+	margin: 20px 0px 0px !important; color: rgb(14, 47, 93) !important; font-family: NewsGothic, arial, verdana, sans-serif !important; font-size: 20px !important; font-weight: normal !important;
+}
+#encadre_intro {
+	display: none;
+}
+.clearfix::after {
+	height: 0px; line-height: 0; clear: both; display: block; visibility: hidden; content: ".";
+}
+.clearfix {
+	display: inline-block;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+#accueil #prochaines_formations {
+	float: none !important;
+}
+#calendrier_actions h2 {
+	padding: 0px !important; background-image: none !important;
+}
+#agenda #calendrier_actions #pagination h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.nous-joindre h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.service-des-ventes h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.service-aux-utilisateurs h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.centre-de-formation h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.essai30jours h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.identification h2 {
+	padding: 0px !important; background-image: none !important;
+}
+#CAIJ h2 {
+	padding: 0px !important; background-image: none !important;
+}
+#form1 h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.service_utilisateurs h2 {
+	padding: 0px !important; background-image: none !important;
+}
+#Professionnels_essai h2 {
+	padding: 0px !important; background-image: none !important;
+}
+#jugements h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.js h2 {
+	padding: 0px !important; background-image: none !important;
+}
+.fcktexte h3 {
+	font: 17px/normal NewsGothic, verdana, arial, sans-serif !important; margin: 0px !important; font-size-adjust: none !important; font-stretch: normal !important;
+}
+#agenda table#calendrier_normal td {
+	border: 1px solid rgb(204, 204, 204) !important;
+}
+#agenda h1 {
+	font: 2em/normal NewsGothic, verdana, arial, sans-serif !important; margin: 0px 0px 15px; padding: 0px 0px 7px 6px; color: rgb(68, 68, 68) !important; font-size-adjust: none !important; font-stretch: normal !important; background-image: none !important; background-color: transparent !important;
+}
+#recherche_globale h3 {
+	font: 2em/normal NewsGothic, verdana, arial, sans-serif !important; margin: 0px 0px 15px; padding: 0px 0px 7px 6px; color: rgb(68, 68, 68) !important; font-size-adjust: none !important; font-stretch: normal !important; background-image: none !important; background-color: transparent !important;
+}
+#agenda a#btn_rechercher_calendrier {
+	padding: 4px 15px; top: 3px; right: 8px; color: rgb(68, 68, 68); font-size: 0.92em; font-weight: bold; text-decoration: none; display: block; position: absolute; background-image: none !important; background-color: rgb(239, 239, 239) !important;
+}
+#agenda #parametres a#inscription {
+	margin: 0px !important; padding: 10px 20px !important; border: currentColor !important; color: rgb(255, 255, 255); font-weight: bold; text-decoration: none; float: right; background-image: none !important; background-color: rgb(206, 75, 19) !important;
+}
+#actions a#rss {
+	background: url("http://soquij.qc.ca/images/ul/icones/rss.gif") no-repeat 3% 50% !important;
+}
+.a-l-agenda #actions ul {
+	border-left-color: rgb(206, 75, 19); border-left-width: 1px; border-left-style: solid;
+}
+.btn {
+	padding: 10px 20px !important; border: currentColor !important; height: auto !important; color: rgb(255, 255, 255) !important; font-family: Arial, Helvetica, sans-serif; font-size: 12px !important; font-weight: normal !important; text-decoration: none !important; vertical-align: middle; display: inline-block; background-image: none !important; background-color: rgb(206, 75, 19) !important;
+}
+.btn:hover {
+	background-color: rgb(176, 65, 17) !important;
+}
+.abonnement #mainform table {
+	left: -105px; position: relative;
+}
+#conteneur_colonnes #fade_colonne_navig {
+	width: 100% !important;
+}
+#publications #presentation li a.plus {
+	background: url("http://soquij.qc.ca/images/ul/graphiques/plus_pros.gif") no-repeat 154px 3px rgb(188, 210, 229); padding: 4px 20px 0px 0px; left: 0px; width: 144px; text-align: right; bottom: 0px; color: rgb(68, 68, 68); line-height: 1.3em; font-size: 0.92em; text-decoration: none; display: block; position: absolute;
+}
+#jugements #jugements_decision #nb_resultats {
+	font: bold 1.17em/1.2em Arial, Verdana, sans-serif; margin: 5px 0px 15px; padding: 5px !important; color: rgb(68, 68, 68); font-size-adjust: none; font-stretch: normal; background-image: none !important; background-color: rgb(218, 218, 218);
+}
+#jugements #jugements_decision #nb_resultats h2.noti {
+	color: rgb(0, 0, 0); font-family: NewsGothic, Arial, sans-serif !important;
+}
+#chroniques #vedette h3 {
+	border: currentColor !important; color: rgb(68, 68, 68) !important; padding-left: 0px !important; font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+#chroniques #recherche h3 {
+	border: currentColor !important; color: rgb(68, 68, 68) !important; padding-left: 0px !important; font-family: NewsGothic !important; font-size: 20px !important; font-weight: normal !important;
+}
+#chroniques #recherche h3 {
+	padding-left: 17px !important;
+}
+#chroniques #recherche {
+	background: rgb(213, 213, 213) !important; padding: 0px 0px 20px;
+}
+#chroniques #conteneur_recherche {
+	width: 594px; margin-top: 10px;
+}
+#chroniques #vedette h4 {
+	color: rgb(68, 68, 68) !important; font-family: NewsGothic !important; font-style: italic !important; font-weight: normal !important;
+}
+#chroniques #vedette .padding {
+	padding: 12px 18px 12px 0px !important;
+}
+.english h1 {
+	display: none;
+}
+#jugements_editeurs .message_alerte {
+	margin: 15px auto; padding: 7px; border: 3px solid rgb(236, 118, 8) !important; width: 85%;
+}
+body#page_flottante_thickbox {
+	background-image: none !important; background-color: rgb(255, 255, 255) !important;
+}
+#profuzio .fcktexte {
+	background-image: none !important; background-color: rgb(255, 255, 255) !important;
+}
+body.starwars #colonne_principale {
+	background: url("http://soquij.qc.ca/images/img_starwars/starwars-bg-plus50.jpg") no-repeat rgb(4, 10, 17) !important; padding: 20px; width: 580px !important; height: auto; text-align: justify; color: rgb(253, 224, 69); line-height: 18px; overflow: hidden; font-family: "DroidSansRegular", arial, verdana, sans-serif; font-size: 12px; font-weight: 500;
+}
+.starwars #ariane {
+	color: rgb(255, 255, 255) !important;
+}
+.starwars #ariane a {
+	color: rgb(255, 255, 255) !important;
+}
+.starwars #ariane span {
+	color: rgb(255, 255, 255) !important;
+}
+.starwars #ariane a {
+	text-decoration: underline;
+}
+.starwars h2 {
+	display: none;
+}
+.starwars strong {
+	font-family: "DroidSansBold", arial, verdana, sans-serif;
+}
+.starwars .fcktexte {
+	margin: 0px; padding: 0px; color: rgb(253, 224, 69);
+}
+.starwars a {
+	color: rgb(253, 224, 69);
+}
+.starwars h3 {
+	color: rgb(253, 224, 69);
+}
+.starwars h4 {
+	color: rgb(253, 224, 69);
+}
+.starwars h5 {
+	color: rgb(253, 224, 69);
+}
+p.titre-starwars {
+	text-align: center; margin-top: 20px;
+}
+.starwars .text-starwars {
+	margin: -175px 0px 50px; padding: 0px; transform-origin: 50% 100%; font-size: 16px; transform: perspective(450px) rotateX(15deg); -webkit-transform-origin: 50% 100%; -moz-transform-origin: 50% 100%; -o-transform-origin: 50% 100%; -webkit-transform: perspective(450px) rotateX(15deg); -moz-transform: perspective(450px) rotateX(15deg); -o-transform: perspective(450px) rotateX(15deg);
+}
+.starwars .text-starwars h4 {
+	text-align: center; text-transform: uppercase; font-family: "DroidSansBold", arial, verdana, sans-serif; font-size: 16px; margin-top: 50px;
+}
+.starwars .bloc_deroulant a.lien_deroulant {
+	color: rgb(16, 30, 42); font-size: 12px; background-image: url("http://soquij.qc.ca/images/img_starwars/starwars-plus.png"); background-color: rgb(255, 255, 255);
+}
+.starwars .bloc_deroulant a.lien_deroulant:hover {
+	color: rgb(16, 30, 42); font-size: 12px; background-image: url("http://soquij.qc.ca/images/img_starwars/starwars-plus.png"); background-color: rgb(255, 255, 255);
+}
+.starwars .bloc_deroulant a.selected.lien_deroulant {
+	background-image: url("http://soquij.qc.ca/images/img_starwars/starwars-moins.png");
+}
+.starwars .bloc_deroulant .zone_deroulante {
+	border: 1px solid rgb(255, 255, 255) !important; color: rgb(255, 255, 255); font-family: Arial, Helvetica, sans-serif !important; font-size: 12px; background-color: transparent;
+}
+.starwars .bloc_deroulant strong {
+	font-family: Arial, Helvetica, sans-serif !important;
+}
+.starwars .zone_deroulante a {
+	color: rgb(255, 255, 255);
+}
+.starwars .zone_deroulante h5 {
+	font-size: 14px; margin-bottom: 5px;
+}
+p.programme {
+	font-size: 12px; margin-top: 10px;
+}
+.notabene {
+	font-size: 12px;
+}
+.notabene h4 {
+	margin-bottom: 5px;
+}
+.action-starwars#actions {
+	
+}
+.action-starwars#actions ul {
+	color: rgb(253, 224, 69); border-left-color: rgb(253, 224, 69); border-left-width: 1px; border-left-style: solid; background-color: transparent;
+}
+.action-starwars#actions ul a {
+	color: rgb(253, 224, 69);
+}
+@media screen and (max-width:860px)
+{
+body #accueil ul#clienteles li.citoyens {
+	background-image: none !important;
+}
+body #accueil ul#clienteles li.pros {
+	background-image: none !important;
+}
+body #accueil ul#clienteles li.etudiants {
+	background-image: none !important;
+}
+}

@@ -1,0 +1,149 @@
+<!-- BEGIN: main -->
+
+<html>
+<!-- HEADING: -->
+<link rel="stylesheet" type="text/css" media="all" href="../solstice.css">
+  <body>
+
+  <div class="blk_inside">
+    <div class="blk_content pdg pdg_h">
+    <h2><img alt="Profil employ&eacute;" src="/Img/Account/titre_carnet_adresse.gif"></h2>
+    <div class="line_2cols_mea mrg_v"> 
+        <div class="block block_moutarde">
+          <div class="blk_inside flat gradient_blanc">
+            <b class="bl"><!--  --></b>
+	    <h3 id="PostalAddresses" class="blk_header"><span class="fine">Mon adresse</span></h3>
+
+	    <div class="blk_content pdg_h">
+	          
+	<div>
+		
+	<p class="mrg_b_sm">
+	
+			<span class="gras">{EmployeeName}</span><br>
+			<span class="grisfonce">{EmployeeAdress1}</span><br>
+			
+			<span class="grisfonce">{EmployeeAdress2}</span><br>
+			<span class="grisfonce">{EmployeeAdress3}</span><br>
+			<span class="grisfonce">{EmployeeAdress4}</span> <br>
+			<span class="grisfonce">{EmployeePostal}&nbsp;{EmployeeCity}</span> <br>
+			<span class="grisfonce">{EmployeeRegion}&nbsp;{EmployeeCountry}</span> <br>
+			T&eacute;l&eacute;phone : <span class="grisfonce">{EmployeePhone}</span><br>
+			Poste t&eacute;l&eacute;phonique :<span class="grisfonce">{EmployeeExt}</span><br>
+			
+			
+			<span class="grisfonce">Canada</span><br>
+	</p>
+
+	<p class="mrg_no mrg_t_sm pdg_b brd_b_gris">
+		
+			»&nbsp;<a href="./Address.jsp" class="grisfonce">Modifier</a>&nbsp;&nbsp;&nbsp;
+	</p>
+
+	
+	</div>
+
+	    </div>
+          </div>
+        </div><!-- /block moutarde  -->
+ 
+       <div class="block block_last block_vert">
+          <div class="blk_inside flat gradient_blanc">
+            <b class="bl"><!--  --></b>
+	    <h3 id="InfoBussiness" class="blk_header"><span class="fine">Informations</span></h3>
+
+	    <div class="blk_content pdg_h">
+	          
+	<div>
+		
+	<p class="mrg_b_sm">
+	
+			<span class="gras">{EmployeeName}</span><br>
+			Courielle : <span class="grisfonce">{EmployeeEmail}</span><br>
+			
+			Lieu de travail :<span class="grisfonce">{Workplace}</span><br>
+			T&eacute;l&eacute;phone : <span class="grisfonce">{EmployeePhone}</span><br>
+			Poste t&eacute;l&eacute;phonique :<span class="grisfonce">{EmployeeExt}</span><br>
+			Fax :<span class="grisfonce">243</span><br>
+	</p>
+
+	<p class="mrg_no mrg_t_sm pdg_b brd_b_gris">
+		
+			»&nbsp;<a href="./Address.jsp" class="grisfonce">Modifier</a>&nbsp;&nbsp;&nbsp;
+	</p>
+	
+	</div>
+
+	    </div>
+          </div>
+        </div><!-- /block vert -->
+	</div>
+
+       <div class="block block_last block_vert">
+          <div class="blk_inside flat gradient_blanc">
+            <b class="bl"><!--  --></b>
+	    <h3 id="Contacts" class="blk_header"><span class="fine">Personnes contacts</span></h3>
+
+	    <div class="blk_content pdg_h">
+	          
+	<div>
+		
+	<p class="mrg_b_sm">
+	<table border="1">
+	  <tr>
+	    <th>Contact Type</th>
+    	    <th>Contact</th>
+    	    <th>Phone</th>
+    	    <th>Comments</th>
+    	    <th>&nbsp;</th>
+          </tr> 
+	  <tr>
+	  	<td>&nbsp;</td>
+		<td>Marc Morissette </td>
+	  	<td>(418) 286-3428</td>
+	  	<td>&nbsp;</td>
+	  	<td>»&nbsp;<a href="./EmergencyContact.jsp?id=10" class="grisfonce">Modifier</a></td>
+	  </tr>
+	  <tr>
+	  	<td>&nbsp;</td>
+		<td>Anne Morissette </td>
+	  	<td>&nbsp;</td>
+	  	<td>&nbsp;</td>
+	  	<td>»&nbsp;<a href="./EmergencyContact.jsp?id=20" class="grisfonce">Modifier</a></td>
+	  </tr>
+<!-- BEGIN: line --> 	  
+	  <tr>
+	  	<td>&nbsp;</td>
+		<td>Anne Morissette </td>
+	  	<td>&nbsp;</td>
+	  	<td>&nbsp;</td>
+	  	<td>»&nbsp;<a href="./EmergencyContact.jsp?id=20" class="grisfonce">Modifier</a></td>
+	  </tr>
+<!-- END: line --> 	  
+	  </table>
+	</p>
+
+	<p class="mrg_no mrg_t_sm pdg_b brd_b_gris">
+		
+			»&nbsp;<a href="./Address.jsp" class="grisfonce">Ajouter un contact</a>&nbsp;&nbsp;&nbsp;
+	</p>
+	
+	</div>
+
+	    </div>
+          </div>
+        </div><!-- /block vert -->
+
+
+    </div>
+  </div>
+
+
+
+
+</div>		
+</div>	
+</div>	
+</body>
+</html>
+<!-- END: main -->	

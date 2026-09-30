@@ -1,0 +1,1079 @@
+package solstice.fop;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import org.compiere.util.DB;
+
+/**
+ * Cette classe sert à générer un XML pour l'avis de dépôt d'un employé pour une période
+ * à partir de la base de données
+ * @author frafor01
+ */
+public class BankDepositXmlGenerator implements IXmlGenerator
+{
+	
+	public static void main(String[] args) throws Exception
+	{
+		org.compiere.Compiere.startupEnvironment(true);
+		BankDepositXmlGenerator xmlGenerator = new BankDepositXmlGenerator(1009592, 1001918, 1000010);
+		
+		FileOutputStream outputStream = new FileOutputStream("C:\\Temp\\AvisDepotBancaire.xml");
+		xmlGenerator.generateXml(outputStream);
+		outputStream.flush();
+		outputStream.close();
+	}
+	
+	/**
+	 * Cette méthode retourne le format des décimals à utiliser dans l'avis de dépôt
+	 * @return nouvelle instance
+	 */
+	private static DecimalFormatSymbols getDecimalFormatSymbols()
+	{
+		DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols();
+		formatSymbols.setDecimalSeparator('.');
+		return formatSymbols;
+	}
+	
+	private static final String TXBL_EARNINGS = "A";
+	private static final String ENGLISH_PREFIX = "en_";
+	private static final DecimalFormat TWO_DECIMALS_FORMAT = new DecimalFormat("#0.00", BankDepositXmlGenerator.getDecimalFormatSymbols());
+	private static final DecimalFormat FOUR_DECIMALS_FORMAT = new DecimalFormat("#0.0000", BankDepositXmlGenerator.getDecimalFormatSymbols());
+	private static final DecimalFormat TWO_DIGITS_FORMAT = new DecimalFormat("00");
+	private static final DecimalFormat FOUR_DIGITS_FORMAT = new DecimalFormat("0000");
+	private static final int CANADA_ID = 109;
+	public static final int ENGLISH = 0;
+	public static final int FRENCH = 1;
+
+	private int employeeID;
+	private int periodID;
+	private int frequencyID;
+	private int language = FRENCH;
+	private boolean dataGenerated = false;
+	private String baseUrl;
+	
+	/**
+	 * Constructeur
+	 * @param employeeID L'employé
+	 * @param periodID La période
+	 * @param frequencyID La fréquence de paie
+	 */
+	public BankDepositXmlGenerator(int employeeID, int periodID, int frequencyID)
+	{
+		this.employeeID = employeeID;
+		this.periodID = periodID;
+		this.frequencyID = frequencyID;
+	}
+	
+	/**
+	 * Cette méthode sert à générer le XML
+	 * @param outputStream Un flux de sortie ouvert
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	public void generateXml(OutputStream outputStream) throws IOException, SQLException
+	{
+		OutputStreamWriter writer = null;
+		
+		try
+		{
+			writer = new OutputStreamWriter(outputStream, "iso-8859-1");
+			writer.write("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n");
+			
+			this.writeBankDeposit(writer);
+			writer.flush();
+		}
+		finally
+		{
+			if(writer != null)
+				writer.close();
+		}
+	}
+	
+	/**
+	 * La langue dans laquelle l'avis de dépôt a été généré
+	 * @return La langue selon les constantes
+	 */
+	public int getLanguage() throws IllegalStateException
+	{
+		return this.language;
+	}
+	
+	/**
+	 * Cette méthode indique si le XML contient des données
+	 * @return VRAI si le XML contient des données
+	 */
+	public boolean containsData()
+	{
+		return this.dataGenerated;
+	}
+	
+	/**
+	 * Cette méthode sert à définir l'url de base qui doit être inscrite dans le XML 
+	 * pour faire les liens avec les images. L'url doit obligatoirement se terminer 
+	 * par un caractère /
+	 * @param baseUrl
+	 */
+	public void setBaseUrl(String baseUrl)
+	{
+		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * Cette méthode permet d'écrire l'avis de dépôt bancaire
+	 * @param writer
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeBankDeposit(Writer writer) throws IOException, SQLException
+	{
+		writer.write("<bankDeposit>\r\n");
+
+		this.writeBaseUrl(writer);
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête permet d'obtenir toutes l'informations nécessaires
+			// pour commencer le rapport pour un employé
+			pstmt = DB.prepareStatement(
+					"SELECT	P_DISTRIBUTION.VALUE AS P_DISTRIBUTION_VALUE, " +
+					"		P_Language.VALUE AS P_Language_VALUE, " + 
+					"		P_PERIOD.P_FREQUENCY_ID, " + 
+					"		P_PERIOD.PAYDATE, " + 
+					"		P_PERIOD.STARTDATE, " + 
+					"		P_PERIOD.ENDDATE, " + 
+					"		AD_ORG.VALUE AS AD_ORG_VALUE, " + 
+					"		C_ACTIVITY.VALUE AS C_ACTIVITY_VALUE, " + 
+					"		C_REGION.NAME AS C_REGION_NAME, " + 
+					"		C_LOCATION.C_COUNTRY_ID, " + 
+					"		C_LOCATION.CITY, " + 
+					"		C_LOCATION.ADDRESS1, " + 
+					"		C_LOCATION.POSTAL, " + 
+					"		C_COUNTRY.NAME AS C_COUNTRY_NAME, " + 
+					"		P_POST.NAME AS P_POST_NAME, " + 
+					"		P_POST_TRL.NAME AS P_POST_TRL_NAME, " + 
+					"		P_WORKPLACE.VALUE AS P_WORKPLACE_VALUE, " + 
+					"		P_DEPARTMENT.VALUE AS P_DEPARTMENT_VALUE, " + 
+					"		P_EMPLOYEE.VALUE AS P_EMPLOYEE_VALUE, " + 
+					"		P_EMPLOYEE.NAME AS P_EMPLOYEE_NAME, " + 
+					"		P_EMPLOYEE.P_EMPLOYEE_ID, " + 
+					"		P_EMPLOYEE.P_DISTRIBUTION_BOOKLET_ID, " + 
+					"		P_EMPLOYEE.PRINTSTATEMENTEARNING, " + 
+					"		P_EMPLOYEE.FIRSTNAME, " + 
+					"		P_EMPLOYEE.SURNAME, " + 
+					"		P_STATEMENT_EARNING.PREPRINTEDNO, " + 
+					"		P_STATEMENT_EARNING.P_STATEMENT_EARNING_ID, " + 
+					"		P_STATEMENT_EARNING.P_PERIOD_ID, " + 
+					"		P_STATEMENT_EARNING.GROSSEARNINGSPERIOD, " + 
+					"		P_STATEMENT_EARNING.GROSSEARNINGSCUM, " + 
+					"		P_STATEMENT_EARNING.AD_CLIENT_ID, " + 
+					"		P_STATEMENT_EARNING.AD_ORG_ID, " + 
+					"		P_STATEMENT_EARNING.C_ACTIVITY_ID, " + 
+					"		P_STATEMENT_EARNING.P_PAYMENT_ID, " + 
+					"		P_STATEMENT_EARNING.P_Department_ID " +
+					"FROM   ((((((((((((P_STATEMENT_EARNING INNER JOIN AD_ORG ON (P_STATEMENT_EARNING.AD_ORG_ID=AD_ORG.AD_ORG_ID) AND (P_STATEMENT_EARNING.AD_CLIENT_ID=AD_ORG.AD_CLIENT_ID)) LEFT OUTER JOIN P_DISTRIBUTION ON P_STATEMENT_EARNING.P_DISTRIBUTION_ID=P_DISTRIBUTION.P_DISTRIBUTION_ID) LEFT OUTER JOIN P_PERIOD ON P_STATEMENT_EARNING.P_PERIOD_ID=P_PERIOD.P_PERIOD_ID) INNER JOIN P_EMPLOYEE ON P_STATEMENT_EARNING.P_EMPLOYEE_ID=P_EMPLOYEE.P_EMPLOYEE_ID) LEFT OUTER JOIN C_ACTIVITY ON P_STATEMENT_EARNING.C_ACTIVITY_ID=C_ACTIVITY.C_ACTIVITY_ID) LEFT OUTER JOIN P_POST ON P_STATEMENT_EARNING.P_Post_ID=P_POST.P_POST_ID) LEFT OUTER JOIN P_POST_TRL ON P_STATEMENT_EARNING.P_Post_ID=P_POST_TRL.P_POST_ID) INNER JOIN P_DEPARTMENT ON P_STATEMENT_EARNING.P_Department_ID=P_DEPARTMENT.P_DEPARTMENT_ID) INNER JOIN P_Language ON P_EMPLOYEE.P_Language_ID=P_Language.P_Language_ID) INNER JOIN C_LOCATION ON P_EMPLOYEE.C_LOCATION_ID=C_LOCATION.C_LOCATION_ID) INNER JOIN P_WORKPLACE ON P_EMPLOYEE.P_WORKPLACE_ID=P_WORKPLACE.P_WORKPLACE_ID) INNER JOIN C_REGION ON C_LOCATION.C_REGION_ID=C_REGION.C_REGION_ID) INNER JOIN C_COUNTRY ON C_LOCATION.C_COUNTRY_ID=C_COUNTRY.C_COUNTRY_ID " +
+					"WHERE	P_STATEMENT_EARNING.AD_CLIENT_ID=P_EMPLOYEE.AD_CLIENT_ID " +
+					"AND	P_PERIOD.P_FREQUENCY_ID=" + this.frequencyID + " " +
+					"AND	P_STATEMENT_EARNING.P_PERIOD_ID=" + this.periodID + " " +
+					"AND	P_EMPLOYEE.P_EMPLOYEE_ID=" + this.employeeID, null);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				this.language = this.getLanguage(rs.getString("P_Language_VALUE"));
+				
+				this.writeReportHeader(writer, rs);
+				this.writeReportBody(writer, rs);
+				this.writeReportFooter(writer, rs);
+				
+				this.dataGenerated = true;
+			}
+		}
+		finally
+		{
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+
+		writer.write("</bankDeposit>\r\n");
+	}
+	
+	/**
+	 * Cette méthode retourne la langue à partir des constantes définie pour cette classe. La
+	 * langue par défaut est le français.
+	 * @param slanguage La langue du style en_CA
+	 * @return La langue selon les valeurs des constantes de langues
+	 */
+	private int getLanguage(String slanguage)
+	{
+		if(slanguage != null)
+		{
+			if(slanguage.startsWith(ENGLISH_PREFIX))
+				return ENGLISH;
+			
+		}
+		return FRENCH;
+	}
+	
+	/**
+	 * Cette méthode sert à écrire l'URL de base pour les images
+	 * @param writer
+	 */
+	private void writeBaseUrl(Writer writer) throws IOException
+	{
+		writer.write("<baseUrl>" + this.baseUrl + "</baseUrl>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire l'entête du rapport
+	 * @param writer
+	 * @param rs
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeReportHeader(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<reportHeader>\r\n");
+		
+		if(this.language == ENGLISH)
+			writer.write("<title>Bank Deposit Notice</title>\r\n");
+		else
+			writer.write("<title>Avis de dépôt bancaire</title>\r\n");
+		
+		this.writePayment(writer, rs);
+		
+		writer.write("</reportHeader>\r\n");
+	}
+
+	/**
+	 * Cette méthode sert à écrire le corp du rapport
+	 * @param writer
+	 * @param rs
+	 * @param this.language
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeReportBody(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<reportBody>\r\n");
+		int statementEarningID = rs.getInt("P_STATEMENT_EARNING_ID");
+		BigDecimal grossEarningsPeriod = rs.getBigDecimal("GROSSEARNINGSPERIOD");
+		BigDecimal grossEarningsCum = rs.getBigDecimal("GROSSEARNINGSCUM");
+		
+		this.writeGains(writer, statementEarningID, grossEarningsPeriod, grossEarningsCum);
+		BigDecimal[] sums = this.writeDeductions(writer, statementEarningID);
+		this.writeNetPay(writer, sums[0], sums[1], sums[2], sums[3]);
+		writer.write("</reportBody>\r\n");
+	}
+
+	/**
+	 * Cette méthode sert à écrire le pied du rapport
+	 * @param writer
+	 * @param rs
+	 * @param this.language
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeReportFooter(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<reportFooter>\r\n");
+		int statementEarningID = rs.getInt("P_STATEMENT_EARNING_ID");
+		int paiementID = rs.getInt("P_PAYMENT_ID");
+
+		if(this.language == ENGLISH)
+			writer.write("<nonNegociable>*** NON NEGOCIABLE ***</nonNegociable>\r\n");
+		else
+			writer.write("<nonNegociable>*** NON NÉGOCIABLE ***</nonNegociable>\r\n");
+
+		this.writeEmployeeAddress(writer, rs);
+		this.writeIdentificationJobTitle(writer, rs);
+		this.writeCredits(writer, statementEarningID);
+		this.writeBankAccounts(writer, paiementID);
+		writer.write("</reportFooter>\r\n");
+	}
+
+	/**
+	 * Cette méthode sert à écrire la sections des gains
+	 * @param writer le flux d'écriture
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeGains(Writer writer, int statementEarningID, BigDecimal grossEarningsPeriod, BigDecimal grossEarningsCum) throws IOException, SQLException
+	{
+		writer.write("<gains>\r\n");
+		
+		this.writeGainsHeader(writer);
+		BigDecimal[] sums = this.writeGainsBody(writer, statementEarningID);
+		this.writeGainsSummaries(writer, grossEarningsPeriod, grossEarningsCum, sums[0], sums[1], sums[2], sums[3]);
+		
+		writer.write("</gains>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire l'entête des gains
+	 * @param writer
+	 * @throws IOException
+	 */
+	private void writeGainsHeader(Writer writer) throws IOException
+	{
+		writer.write("<header>\r\n");
+		
+		if(this.language == ENGLISH)
+		{
+			writer.write("<description>REVENUS</description>\r\n");
+			writer.write("<hourlyRate>RATE</hourlyRate>\r\n");
+			writer.write("<unitaryPeriod>CURRENT UNITS</unitaryPeriod>\r\n");
+			writer.write("<amountPeriod>CURRENT AMT</amountPeriod>\r\n");
+			writer.write("<unitaryCum>YTD UNITS</unitaryCum>\r\n");
+			writer.write("<amountCumul>YTD AMT</amountCumul>\r\n");
+		}
+		else
+		{
+			writer.write("<description>GAINS</description>\r\n");
+			writer.write("<hourlyRate>TAUX</hourlyRate>\r\n");
+			writer.write("<unitaryPeriod>UNITÉS COURANTES</unitaryPeriod>\r\n");
+			writer.write("<amountPeriod>MONTANT COURANT</amountPeriod>\r\n");
+			writer.write("<unitaryCum>UNITÉS ACJ</unitaryCum>\r\n");
+			writer.write("<amountCumul>MONTANT ACJ</amountCumul>\r\n");
+		}
+		
+		writer.write("</header>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire le détail des gains
+	 * @param writer
+	 * @param statementEarningID
+	 * @return BigDecimal[] { federalAmountCumul, 
+	 *                        federalAmountPeriod, 
+	 *                        provincialAmountCumul, 
+	 *                        provincialAmountPeriod }
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private BigDecimal[] writeGainsBody(Writer writer, int statementEarningID) throws IOException, SQLException
+	{
+		writer.write("<body>\r\n");
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		BigDecimal federalAmountCumul = new BigDecimal(0);
+		BigDecimal federalAmountPeriod = new BigDecimal(0);
+		BigDecimal provincialAmountCumul = new BigDecimal(0);
+		BigDecimal provincialAmountPeriod = new BigDecimal(0);
+		
+		try
+		{
+			// Cette requête sert à obtenir la liste des gains
+			pstmt = DB.prepareStatement(
+					"SELECT	RV_P_AvisDepotBancaire.DESCRIPTION, " +
+					"		RV_P_AvisDepotBancaire.UNITARYPERIOD, " +
+					"		RV_P_AvisDepotBancaire.UNITARYCUM, " +
+					"		RV_P_AvisDepotBancaire.AMOUNTPERIOD, " +
+					"		RV_P_AvisDepotBancaire.AMOUNTCUMUL, " +
+					"		RV_P_AvisDepotBancaire.P_STATEMENT_EARNING_ID, " +
+					"		RV_P_AvisDepotBancaire.HOURLY_RATE, " +
+					"		RV_P_AvisDepotBancaire.ISProvincial, " +
+					"		RV_P_AvisDepotBancaire.[TYPE] " +
+					"FROM	RV_P_AvisDepotBancaire " +
+					"WHERE	RV_P_AvisDepotBancaire.P_STATEMENT_EARNING_ID=" + statementEarningID, null);
+			
+			rs = pstmt.executeQuery();
+			
+			BigDecimal value = null;
+			
+			while(rs.next())
+			{
+				writer.write("<detail>\r\n");
+				writer.write("<description>" + rs.getString("DESCRIPTION") + "</description>\r\n");
+				
+				value = rs.getBigDecimal("HOURLY_RATE");
+				if(value != null)
+					writer.write("<hourlyRate>" + FOUR_DECIMALS_FORMAT.format(value.doubleValue()) + "</hourlyRate>\r\n");
+				
+				value = rs.getBigDecimal("UNITARYPERIOD");
+				if(value != null)
+					writer.write("<unitaryPeriod>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</unitaryPeriod>\r\n");
+				
+				value = rs.getBigDecimal("AMOUNTPERIOD");
+				if(value != null)
+					writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</amountPeriod>\r\n");
+				
+				value = rs.getBigDecimal("UNITARYCUM");
+				if(value != null)
+					writer.write("<unitaryCum>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</unitaryCum>\r\n");
+				
+				value = rs.getBigDecimal("AMOUNTCUMUL");
+				if(value != null)
+					writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</amountCumul>\r\n");
+
+				writer.write("</detail>\r\n");
+				
+				// On doit maitenant calculer les gains taxables pour le provincial et le fédéral
+				if(TXBL_EARNINGS.equals(rs.getString("TYPE")))
+				{
+					if("Y".equals(rs.getString("ISProvincial")))
+					{
+						provincialAmountPeriod = provincialAmountPeriod.add(rs.getBigDecimal("AMOUNTPERIOD"));
+						provincialAmountCumul = provincialAmountCumul.add(rs.getBigDecimal("AMOUNTCUMUL"));
+					}
+					else
+					{
+						federalAmountPeriod = federalAmountPeriod.add(rs.getBigDecimal("AMOUNTPERIOD"));
+						federalAmountCumul = federalAmountCumul.add(rs.getBigDecimal("AMOUNTCUMUL"));
+					}
+				}
+			}
+		}
+		finally
+		{
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+		
+		writer.write("</body>\r\n");
+		return new BigDecimal[] { federalAmountCumul, 
+								  federalAmountPeriod, 
+								  provincialAmountCumul, 
+								  provincialAmountPeriod};
+	}
+	
+	/**
+	 * Cette méthode sert à écrire les sommations des gains
+	 * @param writer
+	 * @param statementEarningID
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeGainsSummaries(Writer writer, BigDecimal grossEarningsPeriod, 
+			BigDecimal grossEarningsCum, BigDecimal federalAmountCumul, 
+			BigDecimal federalAmountPeriod, BigDecimal provincialAmountCumul, 
+			BigDecimal provincialAmountPeriod) throws IOException, SQLException
+	{
+		writer.write("<summaries>\r\n");
+
+		// Le premier sommaire sert à afficher les gains totaux pour la période et pour l'année
+		writer.write("<summary>\r\n");
+
+		if(this.language == ENGLISH)
+			writer.write("<description>TOTAL GROSS EARNING</description>\r\n");
+		else
+			writer.write("<description>TOTAL GAINS BRUTS</description>\r\n");
+		
+		writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(grossEarningsPeriod.doubleValue()) + "</amountPeriod>\r\n");
+		writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(grossEarningsCum.doubleValue()) + "</amountCumul>\r\n");
+
+		writer.write("</summary>\r\n");
+		
+		// Si on a compté des gains taxables pour le provincial, on ajoute un sommaire
+		if(provincialAmountCumul != null && provincialAmountCumul.doubleValue() != 0
+				|| provincialAmountPeriod != null && provincialAmountPeriod.doubleValue() != 0)
+		{
+			writer.write("<summary>\r\n");
+
+			if(this.language == ENGLISH)
+				writer.write("<description>TOTAL PROVINCIAL TXBL EARNING</description>\r\n");
+			else
+				writer.write("<description>TOTAL GAINS TAXABLES PROVINCIAUX</description>\r\n");
+			
+			writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(grossEarningsPeriod.add(provincialAmountPeriod).doubleValue()) + "</amountPeriod>\r\n");
+			writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(grossEarningsCum.add(provincialAmountCumul).doubleValue()) + "</amountCumul>\r\n");
+
+			writer.write("</summary>\r\n");
+		}
+		
+		// Si on a compté des gains taxables pour le fédéral, on ajoute un sommaire
+		if(federalAmountCumul != null && federalAmountCumul.doubleValue() != 0
+				|| federalAmountPeriod != null && federalAmountPeriod.doubleValue() != 0)
+		{
+			writer.write("<summary>\r\n");
+
+			if(this.language == ENGLISH)
+				writer.write("<description>TOTAL FEDERAL TXBL EARNING</description>\r\n");
+			else
+				writer.write("<description>TOTAL GAINS TAXABLES FÉDÉRAUX</description>\r\n");
+			
+			writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(grossEarningsPeriod.add(federalAmountPeriod).doubleValue()) + "</amountPeriod>\r\n");
+			writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(grossEarningsCum.add(federalAmountCumul).doubleValue()) + "</amountCumul>\r\n");
+
+			writer.write("</summary>\r\n");
+		}
+
+		writer.write("</summaries>\r\n");
+	}
+
+	
+	/**
+	 * Cette méthode sert à écrire la sections des déductions
+	 * @param writer le flux d'écriture
+	 * @throws IOException
+	 * @throws SQLException
+	 * @return BigDecimal[] { deductionPeriod, 
+	 *                        deductionCum, 
+	 *                        grossEarningsPeriod, 
+	 *                        grossEarningsCum }
+	 */
+	private BigDecimal[] writeDeductions(Writer writer, int statementEarningID) throws IOException, SQLException
+	{
+		writer.write("<deductions>\r\n");
+		
+		this.writeDeductionsHeader(writer);
+		BigDecimal[] sums = this.writeDeductionsBody(writer, statementEarningID);
+		this.writeDeductionsSummaries(writer, sums[0], sums[1]);
+		
+		writer.write("</deductions>\r\n");
+		
+		return sums;
+	}
+	
+	/**
+	 * Cette méthode sert à écrire l'entête des déductions
+	 * @param writer
+	 * @param this.language
+	 * @throws IOException
+	 */
+	private void writeDeductionsHeader(Writer writer) throws IOException
+	{
+		writer.write("<header>\r\n");
+		
+		if(this.language == ENGLISH)
+		{
+			writer.write("<description>DEDUCTIONS</description>\r\n");
+			writer.write("<amountPeriod>CURRENT AMT</amountPeriod>\r\n");
+			writer.write("<amountCumul>YTD AMT</amountCumul>\r\n");
+		}
+		else
+		{
+			writer.write("<description>DÉDUCTIONS</description>\r\n");
+			writer.write("<amountPeriod>MONTANT COURANT</amountPeriod>\r\n");
+			writer.write("<amountCumul>MONTANT ACJ</amountCumul>\r\n");
+		}
+		
+		writer.write("</header>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire la liste des déductions
+	 * @param writer
+	 * @param statementEarningID
+	 * @throws IOException
+	 * @throws SQLException
+	 * @return BigDecimal[] { deductionPeriod, 
+	 *                        deductionCum, 
+	 *                        grossEarningsPeriod, 
+	 *                        grossEarningsCum }
+	 */
+	private BigDecimal[] writeDeductionsBody(Writer writer, int statementEarningID) throws IOException, SQLException
+	{
+		writer.write("<body>\r\n");
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		BigDecimal deductionPeriod = null;
+		BigDecimal deductionCum = null;
+		BigDecimal grossEarningsPeriod = null;
+		BigDecimal grossEarningsCum = null;
+		
+		try
+		{
+			// Cette requête sert à obtenir la liste des gains
+			pstmt = DB.prepareStatement(
+					"SELECT	P_STATEMENT_EARNING.P_STATEMENT_EARNING_ID, " +
+					"		RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.DESCRIPTION, " +
+					"		RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.AMOUNTPERIOD, " +
+					"		RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.AMOUNTCUMUL, " +
+					"		RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.IsBaseInsurance, " +
+					"		RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.[TYPE], " +
+					"		P_STATEMENT_EARNING.DEDUCTIONPERIOD, " +
+					"		P_STATEMENT_EARNING.DEDUCTIONCUM, " +
+					"		P_STATEMENT_EARNING.GROSSEARNINGSPERIOD, " +
+					"		P_STATEMENT_EARNING.GROSSEARNINGSCUM " +
+					"FROM	RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL INNER JOIN P_STATEMENT_EARNING P_STATEMENT_EARNING ON RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.P_STATEMENT_EARNING_ID=P_STATEMENT_EARNING.P_STATEMENT_EARNING_ID " +
+					"WHERE	P_STATEMENT_EARNING.P_STATEMENT_EARNING_ID= " + statementEarningID + " " +
+					"ORDER BY RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.IsBaseInsurance, RV_P_STATEMENT_EARNING_DEDUCTION_INSDETAIL.DESCRIPTION", null);
+			
+			rs = pstmt.executeQuery();
+			
+			BigDecimal value = null;
+			
+			while(rs.next())
+			{
+				writer.write("<detail>\r\n");
+				writer.write("<description>" + rs.getString("DESCRIPTION") + "</description>\r\n");
+				
+				value = rs.getBigDecimal("AMOUNTPERIOD");
+				if(value != null)
+					writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</amountPeriod>\r\n");
+				
+				value = rs.getBigDecimal("AMOUNTCUMUL");
+				if(value != null)
+					writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</amountCumul>\r\n");
+
+				writer.write("</detail>\r\n");
+				
+				if(deductionPeriod == null)
+					deductionPeriod = rs.getBigDecimal("DEDUCTIONPERIOD");
+				
+				if(deductionCum == null)
+					deductionCum = rs.getBigDecimal("DEDUCTIONCUM");
+				
+				if(grossEarningsPeriod == null)
+					grossEarningsPeriod = rs.getBigDecimal("GROSSEARNINGSPERIOD");
+				
+				if(grossEarningsCum == null)
+					grossEarningsCum = rs.getBigDecimal("GROSSEARNINGSCUM");
+			}
+		}
+		finally
+		{
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+		
+		writer.write("</body>\r\n");
+		return new BigDecimal[] { deductionPeriod, 
+				                  deductionCum, 
+				                  grossEarningsPeriod, 
+				                  grossEarningsCum };
+	}
+	
+	/**
+	 * Cette méthode sert à écrire les sommations des déductions
+	 * @param writer
+	 * @param this.language
+	 * @throws IOException
+	 */
+	private void writeDeductionsSummaries(Writer writer, BigDecimal deductionPeriod, BigDecimal deductionCum) throws IOException
+	{
+		writer.write("<summaries>\r\n");
+		writer.write("<summary>\r\n");
+		
+		if(this.language == ENGLISH)
+			writer.write("<description>TOTAL DEDUCTIONS</description>\r\n");
+		else
+			writer.write("<description>TOTAL DÉDUCTIONS</description>\r\n");
+		
+		if(deductionPeriod != null)
+			writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(deductionPeriod.doubleValue()) + "</amountPeriod>\r\n");
+			
+		if(deductionPeriod != null)
+			writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(deductionCum.doubleValue()) + "</amountCumul>\r\n");
+		
+		writer.write("</summary>\r\n");
+		writer.write("</summaries>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire la sections de la paie nette
+	 * @param writer le flux d'écriture
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeNetPay(Writer writer,
+			BigDecimal deductionPeriod, BigDecimal deductionCum, 
+			BigDecimal grossEarningsPeriod, BigDecimal grossEarningsCum) throws IOException, SQLException
+	{
+		writer.write("<netPay>\r\n");
+
+		if(this.language == ENGLISH)
+			writer.write("<description>NET PAY</description>\r\n");
+		else
+			writer.write("<description>PAIE NETTE</description>\r\n");
+		
+		if(deductionPeriod == null)
+			deductionPeriod = new BigDecimal(0);
+		
+		if(deductionCum == null)
+			deductionCum = new BigDecimal(0);
+		
+		if(grossEarningsPeriod == null)
+			grossEarningsPeriod = new BigDecimal(0);
+		
+		if(grossEarningsCum == null)
+			grossEarningsCum = new BigDecimal(0);
+
+		BigDecimal netPayPeriod = grossEarningsPeriod.add(deductionPeriod.negate());
+		BigDecimal netPayCum = grossEarningsCum.add(deductionCum.negate());
+		
+		writer.write("<amountPeriod>" + TWO_DECIMALS_FORMAT.format(netPayPeriod.doubleValue()) + "</amountPeriod>\r\n");
+		writer.write("<amountCumul>" + TWO_DECIMALS_FORMAT.format(netPayCum.doubleValue()) + "</amountCumul>\r\n");
+
+		writer.write("</netPay>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire les banques (temps, maladies, etc.)
+	 * @param writer
+	 * @param statementEarningID
+	 * @param this.language
+	 */
+	private void writeCredits(Writer writer, int statementEarningID) throws IOException, SQLException
+	{
+		writer.write("<credits>\r\n");
+		
+		this.writeCreditsHeader(writer);
+		this.writeCreditsBody(writer, statementEarningID);
+		
+		writer.write("</credits>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire l'entête des banques
+	 * @param writer
+	 * @param this.language
+	 * @throws IOException
+	 */
+	private void writeCreditsHeader(Writer writer) throws IOException
+	{
+		writer.write("<header>\r\n");
+		
+		if(this.language == ENGLISH)
+		{
+			writer.write("<previousUnits>PREVIOUS UNITS</previousUnits>\r\n");
+			writer.write("<variation>VARIATION</variation>\r\n");
+			writer.write("<balance>BALANCE</balance>\r\n");
+		}
+		else
+		{
+			writer.write("<previousUnits>UNITÉS PRÉCÉDENTES</previousUnits>\r\n");
+			writer.write("<variation>VARIATION</variation>\r\n");
+			writer.write("<balance>BALANCE</balance>\r\n");
+		}
+		
+		writer.write("</header>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire la liste des banques
+	 * @param writer
+	 * @param statementEarningID
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeCreditsBody(Writer writer, int statementEarningID) throws IOException, SQLException
+	{
+		writer.write("<body>\r\n");
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête sert à obtenir la liste des gains
+			pstmt = DB.prepareStatement(
+					"SELECT	P_STATEMENT_EARNING_CREDITS.DESCRIPTION, " +
+					"		P_STATEMENT_EARNING_CREDITS.CALCULUNIT, " +
+					"		P_STATEMENT_EARNING_CREDITS.P_STATEMENT_EARNING_ID, " +
+					"		ISNULL(P_STATEMENT_EARNING_CREDITS.BALANCE, 0) AS BALANCE, " +
+					"		ISNULL(P_STATEMENT_EARNING_CREDITS.BALANCE, 0) - ISNULL(P_STATEMENT_EARNING_CREDITS.PMOVEMENTVARIATION, 0) AS PREVIOUSUNITS, " +
+					"		ISNULL(P_STATEMENT_EARNING_CREDITS.PMOVEMENTVARIATION, 0) AS PMOVEMENTVARIATION " +
+					"FROM	P_STATEMENT_EARNING_CREDITS P_STATEMENT_EARNING_CREDITS " +
+					"WHERE	P_STATEMENT_EARNING_CREDITS.P_STATEMENT_EARNING_ID=" + statementEarningID + " " +
+					"ORDER BY P_STATEMENT_EARNING_CREDITS.CALCULUNIT, P_STATEMENT_EARNING_CREDITS.DESCRIPTION", null);
+			
+			rs = pstmt.executeQuery();
+			
+			BigDecimal value = null;
+			
+			while(rs.next())
+			{
+				writer.write("<detail>\r\n");
+				writer.write("<description>" + rs.getString("DESCRIPTION") + "</description>\r\n");
+				
+				value = rs.getBigDecimal("PREVIOUSUNITS");
+				if(value != null)
+					writer.write("<previousUnits>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</previousUnits>\r\n");
+				
+				value = rs.getBigDecimal("PMOVEMENTVARIATION");
+				if(value != null)
+					writer.write("<variation>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</variation>\r\n");
+				
+				value = rs.getBigDecimal("BALANCE");
+				if(value != null)
+					writer.write("<balance>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</balance>\r\n");
+
+				writer.write("</detail>\r\n");
+			}
+		}
+		finally
+		{
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+		
+		writer.write("</body>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à afficher la liste des comptes de banques
+	 * @param writer
+	 * @param paiementID
+	 * @param this.language
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeBankAccounts(Writer writer, int paiementID) throws IOException, SQLException
+	{
+		writer.write("<bankAccounts>\r\n");
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête sort la liste des comptes de banque avec le montant qui 
+			// a été déposé pour ce paiement
+			pstmt = DB.prepareStatement(
+					"SELECT	P_PAYMENT_DISTRIBUTION.P_PAYMENT_ID, " +
+					"		RTRIM(P_FINANCIAL_INSTITUTION.VALUE) +" +
+					"       RTRIM(P_PAYMENT_DISTRIBUTION.TRANSIT) +" +
+					"       RTRIM(P_PAYMENT_DISTRIBUTION.FOLIO) AS FINANCIALINSTITUTION, " +
+					"		P_PAYMENT_DISTRIBUTION.AMOUNT " +
+					"FROM	P_PAYMENT_DISTRIBUTION P_PAYMENT_DISTRIBUTION INNER JOIN P_FINANCIAL_INSTITUTION P_FINANCIAL_INSTITUTION ON P_PAYMENT_DISTRIBUTION.P_FINANCIAL_INSTITUTION_ID=P_FINANCIAL_INSTITUTION.P_FINANCIAL_INSTITUTION_ID " +
+					"WHERE	P_PAYMENT_DISTRIBUTION.P_PAYMENT_ID=" + paiementID, null);
+			
+			rs = pstmt.executeQuery();
+			
+			boolean foundOne = false;
+			
+			while(rs.next())
+			{
+				writer.write("<bankAccount>\r\n");
+				
+				// On écrit la description seulement sur la première ligne
+				if(!foundOne)
+				{
+					if(this.language == ENGLISH)
+						writer.write("<description>BANK ACCOUNT:</description>\r\n");
+					else
+						writer.write("<description>COMPTE BANCAIRE:</description>\r\n");
+				}
+				
+				writer.write("<financialInstitution>" + rs.getString("FINANCIALINSTITUTION") + "</financialInstitution>\r\n");
+				
+				BigDecimal value = rs.getBigDecimal("AMOUNT");
+				if(value != null)
+					writer.write("<amount>" + TWO_DECIMALS_FORMAT.format(value.doubleValue()) + "</amount>\r\n");
+				
+				writer.write("</bankAccount>\r\n");
+				foundOne = true;
+			}
+			
+			// Si on n'a pas trouvé de compte bancaire, on doit quand même écrire la description
+			if(!foundOne)
+			{
+				writer.write("<bankAccount>\r\n");
+				if(this.language == ENGLISH)
+					writer.write("<description>BANK ACCOUNT:</description>\r\n");
+				else
+					writer.write("<description>COMPTE BANCAIRE:</description>\r\n");
+				writer.write("</bankAccount>\r\n");
+			}
+		}
+		finally
+		{
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+
+		writer.write("</bankAccounts>\r\n");
+	}
+
+	/**
+	 * Cette méthode sert à écrire l'adresse de l'employé
+	 * @param writer
+	 * @param this.language
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeEmployeeAddress(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<employeeAddress>\r\n");
+		
+		if(this.language == ENGLISH)
+			writer.write("<confidential>CONFIDENTIAL</confidential>\r\n");
+		else
+			writer.write("<confidential>CONFIDENTIEL</confidential>\r\n");
+		
+		String companyIdentification = rs.getString("AD_ORG_VALUE") +
+			rs.getString("P_DEPARTMENT_VALUE") +
+			rs.getString("C_ACTIVITY_VALUE");
+		
+		writer.write("<companyIdentification>" + companyIdentification + "</companyIdentification>\r\n");
+		
+		String employeeName = rs.getString("SURNAME") + " " + rs.getString("FIRSTNAME");
+		writer.write("<employeeName>" + employeeName.toUpperCase() + "</employeeName>\r\n");
+		writer.write("<address1>" + rs.getString("ADDRESS1") + "</address1>\r\n");
+		
+		String address2;
+		
+		// Si l'employé est au canada, on écrit l'adresse avec le code postal, sinon
+		// on écrit l'adresse avec le pays
+		if(rs.getInt("C_COUNTRY_ID") == CANADA_ID)
+		{
+			address2 = rs.getString("CITY") + 
+				" (" + rs.getString("C_REGION_NAME") + ") " + 
+				rs.getString("POSTAL");
+		}
+		else
+		{
+			address2 = rs.getString("CITY") + 
+				" (" + rs.getString("C_REGION_NAME") + ") " + 
+				rs.getString("C_COUNTRY_NAME");
+		}
+		
+		writer.write("<address2>" + address2 + "</address2>\r\n");
+		
+		writer.write("</employeeAddress>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire les informations sur le paiement (dates)
+	 * @param writer
+	 * @param this.language
+	 * @param rs
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writePayment(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<payment>\r\n");
+		if(this.language == ENGLISH)
+		{
+			writer.write("<dateFormat>\r\n");
+			writer.write("<date>\r\n");
+			writer.write("<year>YYYY</year>\r\n");
+			writer.write("<month>MM</month>\r\n");
+			writer.write("<day>DD</day>\r\n");
+			writer.write("</date>\r\n");
+			writer.write("</dateFormat>\r\n");
+		}
+		else
+		{
+			writer.write("<dateFormat>\r\n");
+			writer.write("<date>\r\n");
+			writer.write("<year>AAAA</year>\r\n");
+			writer.write("<month>MM</month>\r\n");
+			writer.write("<day>JJ</day>\r\n");
+			writer.write("</date>\r\n");
+			writer.write("</dateFormat>\r\n");
+		}
+		writer.write("<paymentDate>\r\n");
+		writer.write("<date>\r\n");
+		if(this.language == ENGLISH)
+			writer.write("<description>Payment Date:</description>\r\n");
+		else
+			writer.write("<description>Date de paiement:</description>\r\n");
+
+		Calendar date = GregorianCalendar.getInstance();
+		date.setTimeInMillis(rs.getTimestamp("PAYDATE").getTime());
+		writer.write("<year>" + FOUR_DIGITS_FORMAT.format(date.get(Calendar.YEAR)) + "</year>\r\n");
+		writer.write("<month>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.MONTH) + 1) + "</month>\r\n");
+		writer.write("<day>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.DAY_OF_MONTH)) + "</day>\r\n");
+		writer.write("</date>\r\n");
+		writer.write("</paymentDate>\r\n");
+		
+		writer.write("<startPeriodDate>\r\n");
+		if(this.language == ENGLISH)
+			writer.write("<to>to</to>\r\n");
+		else
+			writer.write("<to>à</to>\r\n");
+		
+		writer.write("<date>\r\n");
+		date = GregorianCalendar.getInstance();
+		date.setTimeInMillis(rs.getTimestamp("STARTDATE").getTime());
+		if(this.language == ENGLISH)
+			writer.write("<description>Pay Period:</description>\r\n");
+		else
+			writer.write("<description>Période de paie:</description>\r\n");
+		
+		writer.write("<year>" + FOUR_DIGITS_FORMAT.format(date.get(Calendar.YEAR)) + "</year>\r\n");
+		writer.write("<month>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.MONTH) + 1) + "</month>\r\n");
+		writer.write("<day>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.DAY_OF_MONTH)) + "</day>\r\n");
+		writer.write("</date>\r\n");
+		writer.write("</startPeriodDate>\r\n");
+		writer.write("<endPeriodDate>\r\n");
+		writer.write("<date>\r\n");
+		date = GregorianCalendar.getInstance();
+		date.setTimeInMillis(rs.getTimestamp("STARTDATE").getTime());
+		writer.write("<year>" + FOUR_DIGITS_FORMAT.format(date.get(Calendar.YEAR)) + "</year>\r\n");
+		writer.write("<month>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.MONTH) + 1) + "</month>\r\n");
+		writer.write("<day>" + TWO_DIGITS_FORMAT.format(date.get(Calendar.DAY_OF_MONTH)) + "</day>\r\n");
+		writer.write("</date>\r\n");
+		writer.write("</endPeriodDate>\r\n");
+		
+		writer.write("</payment>\r\n");
+	}
+	
+	/**
+	 * Cette méthode sert à écrire les informations sur l'identification de l'employé et sur son poste
+	 * @param writer
+	 * @param this.language
+	 * @param rs
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	private void writeIdentificationJobTitle(Writer writer, ResultSet rs) throws IOException, SQLException
+	{
+		writer.write("<identification>\r\n");
+		if(this.language == ENGLISH)
+			writer.write("<label>IDENTIFICATION:</label>\r\n");
+		else
+			writer.write("<label>IDENTIFICATION:</label>\r\n");
+		
+		String companyIdentification = rs.getString("AD_ORG_VALUE") +
+			rs.getString("P_DEPARTMENT_VALUE") +
+			rs.getString("C_ACTIVITY_VALUE");
+
+		String identification = companyIdentification + " " +
+			rs.getString("P_WORKPLACE_VALUE") + " " +
+			rs.getString("P_EMPLOYEE_VALUE");
+		
+		writer.write("<value>" + identification + "</value>\r\n");
+		writer.write("</identification>\r\n");
+		writer.write("<jobTitle>\r\n");
+		if(this.language == ENGLISH)
+		{
+			writer.write("<label>TITLE:</label>\r\n");
+			writer.write("<value>" + rs.getString("P_POST_NAME") + "</value>\r\n");
+		}
+		else
+		{
+			writer.write("<label>POSTE:</label>\r\n");
+			writer.write("<value>" + rs.getString("P_POST_TRL_NAME") + "</value>\r\n");
+		}
+		writer.write("</jobTitle>\r\n");
+	}
+}

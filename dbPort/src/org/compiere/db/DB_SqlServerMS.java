@@ -1,0 +1,1032 @@
+/******************************************************************************
+ * The contents of this file are subject to the   Compiere License  Version 1.1
+ * ("License"); You may not use this file except in compliance with the License
+ * You may obtain a copy of the License at http://www.compiere.org/license.html
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is Compiere ERP & CRM Smart Business Solution. The Initial
+ * Developer of the Original Code is Jorg Janke. Portions created by Jorg Janke
+ * are Copyright (C) 1999-2005 Jorg Janke.
+ * All parts are Copyright (C) 1999-2005 ComPiere, Inc.  All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ *****************************************************************************/
+package org.compiere.db;
+
+import java.math.*;
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
+import javax.sql.*;
+import org.compiere.dbPort.*;
+import org.compiere.startup.Environment;
+import org.compiere.util.*;
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
+
+/**
+ *	Sybase Database Port
+ *	
+ *  @author Jorg Janke
+ *  @version $Id: DB_SqlServer.java,v 1.1 2007/07/18 14:42:49 marmor01 Exp $
+ */
+public class DB_SqlServerMS implements CompiereDatabase
+{
+	private static final boolean JTDS = false; // true;
+
+	
+	/**
+	 * 	DB Sybase Port
+	 */
+	public DB_SqlServerMS ()
+	{
+		try
+		{
+			getDriver();
+		}
+		catch (Exception e)
+		{
+			log.log(Level.SEVERE, e.getMessage());
+		}
+	}	//	DB_Sybase
+
+	/**	Drver					*/
+	private static com.microsoft.sqlserver.jdbc.SQLServerDriver s_driver = null;
+	private static net.sourceforge.jtds.jdbc.Driver	s_driver_jtds = null;
+	
+	/** Default Port            */
+	public static final int DEFAULT_PORT = 1433;
+	
+	/** Connection String       */
+	private String          m_connectionURL;
+	/**	Data Source				*/
+	private DataSource 		m_ds = null;
+	/** Cached Database Name	*/
+	private String			m_dbName = null;
+	/** Statement Converter     */
+	private Convert         m_convert = new Convert(Environment.DBTYPE_MSSQLServer);
+	
+	/**	Logger	*/
+	private static CLogger	log	= CLogger.getCLogger (DB_SqlServer.class);
+
+    /** Cached User Name			*/
+    private String					m_userName = null;
+
+	
+	/**
+	 *  Get Database Name
+	 *  @return database short name
+	 */
+	public String getName()
+	{
+		return Environment.DBTYPE_MSSQLServer;
+	}   //  getName
+
+	/**
+	 * 	Get Description
+	 *	@return info
+	 */
+	public String getDescription ()
+	{
+		return s_driver.toString(); 
+		//	s_driver.getMajorVersion() + " - " + s_driver.getMinorVersion();
+	}	//	getDrescription
+
+	/**
+	 * 	Get Standard Port
+	 *	@return port
+	 */
+	public int getStandardPort ()
+	{
+		return DEFAULT_PORT;
+	}	//	getStndardPort
+
+	/**
+	 * 	Get Driver
+	 *	@return driver
+	 *	@throws SQLException
+	 */
+	public Driver getDriverJtds () throws SQLException
+	{
+		if (s_driver_jtds == null)
+		{
+			//if (JTDS)
+			try
+			{
+				s_driver_jtds = new net.sourceforge.jtds.jdbc.Driver();
+			}
+			catch(Exception e)
+			{
+				log.log(Level.SEVERE, "DB_SqlServer - getDriver() : "+e.toString());
+			}
+			//else
+				//s_driver = new com.sybase.jdbc3.jdbc.SybDriver();
+			DriverManager.registerDriver (s_driver_jtds);
+			DriverManager.setLoginTimeout (Database.CONNECTION_TIMEOUT);
+		}
+		return s_driver_jtds;
+	}	//	getDriver
+	
+	
+	public Driver getDriver () throws SQLException
+	{
+		if (s_driver == null)
+		{
+			try
+			{
+				s_driver = new com.microsoft.sqlserver.jdbc.SQLServerDriver();
+			}
+			catch(Exception e)
+			{
+				log.log(Level.SEVERE, "DB_SqlServer - getDriver() : "+e.toString());
+			}
+			//else
+				//s_driver = new com.sybase.jdbc3.jdbc.SybDriver();
+			DriverManager.registerDriver (s_driver);
+			DriverManager.setLoginTimeout (Database.CONNECTION_TIMEOUT);
+		}
+		return s_driver;
+	}	//	getDriver
+
+
+	/**
+	 * 	Get Connection URL
+	 *	@param connection connection
+	 *	@return url
+	 */
+	public String getConnectionURL (CConnection connection)
+	{
+		StringBuffer sb = null;
+		if (JTDS)
+		{
+			sb = new StringBuffer("jdbc:jtds:sqlserver://");
+			//
+			sb.append(connection.getDbHost())
+				.append(":").append(connection.getDbPort())
+				.append("/").append(connection.getDbName());
+			//	optional parameters via ?...
+			sb.append( ";appName=Solstice" );
+			sb.append( ";cachemetadata=true" );
+			sb.append( ";bufferMaxMemory=4096" );
+			sb.append( ";autoCommit=false" );
+			
+		}
+		else
+		{
+			sb = new StringBuffer("jdbc:sqlserver://");
+			sb.append(connection.getDbHost())
+			.append(";databaseName=").append(connection.getDbName());
+			sb.append( ";applicationName=Solstice" );
+			
+			//;integratedSecurity=true
+			
+		}
+		
+//		sb.append( ";appName=Solstice("  ).append( this.).append( ")");
+		
+		m_connectionURL = sb.toString();
+		m_dbName = connection.getDbName();
+		m_userName = connection.getDbUid();
+
+		log.info ( "Connection JDBC : " + m_connectionURL );
+		return m_connectionURL;
+	}	//	getConnectionURL
+
+	
+	/**
+	 *  Get Database Connection String
+	 *  @param connectionURL Connection URL
+	 *  @param userName user name
+	 *  @return connection String
+	 */
+	public String getConnectionURL (String connectionURL, String userName)
+	{
+		m_userName = userName;
+		m_connectionURL = connectionURL;
+		return m_connectionURL;
+	}	//	getConnectionURL
+
+	/**
+	 * 	Get Connection URL.
+	 * 	Mainly used for connection test
+	 *	@param dbHost db Host
+	 *	@param dbPort db Port
+	 *	@param dbName db Name (optional)
+	 *	@param userName user name (ignored)
+	 *	@return connection url
+	 */
+	public String getConnectionURL (String dbHost, int dbPort, String dbName,
+		String userName)
+	{
+		m_userName = userName;
+		StringBuffer sb = null;
+
+		if (JTDS)
+		{
+
+			sb = new StringBuffer("jdbc:jtds:sqlserver://");
+			sb.append(dbHost)
+			.append(":").append(dbPort);
+
+			//
+			if (dbName != null && dbName.length() > 0)
+			{
+				m_dbName = dbName;
+				sb.append("/").append(dbName);
+			}
+	
+			sb.append( ";appName=Solstice" );
+			sb.append( ";cachemetadata=true" );
+			sb.append( ";bufferMaxMemory=4096" );
+			sb.append( ";autoCommit=false" );
+
+		}
+		else
+		{
+			sb = new StringBuffer("jdbc:sqlserver://");
+			sb.append( dbHost)
+			.append(";databaseName=").append( dbName );
+			sb.append( ";applicationName=Solstice" );
+			
+		}
+
+		log.info ( "Connection JDBC 2 : " + m_connectionURL );
+
+		return sb.toString();
+	}	//	getConnectionURL
+
+	/**
+	 * 	Get JDBC Catalog
+	 *	@return catalog (database name)
+	 */
+	public String getCatalog()
+	{
+		if (m_dbName != null)
+			return m_dbName;
+		log.severe("Database Name not set (yet) - call getConnectionURL first");
+		return null;
+	}	//	getCatalog
+	
+	/**
+	 * 	Get JDBC Schema
+	 *	@return schema (dbo)
+	 */
+	public String getSchema()
+	{
+		return "dbo";
+	}	//	getSchema
+
+	/**
+	 * 	Supports BLOB
+	 *	@return true
+	 */
+	public boolean supportsBLOB ()
+	{
+		return true;
+	}	//	supportsBLOB
+
+	/**
+	 *  String Representation
+	 *  @return info
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("DB_SqlServer[");
+		sb.append(m_connectionURL);
+		sb.append("]");
+		return sb.toString();
+	}   //  toString
+
+	/**
+	 * 	Get Status
+	 * 	@return status info
+	 */
+	public String getStatus()
+	{
+		StringBuffer sb = new StringBuffer("Status");
+		return sb.toString();
+	}	//	getStatus
+
+	
+	/**************************************************************************
+	 * 	Convert Oracle style Statement
+	 *	@param oraStatement oracle style statement
+	 *	@return statement
+	 */
+/*	public String convertStatement (String oraStatement)
+	{
+		String retValue[] = m_convert.convert(oraStatement);
+		if (retValue == null)
+			throw new IllegalArgumentException
+				("Not Converted (" + oraStatement + ") - "
+					+ m_convert.getConversionError());
+		if (retValue.length != 1)
+			throw new IllegalArgumentException
+				("Convert Command Number=" + retValue.length
+					+ " (" + oraStatement + ") - " + m_convert.getConversionError());
+		//  Diagnostics (show changed, but not if AD_Error
+		if (!oraStatement.equals(retValue[0]) && retValue[0].indexOf("AD_Error") == -1)
+			log.finest("=>" + retValue[0] + "<= [" + oraStatement + "]");
+		//
+		return retValue[0];
+	}	//	convertStatement
+*/
+	/**************************************************************************
+	 *  Convert an individual Oracle Style statements to target database statement syntax.
+	 *  @param oraStatement oracle statement
+	 *  @return converted Statement 
+	 */
+	public String convertStatement (String oraStatement)
+	{
+		String convertedStatement = new String(oraStatement).trim();
+		int i, j, k;
+		String tmpString = "";
+		
+		//test for using TRUNC(date, fmt) or TRUNC(date)
+		j = 0;
+		while (j > -1) 
+		{
+			i = convertedStatement.indexOf("TRUNC", j);
+			boolean notDo = convertedStatement.startsWith("2_DATE", i+5) || convertedStatement.startsWith("_DATE", i+5);
+			//log.warning("debug-miki: i = " + i);
+			if (i < 0 )
+				break;
+			
+			int left = 0;
+			for (k = i; k < convertedStatement.length(); k++) 
+			{
+				if (notDo)
+					break;
+				
+				if(convertedStatement.charAt(k) == '(') //TRUNC(date)
+				{
+					left++;
+					continue;
+				}
+				
+				if(convertedStatement.charAt(k) == ',' && left == 1) //TRUNC(date, fmt)
+				{
+					tmpString = convertedStatement.substring(0, i);
+					//log.warning("debug-miki: tmpString (1) = " + tmpString);
+					tmpString = tmpString + "TRUNC" + convertedStatement.substring(i+5);
+					//log.warning("debug-miki: tmpString (2) = " + tmpString);
+					convertedStatement = tmpString;
+					break;
+				}
+				if(convertedStatement.charAt(k) == ')') //TRUNC(date)
+				{
+					left --;
+					if (left > 0)
+						continue;
+					tmpString = convertedStatement.substring(0, i);
+					//log.warning("debug-miki: tmpString (3) = " + tmpString);
+					tmpString = tmpString + "TRUNC" + convertedStatement.substring(i+5);
+					//log.warning("debug-miki: tmpString (4) = " + tmpString);
+					convertedStatement = tmpString;
+					break;
+				}
+				
+			}
+			j = i + 6;
+		}
+
+		//jz default expre changed to constraint tableName_columnName default expr
+		/*
+		if ((convertedStatement.startsWith("CREATE TABLE") || convertedStatement.startsWith("ALTER TABLE")) && convertedStatement.indexOf(" DEFAULT ")>0) 			
+		{
+			String tokens[] = convertedStatement.split(" ");
+			String tableName = tokens[2].toUpperCase();
+			for (i=0; i<tokens.length; i++)
+			{
+				if ("DEFAULT".equals(tokens[i]))
+				{
+					j = i - 2;
+					if ("NULL".equals(tokens[i-1]))
+						j--;
+					if ("NOT".equals(tokens[i-2]))
+						j--;
+					if (tokens[j].startsWith("("))
+						tokens[j] = tokens[j].substring(1).toUpperCase();
+					convertedStatement = convertedStatement.replace("DEFAULT", "CONSTRAINT " + tableName + "_" + tokens[j] + " DEFAULT");
+				}
+			}
+		}
+		*/
+		
+		if (convertedStatement.startsWith("ALTER TABLE") && convertedStatement.indexOf(" MODIFY ")>0)
+		{
+			String tokens[] = convertedStatement.split(" ");
+			String sql = "ALTER TABLE " + tokens[2];
+			int idef = convertedStatement.indexOf(" DEFAULT ");
+			if (idef<0)
+			{
+				sql += " ALTER COLUMN " + tokens[4];
+				i = sql.length() - 6; //alter v.s. modify, + column: +1-7
+				if (idef > 0)
+				{
+					sql += convertedStatement.substring(i, idef+1); //type stuff
+					sql += ", ALTER " + tokens[4] + " SET DEFAULT " + convertedStatement.substring(idef + 9, convertedStatement.length());
+				}
+				else
+					sql += " TYPE " + convertedStatement.substring(i, convertedStatement.length());
+				convertedStatement = sql;				
+			}
+			else
+			{
+				if (convertedStatement.indexOf(" NOT NULL")>0)
+				{
+					sql += " SET NOT NULL";
+					return sql;
+				}
+				else if (convertedStatement.indexOf(" NULL")>0)
+				{
+					sql += " DROP NOT NULL";
+					return sql;				
+				}
+			}
+		}
+		
+		if (convertedStatement.startsWith("CREATE TABLE") || convertedStatement.startsWith("ALTER TABLE")) 			
+		{
+			while (convertedStatement.indexOf("NUMBER(10,0)")>-1)
+				convertedStatement = convertedStatement.replace("NUMBER(10,0)", "INTEGER");
+			while (convertedStatement.indexOf("NUMBER(10)")>-1)
+				convertedStatement = convertedStatement.replace("NUMBER(10)", "INTEGER");
+			/*
+			while (convertedStatement.indexOf(" DATE ")>-1)
+				convertedStatement = convertedStatement.replace(" DATE ", " DATETIME ");
+			while (convertedStatement.indexOf(" DATE,")>-1)
+				convertedStatement = convertedStatement.replace(" DATE,", " DATETIME,");
+			while (convertedStatement.indexOf(" DATE)")>-1)
+				convertedStatement = convertedStatement.replace(" DATE)", " DATETIME)");
+			while (convertedStatement.indexOf(" NVARCHAR2")>-1)
+				convertedStatement = convertedStatement.replace(" NVARCHAR2", " NVARCHAR");
+				*/
+		}
+		
+		//CREATE UNIQUE INDEX AD_User_EMail ON AD_User (AD_Client_ID,COALESCE(UPPER(EMail),TO_NCHAR(AD_User_ID)))
+		if (convertedStatement.startsWith("CREATE UNIQUE INDEX ")) 			
+		{
+			if (convertedStatement.indexOf("UPPER(COALESCE(EMail, Value))")>-1)
+			//	if (convertedStatement.indexOf("COALESCE(UPPER(EMail),TO_NCHAR(AD_User_ID))")>-1)
+			{
+				convertedStatement = convertedStatement.replace("UPPER(COALESCE(EMail, Value))", "EMail");
+				convertedStatement = convertedStatement.replace(" UNIQUE INDEX ", " INDEX ");
+			}
+			if (convertedStatement.indexOf("UPPER(ColumnName)")>-1)
+				convertedStatement = convertedStatement.replace("UPPER(ColumnName)", "ColumnName");
+			if (convertedStatement.indexOf(",UserElement1_ID,UserElement2_ID")>-1) //temp
+				convertedStatement = convertedStatement.replace(",UserElement1_ID,UserElement2_ID", "");
+			if (convertedStatement.indexOf("CREATE UNIQUE INDEX M_Product_ExpenseType")>-1) //temp
+				convertedStatement = convertedStatement.replace(" UNIQUE ", " ");
+			if (convertedStatement.indexOf("CREATE UNIQUE INDEX M_Product_Resource")>-1) //temp
+				convertedStatement = convertedStatement.replace(" UNIQUE ", " ");
+		}
+		
+		//('PK' || AD_Table_ID)
+		if (convertedStatement.indexOf("('PK' || AD_Table_ID)")>0
+				|| convertedStatement.indexOf("('PK' + AD_Table_ID)")>0) 			
+		{
+			convertedStatement = convertedStatement.replace(" AD_Table_ID)", " ltrim(str(AD_Table_ID)))");
+		}
+		//('FK' || AD_Table_ID || '_' || AD_Column_ID)
+		if (convertedStatement.indexOf("('FK' || AD_Table_ID || '_' || AD_Column_ID)")>0) 			
+		{
+			convertedStatement = convertedStatement.replace("('FK' || AD_Table_ID || '_' || AD_Column_ID)", 
+					"('FK' + ltrim(str(AD_Table_ID)) + '_' + ltrim(str(AD_Column_ID)))");
+		}
+		else 		
+		if (convertedStatement.indexOf("('FK' + AD_Table_ID + '_' + AD_Column_ID)")>0) 			
+		{
+			convertedStatement = convertedStatement.replace("('FK' + AD_Table_ID + '_' + AD_Column_ID)", 
+					"('FK' + ltrim(str(AD_Table_ID)) + '_' + ltrim(str(AD_Column_ID)))");
+		}
+
+		
+		if (!convertedStatement.startsWith("INSERT INTO AD_Issue"))
+			convertedStatement = DBUtils.whereSelectList(convertedStatement); //jz check equivalence
+		
+		if (convertedStatement.startsWith("UPDATE "))
+		{
+			String[] tks = convertedStatement.split(" ");
+			if (tks.length>4 && tks[3].trim().equalsIgnoreCase("SET"))
+			{
+				int iwh = convertedStatement.indexOf(" WHERE ");
+				int iset = convertedStatement.indexOf(" SET ");
+				if (iset>-1)
+				{
+					int isubQ = convertedStatement.indexOf("(SELECT ", iset);
+					int lsql = convertedStatement.length();
+					int ip = 0;
+					while (isubQ>0)
+					{
+						if (isubQ>-1 && isubQ<iwh)
+						{
+							int il = 1;
+							int ir = 0;
+							ip = isubQ+7;
+							while (il>ir && ++ip<lsql)
+							{
+								if (convertedStatement.charAt(ip)=='(')
+									il++;
+								else 
+									if (convertedStatement.charAt(ip)==')')
+										ir++;
+							}
+							if (ip>iwh)
+								iwh = convertedStatement.indexOf("WHERE ", ip);
+						}
+						else
+							break;
+						isubQ = convertedStatement.indexOf("(SELECT ", ip);
+					}
+					if (iwh>-1)
+					{
+						convertedStatement = "UPDATE " + tks[2] + convertedStatement.substring(iset, iwh) + " FROM " + 
+												tks[1] + " " + tks[2] + " " + convertedStatement.substring(iwh, lsql);
+					}
+					else
+						convertedStatement = "UPDATE " + tks[2] + convertedStatement.substring(iset, lsql) + " FROM " + 
+						tks[1] + " " + tks[2];
+				}//iset
+			}//co-rel_ID
+			convertedStatement = DBUtils.updateSetSelectList(convertedStatement);
+			
+		}//update
+
+		if (convertedStatement.startsWith("DELETE FROM "))
+		{
+			String[] tks = convertedStatement.split(" ");
+			if (tks.length>5 && tks[4].trim().equalsIgnoreCase("WHERE"))
+			{
+				int iwh = convertedStatement.indexOf(" WHERE ");
+				if (iwh>-1)
+				{
+					int lsql = convertedStatement.length();
+					convertedStatement = "DELETE " + tks[3] + " FROM " + 
+											tks[2] + " " + tks[3] + convertedStatement.substring(iwh, lsql);
+				}
+			}
+		}
+
+		while (convertedStatement.indexOf("||")>-1)
+			convertedStatement = convertedStatement.replace("||", "+");  //string concatenation
+
+		String retValue[] = null;
+		if (!(convertedStatement.startsWith("CREATE FUNCTION") || convertedStatement.startsWith("CREATE TRIGGER")))
+			retValue = m_convert.convert(convertedStatement);
+
+		if (retValue  != null && retValue.length == 1)
+			convertedStatement = retValue[0];
+		
+		if (convertedStatement.indexOf("[[LineNo]]")>-1)
+			convertedStatement = convertedStatement.replace("[[LineNo]]", "[LineNo]");  //some converted in value
+
+		String curr_user = "[" + m_userName + "]";
+		if (m_userName!=null && !m_userName.equals("compiere"))
+		{
+			while (convertedStatement.indexOf("[compiere]")>-1)
+				convertedStatement = convertedStatement.replace("[compiere]", curr_user);
+		}
+		
+		//String doubleCU = "[" + m_userName + "].[" + m_userName + "].";
+		String doubleCU = curr_user + "." + curr_user;
+		while (convertedStatement.indexOf(doubleCU)>-1)
+			convertedStatement = convertedStatement.replace(doubleCU, curr_user);
+		
+		if (!(convertedStatement.startsWith("CREATE FUNCTION") || convertedStatement.startsWith("CREATE TRIGGER")))
+		{
+			if (retValue == null)
+			{
+				log.severe("Not Converted (" + convertedStatement + ") - "
+						+ m_convert.getConversionError());
+				return convertedStatement;
+			}
+			if (retValue.length != 1)
+			{
+				log.warning("Convert Command Number=" + retValue.length
+						+ " (" + convertedStatement + ") - " + m_convert.getConversionError());
+				return convertedStatement;
+			}
+		}
+		//  Diagnostics (show changed, but not if AD_Error
+		if (!convertedStatement.equals(oraStatement) && convertedStatement.indexOf("AD_Error") == -1)
+			log.finest("=>" + convertedStatement + "<= [" + oraStatement + "]");
+		
+		//check if we support the sql, if not, return ""
+		if (!isSupported(convertedStatement))
+		{
+			log.warning("MS SQL Server doesn't support this sql: " + oraStatement);
+			return "";
+		}
+		return convertedStatement;
+
+	}   //  convertStatement
+
+	/**
+	 *  Get Name of System User
+	 *  @return e.g. sa, system
+	 */
+	public String getSystemUser()
+	{
+		return "sa";
+	}	//	getSystemUser
+	
+	/**
+	 *  Get Name of System Database
+	 *  @param databaseName database Name ignored
+	 *  @return e.g. master or database Name
+	 */
+	public String getSystemDatabase(String databaseName)
+	{
+		return "master";
+	}	//	getSystemDatabase
+
+
+	private static final String[] MONTHS = new String[]{
+		"JAN","FEB","MAR", "APR","MAY","JUN", "JUL","AUG","SEP", "OCT","NOV","DEC"};
+	
+	/**
+	 *  Create SQL TO Date String from Timestamp
+	 *
+	 *  @param  time Date to be converted
+	 *  @param  dayOnly true if time set to 00:00:00
+	 *  @return date function
+	 */
+	public String TO_DATE (Timestamp time, boolean dayOnly)
+	{
+		if (time == null)
+		{
+			if (dayOnly)
+				return "convert(datetime,getdate())";
+			return "getdate()";
+		}
+
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(time);
+		//
+		StringBuffer dateString = new StringBuffer("convert(datetime,'");
+		//	yyyy.mm.dd	- format 2 p.411 
+		if (dayOnly)
+		{
+			int yyyy = cal.get(Calendar.YEAR);
+			String format = "102";	//	"SQL Standard" format
+			if (yyyy < 100)
+				format = "2";
+			dateString.append(yyyy).append(".")
+				.append(getXX(cal.get(Calendar.MONTH)+1)).append(".")
+				.append(getXX(cal.get(Calendar.DAY_OF_MONTH)))
+				.append("',").append(format).append(")");
+		}
+		//	format 126 ISO8601
+		// yyyy-mm-dd Thh:mm:ss:mmm(no spaces)
+		else
+		{
+			int yyyy = cal.get(Calendar.YEAR);
+			String format = "126";	//	n/a format
+			
+			dateString.append(getXX(cal.get(Calendar.YEAR))).append("-");
+			if ( cal.get(Calendar.MONTH)+1 < 10 )
+				dateString.append("0").append(cal.get(Calendar.MONTH)+1).append("-");
+			else	
+				dateString.append(cal.get(Calendar.MONTH)+1).append("-");
+			
+			dateString.append(getXX(cal.get(Calendar.DAY_OF_MONTH))).append("T");
+			dateString.append(getXX(cal.get(Calendar.HOUR_OF_DAY))).append(":")
+				.append(getXX(cal.get(Calendar.MINUTE))).append(":")
+				.append(getXX(cal.get(Calendar.SECOND)))
+				.append("',").append(format).append(")");
+		}
+		return dateString.toString();
+	}	//	TO_DATE
+
+	/**
+	 * 	Get integer as two string digits (leading zero)
+	 *	@param x integer
+	 *	@return string of x
+	 */
+	private String getXX (int x)
+	{
+		if (x < 10)
+			return "0" + x;
+		return String.valueOf(x);
+	}	//	getXX
+	
+	/**
+	 *  Create SQL for formatted Date, Number
+	 *
+	 *  @param  columnName  the column name in the SQL
+	 *  @param  displayType Display Type
+	 *  @param  AD_Language 6 character language setting (from Env.LANG_*)
+	 *
+	 *  @return TRIM(TO_CHAR(columnName,'9G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
+	 *      or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language
+	 *  @see org.compiere.util.DisplayType
+	 *  @see org.compiere.util.Env
+	 *
+	 **/
+	public String TO_CHAR (String columnName, int displayType, String AD_Language)
+	{
+		StringBuffer retValue = new StringBuffer("CAST(");
+		retValue.append(columnName);
+
+		retValue.append(" AS VARCHAR(15)");
+		retValue.append(")");
+		//
+		return retValue.toString();
+	}	//	TO_CHAR
+
+	/**
+	 * 	Return number as string for INSERT statements with correct precision
+	 *	@param number number
+	 *	@param displayType display Type
+	 *	@return number as string
+	 */
+	public String TO_NUMBER (BigDecimal number, int displayType)
+	{
+		if (number == null)
+			return "NULL";
+		BigDecimal result = number;
+		int scale = DisplayType.getDefaultPrecision(displayType);
+		if (number.scale() > scale)
+		{
+			try
+			{
+				result = number.setScale(scale, BigDecimal.ROUND_HALF_UP);
+			}
+			catch (Exception e)
+			{
+				log.severe("Number=" + number + ", Scale=" + " - " + e.getMessage());
+			}
+		}
+		return result.toString();
+	}	//	TO_NUMBER
+	 
+	
+	/**
+	 * 	Get SQL Commands.
+	 * 	The following variables are resolved:
+	 * 	@SystemPassword@, @CompiereUser@, @CompierePassword@
+	 * 	@SystemPassword@, @DatabaseName@, @DatabaseDevice@
+	 *	@param cmdType CMD_*
+	 *	@return array of commands to be executed
+	 */
+	public String[] getCommands (int cmdType)
+	{
+		if (CMD_CREATE_USER == cmdType)
+			return new String[]
+			{
+			
+			};
+		//
+		if (CMD_CREATE_DATABASE == cmdType)
+			return new String[]
+			{
+				"CREATE database @DatabaseName@ on @DatabaseDevice@ = 200",
+				"sp_configure \"enable java\", 1"
+			};
+		//
+		if (CMD_DROP_DATABASE == cmdType)
+			return new String[]
+			{
+				"DROP database @DatabaseName@"
+			};
+		//
+		return null;
+	}	//	getCommands
+
+	
+	/**
+	 * 	Get Cached Connection
+	 *	@param connection connection
+	 *	@param autoCommit auto commit
+	 *	@param transactionIsolation trx isolation
+	 *	@return Connection
+	 *	@throws Exception
+	 */
+	public Connection getCachedConnection (CConnection connection,
+		boolean autoCommit, int transactionIsolation)
+		throws Exception
+	{
+		if (m_ds == null)
+			getDataSource(connection);
+		//
+//		Connection conn = m_ds.getConnection();
+		Connection conn = getDriverConnection(connection);
+		//
+		conn.setAutoCommit(autoCommit);
+		conn.setTransactionIsolation(transactionIsolation);
+		return conn;
+	}	//	getCachedConnection
+
+	/**
+	 * 	Get Driver Connection
+	 *	@param connection connection info
+	 *	@return new connection
+	 *	@throws SQLException
+	 */
+	public Connection getDriverConnection (CConnection connection)
+		throws SQLException
+	{
+	//	getDriver();  //ICI
+		
+		return m_ds.getConnection();
+
+		//return DriverManager.getConnection (getConnectionURL (connection), 
+		//	connection.getDbUid(), connection.getDbPwd());
+		
+	}	//	getDiverConnection
+
+	/**
+	 * 	Get Driver Connection
+	 *	@param dbUrl URL
+	 *	@param dbUid user
+	 *	@param dbPwd password
+	 *	@return connection
+	 *	@throws SQLException
+	 */
+	public Connection getDriverConnection (String dbUrl, String dbUid, String dbPwd) 
+		throws SQLException
+	{
+		getDriver();
+		return DriverManager.getConnection (dbUrl, dbUid, dbPwd);
+	}	//	getDriverConnection
+
+	/**
+	 * 	Get Data Source
+	 *	@param connection connection
+	 *	@return n/a
+	 */
+	
+	/**
+	 * 	Get Data Source
+	 *	@param connection connection
+	 *	@return n/a
+	 */
+	public DataSource getDataSource (CConnection connection)
+	{
+		if (m_ds != null)
+			return m_ds;
+
+		if (JTDS)
+		{
+			net.sourceforge.jtds.jdbcx.JtdsDataSource ds = new net.sourceforge.jtds.jdbcx.JtdsDataSource();
+			ds.setServerType(net.sourceforge.jtds.jdbc.Driver.SQLSERVER);
+			ds.setTds("5.0");
+			ds.setServerName(connection.getDbHost());
+			ds.setPortNumber(connection.getDbPort());
+			ds.setDatabaseName(connection.getDbName());
+			//
+			ds.setUser(connection.getDbUid());
+			ds.setPassword(connection.getDbPwd());
+			m_ds = ds;
+			
+		}
+		
+		else
+		{
+			SQLServerDataSource ds = new SQLServerDataSource();
+			ds.setUser(connection.getDbUid());
+			ds.setPassword(connection.getDbPwd());
+			ds.setServerName(connection.getDbHost());
+			ds.setPortNumber(connection.getDbPort());
+	        ds.setDatabaseName(connection.getDbName());
+	        ds.setApplicationName("Solstice Plus");
+//	        ds.setTrustServerCertificate(true);
+	        ds.setDescription("Solstice Plus - Paie et ressources humaines");
+	 //       ds.setIntegratedSecurity(true);
+	        m_ds = ds;
+		}
+		
+		return m_ds;
+	}	//	getDataSource
+
+	
+	/*
+	public DataSource getDataSource (CConnection connection)
+	{
+		if (m_ds != null)
+			return m_ds;
+
+		SQLServerDataSource ds = new SQLServerDataSource();
+		ds.setUser(connection.getDbUid());
+		ds.setPassword(connection.getDbPwd());
+		ds.setServerName(connection.getDbHost());
+		ds.setPortNumber(connection.getDbPort());
+        ds.setDatabaseName(connection.getDbName());
+        ds.setApplicationName("Solstice Plus");
+//        ds.setTrustServerCertificate(true);
+        ds.setDescription("Solstice Plus - Paie et ressources humaines");
+ //       ds.setIntegratedSecurity(true);
+        m_ds = ds;
+       
+		//
+		return m_ds;
+	}	//	getDataSource
+*/
+
+	/**
+	 * 	Close
+	 */
+	public void close ()
+	{
+		m_ds = null;
+	}	//	close
+	
+	/**
+	 *  Check and generate an alternative SQL
+	 *  @reExNo number of re-execution
+	 *  @msg previous execution error message
+	 *  @sql previous executed SQL
+	 *  @return String, the alternative SQL, null if no alternative
+	 */
+	public String getAlternativeSQL(int reExNo, String msg, String sql)
+	{
+		//check reExNo or based on reExNo to do a decision. Currently none
+		
+		return null; //do not do re-execution of alternative SQL
+	}
+
+	/**
+	 *  change update set (...) = (select ... from ) standard format 
+	 *  @param  sql update clause
+	 *  @return new sql
+	 */
+	public String updateSetSelectList (String sql)
+	{
+		return sql;
+	}   //  
+
+	
+	/**
+	 *  Get a string representation of literal used in SQL clause
+	 *
+	 *  @param  sqlClause "S", "U","I", "W"
+	 *  @param  dataType java.sql.Types
+	 *
+	 *  @return db2: nullif(x,x)
+	 */
+	public String nullValue (String sqlClause, int dataType)
+	{
+		return "NULL";
+	}   //	nullValue  
+
+	/**
+	 *  Get the Database specific Clob data type
+	 *  @param connection connection
+	 *  @param clobString clob string
+	 *  @return Clob
+	 */
+	public Clob getClob(Connection con, String clobString)
+	{
+		return null;
+	}  // getClob()
+	
+	/**
+	 *  Get the Database specific Blob data type
+	 *  @param connection connection
+	 *  @param bytes bytes
+	 *  @return Blob
+	 */
+	public Blob getBlob(Connection con, byte[] bytes)
+	{
+		return null;
+	}  // getBlob()
+
+	/**
+	 *  Get constraint type associated with the index
+	 *  @tableName table name
+	 *  @IXName Index name
+	 *  @return String[0] = 0: do not know, 1: Primary Key  2: Foreign Key
+	 *  		String[1] - String[n] = Constraint Name
+	 */
+	public String getConstraintType(Connection conn, String tableName, String IXName) 
+	{
+		if (IXName == null || IXName.length()==0)
+			return "0";
+		if (IXName.toUpperCase().endsWith("_KEY"))
+			return "1"+IXName;
+		else
+			return "0";
+	}
+
+	/**
+	 *  Check if a connect is valid
+	 *  conn Connection
+	 *  @return true if connection is valid
+	 */
+	public boolean isConnectionValid(Connection conn)
+	{
+		return true;
+	}
+	
+	/**
+	 *  Check if DBMS support the sql statement
+	 *  @sql SQL statement
+	 *  @return true: yes
+	 */
+	public boolean isSupported(String sql)
+	{
+		return true;
+	}
+
+}	//	DB_SqlServer

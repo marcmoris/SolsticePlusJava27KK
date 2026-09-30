@@ -1,0 +1,62 @@
+<!-- BEGIN: main -->
+<html>
+<!-- HEADING: -->
+
+<table width="800" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> 
+		</td>
+	</tr>
+
+<form name='codegain' id='codegain' action="listgain.jsp" method="post">
+{post}
+<table width="100%" border="0" cellspacing="2" cellpadding="1">
+<tr>
+    <td colspan="3" class="tdlabel" style='width:100%;'>{LabelFilter}</td>
+</tr>
+<tr>
+    <td class="tdfield" style='width:35%;' >{LabelChamp} {ddlfiltre} </td>
+    <td class="tdfield" rowspan="2" style='width:5%; text-align: center;'>
+         <input type="image" src="images/refresh.gif" onClick="javascript: document.codegain.submit();"> 
+    </td>
+    <td class="tdfield" rowspan="2" style='width:60%;'> </td>
+
+</tr>
+<tr>
+    <td class="tdfield">{LabelParam} {txbRecherche}</td>
+</tr>
+</table><br>
+
+<table border="0" width="100%">
+<tr>
+<td class="tdlabel" style='width:5%;'><a href='listgain.jsp?tri=c' >{LabelCode}</a></td>
+<td class="tdlabel" style='width:30%;'><a href='listgain.jsp?tri=n' >{LabelNom}</a></td>
+<td class="tdlabel" style='width:65%;'><a href='listgain.jsp?tri=d' >{LabelDesc}</a></td>
+</tr>
+
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}">{ValueCode}</td>
+<td class="{CELLCLASS}">{ValueName} </td>
+<td class="{CELLCLASS}">{ValueDesc}</td>
+</tr>
+<!-- END: line --> 
+</table>
+</form>
+
+{FOOTING}
+</table>
+</div>		
+</div>	
+</div>	
+
+</body>
+</html>
+<!-- END: main -->
+
+
+

@@ -1,0 +1,140 @@
+<!-- BEGIN: main -->
+<html>
+<!-- HEADING: -->
+
+
+<style type="text/css">
+	#mainSection .messageTable .lastRow td { border-bottom:1px solid black !important; }
+	
+	#mainSection .messageTable .unread td {
+	font-weight: bold;
+	background-color: #ffffcd;
+}
+	
+</style>
+
+<script language="JavaScript">
+
+	   function deleteEmail()
+	   {
+	      document.msgListForm.action.value = "delete";
+	      document.msgListForm.submit();
+	   }
+
+function selectAllMessages(){
+	var thisForm = document.getElementById('msgListForm');
+	var checkboxArray = thisForm.selectedMessages;
+	var currentState = thisForm.selectAll.value;	
+	var setState = false;
+	if (currentState == "false") {
+		setState = true;
+		thisForm.selectAll.value = "true";
+	} else {
+		thisForm.selectAll.value = "false";
+	}
+	if(checkboxArray.length == null){
+            checkboxArray.checked=setState;
+	}else{
+		for (var i = 0; i < checkboxArray.length; i++){
+			checkboxArray[i].checked=setState;
+		}   
+	}
+}
+
+function toggleEmailActivation(obj){
+	if(obj.checked){
+		document.getElementById('emailFieldset').className = '';
+		document.getElementById('emailAddress').disabled = false;
+		document.getElementById('emailTypeHTML').disabled = false;
+		document.getElementById('emailTypeText').disabled = false;
+		document.getElementById('sendTest').disabled = false;
+	}else{
+		document.getElementById('emailFieldset').className = 'disabled';
+		document.getElementById('emailAddress').disabled = true;
+		document.getElementById('emailTypeHTML').disabled = true;
+		document.getElementById('emailTypeText').disabled = true;
+		document.getElementById('sendTest').disabled = true;
+	}
+}
+
+function sendAction(action, id)
+{
+    document.mainForm.UserMailID.value = id;
+	document.mainForm.action.value = action;
+	document.mainForm.submit();
+}
+
+
+</script> 
+
+
+	<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">{MainMenu}</a> 
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div class="pagetitle">{TITLE}</div></td>
+	</tr>
+
+	<tr>
+		<td colspan="2">
+
+<form id="msgListForm" name="msgListForm" action="MessageBox.jsp" method="post">
+
+	<input type="hidden" name="action">
+	<input type="hidden" name="UserMailID">
+
+	<div id="mcMessageListContainer" class="messageListContainer">
+		<div id="messagesContainer" class="tableContainer">
+		<table id="messagesTable" width="100%" border="0" cellspacing="1" cellpadding="1">
+			<thead id="messageHead">
+			<tr>
+				<th class="tdlabel">
+				<input name="selectAll" id="selectAll" value="false" onclick="javascript:selectAllMessages();" type="checkbox">
+				</th>
+				<th class="tdlabel"></th>
+				<th class="tdlabel">{LabelSubject}</th>
+				<th class="tdlabel">{LabelAttachment}</th>
+				<th class="tdlabel">{LabelDate}</th>
+			</tr>
+			</thead>
+			<tbody id="messagesBody">	
+							
+<!-- BEGIN: line --> 
+		<tr class="unread" id="msgRow{MailID}">
+			<td align=center class="{CELLCLASS}" id="msgDdata{MailID}">
+				<input name="selectedMessages" id="selectedMessages{MailID}" value="{MailID}" type="checkbox">
+			</td>
+			<td width="10" class="{CELLCLASS}">{ImageRead}</td>
+			<td class="{CELLCLASS}">{Read1}{VIEW}{Read2}</td>
+			<td align="center" width="90" class="{CELLCLASS}">{ImagePdf}</td>
+			<td class="{CELLCLASS}">{Date}	</td>
+		</tr>
+<!-- END: line --> 							
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div><div class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide hideTabContent" id="MainTab-2"></div>
+	</div>
+</form>
+
+		<div id="actionContainerTop" class="actionContainer">
+		<ul>
+			<li id="msgDeleteActionTop"><a href="javascript:deleteEmail();" onclick="javascript:deleteEmail();">{LabelDelete}</a>	</li>
+		</ul>
+		</div>
+
+
+{FOOTING}
+</table>
+
+</body>	
+
+<!-- END: main -->

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du Relevé 3 provincial
+-->
+<report view="RV_P_P_FORM_R3" fontFamily="Serif" fontSize="8" fontStyle="plain" recordPerPage="3" marginX="25" marginY="15" deltaY="268">
+   <field id="CaseA1" x="97" y="55" align="currency" />
+   <field id="CaseA2" x="204" y="55" align="currency" />
+   <field id="CaseB" x="311" y="55" align="currency" />
+   <field id="CaseC" x="418" y="55" align="currency" />
+   <field id="CaseD" x="525" y="55" align="currency" />
+   <field id="CaseE" x="97" y="78" align="currency" />
+   <field id="CaseF" x="204" y="78" align="currency" />
+   <field id="CaseG" x="311" y="78" align="currency" />
+   <field id="CaseH" x="418" y="78" align="currency" />
+   <field id="CaseI" x="525" y="78" align="currency" />
+   <field id="CaseJ" x="97" y="103" align="currency" />
+   <field id="Year" x="287" y="19" fontSize="12" align="center" />
+   <field id="FormType" x="335" y="19" align="center" />
+   <field id="NumeroFormulaire" x="495" y="8" align="center" />
+   <field id="EmployeeName" x="25" y="140" />
+   <field id="EmployeeAdresse" x="25" y="151" />
+   <field id="EmployeeAdresse2" x="25" y="162" />
+   <field id="EmployeeVille" x="25" y="174" />
+   <field id="DescriptionCompagnie" x="330" y="174" />
+   <field id="EmployerAdresse1" x="330" y="185" />
+   <field id="EmployerAdresse2" x="330" y="196" />
+   <field id="EmployerVille" x="330" y="207" />
+   <field id="CaseNumeroSuccursale" x="380" y="137" />
+   <field id="EmployeeSin_P1" x="338" y="115" align="center" />
+   <field id="EmployeeSin_P2" x="371" y="115" align="center" />
+   <field id="EmployeeSin_P3" x="408" y="115" align="center" />
+   <field id="CaseType" x="332" y="137" align="center" />
+   <field id="CaseIdentification" x="445" y="115" />
+   <field id="DistributionValue" x="166" y="140" />
+   <field id="CaseCodeDevise" x="391" y="19" align="center" />
+</report>

@@ -1,0 +1,202 @@
+/*
+ * Created on 2005-10-26
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package solstice.process;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Properties;
+
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+
+import solstice.model.P_BankAccountDoc;
+import solstice.model.P_Payment;
+import solstice.model.P_Time_Sheet;
+
+/**
+ * @author alenav01
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * Réjean Garant
+ * 
+ * Ajout du Rework pour permettre de relancé la procédure
+ */
+public class P_InOutBankDeposit {
+
+	  private String _ClassErrorMessage ="Error Bank Deposit";
+	  private P_Payment _Payment;
+	  private Properties _ctx;
+	  private int _InstanceID=0;
+	  private int BankAccountDocID=0;
+	  
+	/**
+	 * 
+	 */
+	public P_InOutBankDeposit(Properties ictx,int iInstanceID) {
+		super();
+		_ctx=ictx;
+		_InstanceID=iInstanceID;
+		// TODO Auto-generated constructor stub
+	}
+	
+	public int StartProcess(int iFrequencyID,int iPeriodID,int iDistributionBookletID,int iDistributionID,int iEmployeeID, boolean iRework)
+	{
+		int FirstDepotNumber=GetDepotNumber();
+		int count = 0;
+		
+		if (FirstDepotNumber!=0)
+		{
+			count = ProcessDepot(DepositToPrint(iFrequencyID,iPeriodID,iDistributionBookletID,iDistributionID,iEmployeeID, iRework),FirstDepotNumber);
+		}
+		else
+			System.err.println(_ClassErrorMessage + " There are not depot numeration. Please check table P_ACCOUNTBANKACCOUNT");
+		
+		return count;
+	}
+	
+	private ResultSet DepositToPrint(int iFrequencyID,int iPeriodID,int iDistributionBookletID,int iDistributionID,int iEmployeeID, boolean iRework)
+	{
+		String PaymentSQL="SELECT TS.P_TIME_SHEET_ID,P.*" +
+						  " FROM P_PAYMENT P,P_TIME_SHEET TS" +
+						  " WHERE P.P_PAYMENT_ID=TS.P_PAYMENT_ID" +
+						  " AND P.PAYMENTTYPE = 'D'" +
+						  " AND P.PAYMENTTYPEDOC in ( 'Regular', 'Adjustement', 'HolidayPayment', 'ExpenseAccount', 'Complementary' )" +
+						  " AND P.P_PERIOD_ID="+iPeriodID
+						  ;
+
+		ResultSet rsPayment=null;
+		PreparedStatement pstmt = null;
+			
+		try
+		{
+			if (iFrequencyID!=0)
+				PaymentSQL+=" AND P.P_FREQUENCY_ID="+iFrequencyID;
+			if (iDistributionBookletID!=0)
+				PaymentSQL+=" AND P.P_DISTRIBUTION_BOOKLET_ID="+iDistributionBookletID;
+			if (iDistributionID!=0)
+				PaymentSQL+=" AND P.P_DISTRIBUTION_ID="+iDistributionID;
+			if (iEmployeeID!=0)
+				PaymentSQL+=" AND P.P_EMPLOYEE_ID="+iEmployeeID;
+			if (iRework)
+				PaymentSQL+=" AND P.TIMESHEETSTATUS='E'";
+			else
+			{
+				PaymentSQL+=" AND P.TIMESHEETSTATUS='C'" +
+				            " AND P.PREPRINTEDNO IS NULL";
+			}
+			
+			pstmt= DB.prepareStatement(PaymentSQL, null);
+			rsPayment= pstmt.executeQuery();			
+		}
+		catch (Exception e)
+		{
+			System.err.println(_ClassErrorMessage + " [StartProcess] " + e);
+		}
+		return rsPayment;
+	}
+	
+	private int GetDepotNumber()
+	{
+		return GetCurrentBankDepotNumber()+1;
+	}
+	
+	private int ProcessDepot(ResultSet rsPayment,int iFirstChequeNumber)
+	{
+		int Count = 0;
+		int CurrentNumeration=iFirstChequeNumber;
+		try
+		{
+			if (rsPayment.isBeforeFirst())
+			{
+				while (rsPayment.next())
+				{
+					UpdatePayment(rsPayment.getInt("P_PAYMENT_ID"),rsPayment.getInt("P_TIME_SHEET_ID"),MakeNumeration(CurrentNumeration));
+					CurrentNumeration++;
+					Count++;
+				}
+				SetLastBankAccountDoc(CurrentNumeration-1);
+			}
+		}
+		catch (Exception e)
+		{
+			System.err.println(_ClassErrorMessage + " [ProcessDepot] " + e);
+		}		
+		return Count;
+	}
+	
+	private String MakeNumeration(int CurrentNumeration)
+	{
+		String  PrePrintedNo=String.valueOf(CurrentNumeration);
+		int NumberOfChar=PrePrintedNo.length();
+		PrePrintedNo="D" + InsertZero(6-NumberOfChar) + PrePrintedNo;
+		return PrePrintedNo;
+	}
+	
+	private String InsertZero(int Pos)
+	{
+		String Zeros="";
+    	for (int i = 0; i < Pos; i++)
+    	{
+    		Zeros+="0";
+    	}
+    	return Zeros;
+	}
+		
+	private void UpdatePayment(int iPaymentID,int iTimeSheetID,String iPrePrintedNo) 
+	{
+		P_Time_Sheet TimeSheet=new P_Time_Sheet(Env.getCtx(),iTimeSheetID, null);
+		TimeSheet.setTimeSheetStatus(P_Time_Sheet.TIMESHEETSTATUS_Issued);
+		TimeSheet.save();
+		
+		P_Payment Payment=new P_Payment(Env.getCtx(),iPaymentID, null);
+//		if ( Payment.getPaymentTypeDoc().equals( P_Payment.PAYMENTTYPEDOC_Regular ))
+		{
+			Payment.setPrePrintedNo(iPrePrintedNo);
+			Payment.save();
+            Payment.createStatementEarning();
+		}
+	}
+	
+	private int GetCurrentBankDepotNumber()
+	{
+		int DepotNumber=0;
+		String SqlBankAccountDoc="SELECT P_BANKACCOUNTDOC_ID,CURRENTNEXT FROM P_BANKACCOUNTDOC WHERE PAYMENTRULE='D'"; 
+		
+		ResultSet rsBankAccountDoc=null;
+		PreparedStatement pstmt = null;
+		
+		try
+		{
+			pstmt= DB.prepareStatement(SqlBankAccountDoc, null);
+			rsBankAccountDoc= pstmt.executeQuery();
+			
+			if (rsBankAccountDoc.isBeforeFirst())
+			{
+				rsBankAccountDoc.next();
+				BankAccountDocID=rsBankAccountDoc.getInt("P_BANKACCOUNTDOC_ID");
+				DepotNumber=rsBankAccountDoc.getInt("CURRENTNEXT");
+			}
+			
+		}
+		catch (Exception e)
+		{
+			System.err.println(_ClassErrorMessage + " [GetCurrentBankDepotNumber] " + e);
+		}
+		
+		return DepotNumber;
+	}
+	
+	private void SetLastBankAccountDoc(int iLastDepotNumber)
+	{
+		P_BankAccountDoc BankAccountDoc=new P_BankAccountDoc(Env.getCtx(), BankAccountDocID, null);
+		BankAccountDoc.setCurrentNext(iLastDepotNumber);
+		BankAccountDoc.save();
+	}
+	
+}

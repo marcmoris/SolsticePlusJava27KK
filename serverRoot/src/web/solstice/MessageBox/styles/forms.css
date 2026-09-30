@@ -1,0 +1,70 @@
+.form { 
+	BORDER-RIGHT: white 1px solid; 
+	PADDING-RIGHT: 1px; 
+	BORDER-TOP: white 1px solid; 
+	PADDING-LEFT: 1px; 
+	FONT-SIZE: 12px; 
+	PADDING-BOTTOM: 1px; 
+	MARGIN: 1px; 
+	BORDER-LEFT: white 1px solid; 
+	COLOR: #390909; 
+	PADDING-TOP: 1px; 
+	BORDER-BOTTOM: white 1px solid; 
+	FONT-FAMILY: arial; 
+	BACKGROUND-COLOR: #aabeca; 
+	TEXT-ALIGN: center; 
+	TEXT-DECORATION: none 
+} 
+
+.font { 
+	FONT-WEIGHT: bolder; 
+	FONT-SIZE: 16px; 
+	COLOR: white; 
+	FONT-FAMILY: arial; 
+	TEXT-DECORATION: none 
+}
+
+.bfont { 
+	FONT-WEIGHT: bolder; 
+	FONT-SIZE: 24px; 
+	COLOR: black; 
+	FONT-FAMILY: arial; 
+	TEXT-DECORATION: none 
+}  
+
+.desc { 
+	FONT-SIZE: 12px; 
+	FONT-FAMILY: arial; 
+	TEXT-DECORATION: none 
+} 
+
+.titlefont { 
+	FONT-WEIGHT: bolder; 
+	FONT-SIZE: 12px; 
+	COLOR: white; 
+	FONT-FAMILY: arial; 
+	TEXT-DECORATION: none 
+} 
+	
+	.boldtext {
+		FONT-WEIGHT: bolder; 
+		FONT-SIZE: 12px;  
+		FONT-FAMILY: arial; 
+		TEXT-DECORATION: none
+	}
+	
+	.bigitalictext {
+		FONT-WEIGHT: bolder; 
+		FONT-SIZE: 14px; 
+		FONT-STYLE: Italic;  
+		FONT-FAMILY: arial; 
+		TEXT-DECORATION: none
+	}
+	
+	.error { 
+		FONT-WEIGHT: bolder; 
+		FONT-SIZE: 16px; 
+		COLOR: red; 
+		FONT-FAMILY: arial; 
+		TEXT-DECORATION: none 
+	}

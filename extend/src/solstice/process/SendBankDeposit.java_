@@ -1,0 +1,420 @@
+/**
+ * 
+ */
+package solstice.process;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.logging.Level;
+
+import javax.mail.internet.InternetAddress;
+
+import org.compiere.process.ProcessInfoParameter;
+import org.compiere.process.SvrProcess;
+import org.compiere.util.ByteArrayDataSource;
+import org.compiere.util.CLogger;
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+
+import solstice.custom.EMailSender;
+import solstice.fop.BankDepositXmlGenerator;
+import solstice.fop.PdfGenerator;
+import solstice.model.P_Notice_Bank_Deposit;
+
+/**
+ * @author frafor01
+ * Cette classe définit le processus pour l'envoi des avis de dépôt par courriel. Les
+ * avis de dépôt peuvent être accompagnés d'un ou de plusieurs mémos.
+ */
+public class SendBankDeposit extends SvrProcess
+{
+
+	private static final String P_PERIOD_ID = "P_Period_ID";
+	private static final String P_FREQUENCY_ID = "P_Frequency_ID";
+	private static final String P_EMPLOYEE_ID = "P_Employee_ID";
+	private static final String AD_CLIENT_ID = "AD_Client_ID";
+	private static final String AD_ORG_ID = "AD_Org_ID";
+	private static final String P_DISTRIBUTION_BOOKLET_ID = "P_Distribution_Booklet_ID";
+	
+	private int periodID = 0;
+	private int frequencyID = 0;
+	private String whereClause = null;
+	
+	/**
+	 * Constructeur
+	 */
+	public SendBankDeposit()
+	{
+	}
+
+	/**
+	 * Cette méthode sert à lancer la procédure d'envoi des avis de dépôt
+	 * @see org.compiere.process.SvrProcess#doIt()
+	 */
+	@Override
+	protected String doIt() throws Exception
+	{
+		CLogger log = CLogger.getCLogger(this.getClass());
+		
+		// Si on n'a pas reçu de valeur pour le paramètre P_PERIOD_ID, on renvoit
+		// un message d'erreur
+		if(this.periodID <= 0)
+		{
+			log.log(Level.SEVERE, "Le paramètre P_PERIOD_ID est obligatoire");
+			return "Le paramètre P_PERIOD_ID est obligatoire";
+		}
+		
+		// Si on n'a pas reçu de valeur pour le paramètre P_FREQUENCY_ID, on renvoit
+		// un message d'erreur
+		if(this.frequencyID <= 0)
+		{
+			log.log(Level.SEVERE, "Le paramètre P_FREQUENCY_ID est obligatoire");
+			return "Le paramètre P_FREQUENCY_ID est obligatoire";
+		}
+		
+		// La première étape est de sortir la liste des employés et de leur associer des mémos
+		Hashtable<Integer, P_Notice_Bank_Deposit> memos = this.obtenirMemos();
+		Hashtable<Integer, ArrayList<P_Notice_Bank_Deposit>> employesAvecMemos = this.obtenirEmployesAvecMemos(memos);
+		
+		// Pour chacun des employés, on prépare la liste des courriels
+		Enumeration<Integer> employeeIDs = employesAvecMemos.keys();
+		while(employeeIDs.hasMoreElements())
+		{
+			int employeeID = employeeIDs.nextElement().intValue();
+
+			ByteArrayOutputStream outputPdf = null;
+			ByteArrayInputStream inputPdf = null;
+			
+			try
+			{
+				// On prépare d'abord les générateurs pour le XML et le PDF
+				outputPdf = new ByteArrayOutputStream();
+				BankDepositXmlGenerator xmlGenerator = new BankDepositXmlGenerator(
+						employeeID, this.periodID, this.frequencyID);
+				
+				PdfGenerator pdfGenerator = new PdfGenerator();
+				pdfGenerator.generatePdf(xmlGenerator, "AvisDepotBancaire.xsl", outputPdf);
+				
+				if(xmlGenerator.containsData())
+				{
+					// On transforme ensuite le PDF en mémoire en source pour attacher au courriel
+					inputPdf = new ByteArrayInputStream(outputPdf.toByteArray());
+					ByteArrayDataSource pdfSource = new ByteArrayDataSource(inputPdf, "application/pdf");
+					pdfSource.setName("Bank_deposit.pdf");
+					
+					// On envoie finalement le courriel avec la liste des mémos
+					String title;
+					if(xmlGenerator.getLanguage() == BankDepositXmlGenerator.ENGLISH)
+						title = "Bank Deposit";
+					else
+						title = "Avis de dépôt";
+					
+					EMailSender emailSender = new EMailSender(employeeID, new InternetAddress("solstice@tempuri.org"), Env.getCtx());
+					emailSender.addAttachment(pdfSource);
+					emailSender.sendEMail(title, this.preparerMessage(
+							employesAvecMemos.get(new Integer(employeeID)), xmlGenerator.getLanguage()));
+				}
+			}
+			catch (Throwable ex)
+			{
+				// Si on a rencontré une exception, on la logue et on poursuit le traitement
+				// avec les autres employés dans la liste
+				log.log(Level.SEVERE, "Erreur dans l'envoie du courriel pour l'employé ID=" + employeeID, ex);
+			}
+			finally
+			{
+				if(inputPdf != null)
+					inputPdf.close();
+				
+				if(outputPdf != null)
+					outputPdf.close();
+			}
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Cette méthode sert à récupérer les paramètres de lancement pour la procédure et à
+	 * créer la clause de recherche pour les employés
+	 * @see org.compiere.process.SvrProcess#prepare()
+	 */
+	@Override
+	protected void prepare()
+	{
+		this.periodID = 0;
+		this.frequencyID = 0;
+		int employeeID = 0;
+		int clientID = 0;
+		int orgID = 0;
+		int distributionBookletID = 0;
+		
+		// On récupère d'abord les valeurs des paramètres
+		ProcessInfoParameter[] parameters = this.getParameter();
+		for(int i = 0; i < parameters.length; i++)
+		{
+			if(SendBankDeposit.P_PERIOD_ID.equals(parameters[i].getParameterName()))
+				this.periodID = parameters[i].getParameterAsInt();
+			else if(SendBankDeposit.P_FREQUENCY_ID.equals(parameters[i].getParameterName()))
+				this.frequencyID = parameters[i].getParameterAsInt();
+			else if(SendBankDeposit.P_EMPLOYEE_ID.equals(parameters[i].getParameterName()))
+				employeeID = parameters[i].getParameterAsInt();
+			else if(SendBankDeposit.AD_CLIENT_ID.equals(parameters[i].getParameterName()))
+				clientID = parameters[i].getParameterAsInt();
+			else if(SendBankDeposit.AD_ORG_ID.equals(parameters[i].getParameterName()))
+				orgID = parameters[i].getParameterAsInt();
+			else if(SendBankDeposit.P_DISTRIBUTION_BOOKLET_ID.equals(parameters[i].getParameterName()))
+				distributionBookletID = parameters[i].getParameterAsInt();
+		}
+		
+		// On construit ensuite les critères pour la recherche dans la table P_EMPLOYEE
+		this.whereClause = " WHERE ISACTIVE = 'Y' AND PRINTSTATEMENTEARNING = 'N'";
+		if(employeeID > 0)
+			this.whereClause += " AND P_EMPLOYEE_ID = " + employeeID;
+		
+		if(clientID > 0)
+			this.whereClause += " AND AD_CLIENT_ID = " + clientID;
+		
+		if(orgID > 0)
+			this.whereClause += " AND AD_ORG_ID = " + orgID;
+		
+		if(distributionBookletID > 0)
+			this.whereClause += " AND P_DISTRIBUTION_BOOKLET_ID = " + distributionBookletID;
+	}
+	
+	/**
+	 * Cette méthode sert à obtenir la liste des mémos pour la période reçue en paramètre
+	 * @return Hashtable&lt;P_NOTICE_BANK_DEPOSIT, NOTICE&gt;
+	 */
+	private Hashtable<Integer, P_Notice_Bank_Deposit> obtenirMemos() throws SQLException
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête sert à obtenir les ID de tous les mémos disponibles pour la
+			// période courante
+			pstmt = DB.prepareStatement(
+					"SELECT  P_Notice_Bank_Deposit_ID " +
+					"FROM    P_Notice_Bank_Deposit " +
+					"WHERE   P_Period_ID = " + this.periodID, null);
+			
+			rs = pstmt.executeQuery();
+			
+			Hashtable<Integer, P_Notice_Bank_Deposit> memos = new Hashtable<Integer, P_Notice_Bank_Deposit>();
+			
+			while(rs.next())
+			{
+				// On ajoute les mémos à la liste en les classant par ID
+				int noticeBankDepositID = rs.getInt("P_Notice_Bank_Deposit_ID");
+				memos.put(noticeBankDepositID, P_Notice_Bank_Deposit.get(Env.getCtx(), noticeBankDepositID, null));
+			}
+			
+			return memos;
+		}
+		finally
+		{
+			// On ferme les connexions
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+	}
+	
+	/**
+	 * Cette méthode sert à obtenir la liste des employés, correspondants au paramètres
+	 * de lancement, avec les mémos qui leurs sont associés (s'il y a lieu).
+	 * @param memos La liste des mémos disponibles pour la période
+	 * @return Hashtable&lt;P_EMPLOYEE_ID, ArrayList&lt;P_NOTICE_BANK_DEPOSIT&gt;&gt;
+	 */
+	private Hashtable<Integer, ArrayList<P_Notice_Bank_Deposit>> obtenirEmployesAvecMemos(Hashtable<Integer, P_Notice_Bank_Deposit> memos) throws SQLException
+	{
+		// On doit se garder une liste d'employés traités pour lancer une requête
+		// pour trouver les employés restant plutard
+		String employesTraites = "";
+		
+		// Pour associer les employés à leurs mémos, on doit parcourir la liste
+		// des mémos pour en sortir tous les employés associés. On doit ensuite les
+		// ajouter à la liste.
+		Hashtable<Integer, ArrayList<P_Notice_Bank_Deposit>> employesAvecMemos = new Hashtable<Integer, ArrayList<P_Notice_Bank_Deposit>>();
+		Enumeration<P_Notice_Bank_Deposit> enumerationMemos = memos.elements();
+		while(enumerationMemos.hasMoreElements())
+		{
+			P_Notice_Bank_Deposit memo = enumerationMemos.nextElement();
+			Integer[] employeeIDs = this.obtenirEmployesPourMemo(memo);
+			
+			for(int i = 0; i < employeeIDs.length; i++)
+			{
+				// Si l'employé est déjà dans la liste, on ajoute le mémo, sinon, on
+				// ajoute d'abord le mémo à la liste et on lui ajoute le mémo.
+				if(employesAvecMemos.containsKey(employeeIDs[i]))
+				{
+					employesAvecMemos.get(employeeIDs[i]).add(memo);
+				}
+				else
+				{
+					ArrayList<P_Notice_Bank_Deposit> list = new ArrayList<P_Notice_Bank_Deposit>();
+					list.add(memo);
+					employesAvecMemos.put(employeeIDs[i], list);
+					employesTraites += "," + employeeIDs[i].toString();
+				}
+			}
+		}
+		
+		if(!"".equals(employesTraites))
+			employesTraites = employesTraites.substring(1);
+		
+		// Il reste à trouver la liste des employés restant, mais sans les associer à aucun mémo
+		Integer[] employeeIDs = this.obtenirEmployesRestant(employesTraites);
+		for(int i = 0; i < employeeIDs.length; i++)
+		{
+			ArrayList<P_Notice_Bank_Deposit> list = new ArrayList<P_Notice_Bank_Deposit>(0);
+			employesAvecMemos.put(employeeIDs[i], list);
+		}
+		
+		return employesAvecMemos;
+	}
+	
+	/**
+	 * Cette méthode permet d'obtenir la liste des employés associé à un mémo
+	 * @param memo Le mémo
+	 * @return Une liste de P_EMPLOYEE_ID
+	 */
+	private Integer[] obtenirEmployesPourMemo(P_Notice_Bank_Deposit memo) throws SQLException
+	{
+		// On construit d'abord les conditions de recherche relative au mémo en paramètre
+		String whereClauseMemo = "";
+		
+		if(memo.getC_Activity_ID() > 0)
+			whereClauseMemo += " AND C_ACTIVITY_ID = " + memo.getC_Activity_ID();
+		
+		if(memo.getAD_Org_ID() > 0)
+			whereClauseMemo += " AND AD_ORG_ID = " + memo.getAD_Org_ID();
+		
+		if(memo.getP_Department_ID() > 0)
+			whereClauseMemo += " AND P_DEPARTMENT_ID = " + memo.getP_Department_ID();
+		
+		if(memo.getP_Employee_ID() > 0)
+			whereClauseMemo += " AND P_EMPLOYEE_ID = " + memo.getP_Employee_ID();
+			
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête sort la liste des IDs des employés répondants aux paramètres
+			// de lancement et aux critères du mémo courant
+			pstmt = DB.prepareStatement(
+					"SELECT  P_Employee_ID " +
+					"FROM    P_Employee" + this.whereClause + whereClauseMemo, null);
+			
+			rs = pstmt.executeQuery();
+			
+			ArrayList<Integer> listID = new ArrayList<Integer>();
+			
+			while(rs.next())
+			{
+				listID.add(new Integer(rs.getInt("P_Employee_ID")));
+			}
+			
+			return (Integer[])listID.toArray();
+		}
+		finally
+		{
+			// On ferme les connexions
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+	}
+	
+	/**
+	 * Cette méthode sert à obtenir la liste des employés restants, i.e. ceux qui n'ont
+	 * pas encore été traités et qui répondent aux paramètres de lancement.
+	 * @param employesTraites La liste des P_EMPLOYEE_ID séparés par des virgules
+	 * @return La liste des P_EMPLOYEE_ID restants
+	 */
+	private Integer[] obtenirEmployesRestant(String employesTraites) throws SQLException
+	{
+		// On prépare une condition pour excluse les employés traités
+		String whereClauseEmployesTraites;
+		if(employesTraites != null && !"".equals(employesTraites))
+			whereClauseEmployesTraites = " AND P_EMPLOYEE_ID NOT IN ( " + employesTraites + " )";
+		else
+			whereClauseEmployesTraites = "";
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try
+		{
+			// Cette requête sort la liste des IDs des employés répondants aux paramètres
+			// de lancement et qui n'ont pas déjà été traités
+			pstmt = DB.prepareStatement(
+					"SELECT  P_Employee_ID " +
+					"FROM    P_Employee" + this.whereClause + whereClauseEmployesTraites, null);
+			
+			rs = pstmt.executeQuery();
+			
+			ArrayList<Integer> listID = new ArrayList<Integer>();
+			
+			while(rs.next())
+			{
+				listID.add(new Integer(rs.getInt("P_Employee_ID")));
+			}
+			
+			return listID.toArray(new Integer[listID.size()]);
+		}
+		finally
+		{
+			// On ferme les connexions
+			if(rs != null)
+				rs.close();
+			
+			if(pstmt != null)
+				pstmt.close();
+		}
+	}
+	
+	/**
+	 * Cette méthode permet de préparer le message à partir de la liste des mémos
+	 * @param memos la liste des mémos
+	 * @param language la langue selon les constantes de BankDepositXmlGenerator
+	 */
+	private String preparerMessage(ArrayList<P_Notice_Bank_Deposit> memos, int language)
+	{
+		String message;
+		if(language == BankDepositXmlGenerator.ENGLISH)
+			message = "Bank Deposit\r\n";
+		else
+			message = "Avis de dépôt\r\n";
+			
+		for(int i = 0; i < memos.size(); i++)
+		{
+			message += "\r\n==========\r\n" + memos.get(i).getNOTICE();
+		}
+		return message;
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		org.compiere.Compiere.startupEnvironment(true);
+		SendBankDeposit obj = new SendBankDeposit();
+		obj.periodID = 1001918;
+		obj.frequencyID = 1000010;
+		obj.whereClause = " WHERE ISACTIVE = 'Y' ";
+		obj.doIt();
+	}
+
+}

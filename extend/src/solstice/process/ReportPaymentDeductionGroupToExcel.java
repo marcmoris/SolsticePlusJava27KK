@@ -1,0 +1,534 @@
+package solstice.process;
+
+import java.io.*;
+
+import jxl.*;
+
+import java.util.*;
+import java.util.logging.Level;
+
+import jxl.Workbook;
+import jxl.format.Colour;
+import jxl.write.Formula;
+import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.NumberFormats;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableImage;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
+import jxl.write.*;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.compiere.util.CLogger;
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+
+import org.compiere.process.ProcessInfoParameter;
+import org.compiere.process.SvrProcess;
+
+import solstice.model.P_Deduction;
+import solstice.model.P_Period;
+import solstice.utils.PgiUtil;
+
+public class ReportPaymentDeductionGroupToExcel extends SvrProcess
+{
+	/** Logger */
+	private static CLogger log = CLogger.getCLogger(ReportPaymentDeductionGroupToExcel.class);
+	private int P_Period_Start_ID = 1002017;
+	private int P_Period_End_ID   = 1002041;
+//	private int P_Deduction_ID = 1;
+	private String[] DeductionList = new String[] {"65", "68"};
+	
+	public ReportPaymentDeductionGroupToExcel()
+	{
+/*		try
+		{ 
+			doIt();
+        }
+        catch (Exception e)
+        {
+            log.log(Level.WARNING, "ReportPaymentDeductionGroupToExcel", e);
+        }
+*/        
+	}
+
+	
+	protected void prepare() 
+	{
+		String lst = "65,68";
+
+		ProcessInfoParameter[] para = getParameter();
+		String paramName = "";
+		//Read the parameters
+		for(int i=0; i < para.length; i++)
+		{ 
+			paramName = para[i].getParameterName();
+			if (paramName.equals("P_Period_Start_ID")){
+				this.P_Period_Start_ID = para[i].getParameterAsInt();
+			}else if (paramName.equals("P_Period_End_ID")){
+				this.P_Period_End_ID = para[i].getParameterAsInt();
+			}
+//			else if ( paramName.equals("P_Deduction_ID"))
+//				this.P_Deduction_ID = para[i].getParameterAsInt();
+		}
+
+		DeductionList = new String[1];
+
+		int i = 0;
+		while ( lst.contains(","))
+		{
+			if ( DeductionList.length != i + 1 ) DeductionList = (String[])PgiUtil.resizeArray( DeductionList, i + 1 );
+			DeductionList[i] = lst.substring( 0,lst.indexOf(","));
+			lst = lst.substring( lst.indexOf(",") + 1, lst.length());
+			i = i + 1;
+		}
+		if ( lst.length() != 0)
+		{
+			if ( DeductionList.length != i + 1 ) DeductionList = (String[])PgiUtil.resizeArray( DeductionList, i + 1 );
+			DeductionList[i] = lst;
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see org.compiere.process.SvrProcess#doIt()
+	 */
+	protected String doIt() throws Exception 
+	{
+		System.out.println("ReportPaymentDeductionGroupToExcel   $Revision: 1.0 $");
+		System.out.println("----------------------------------");
+		//
+		int exported = 0;
+	    try
+	    {
+     	  String Path = PgiUtil.getSolsticeParameter(getCtx(), "TransfertPath");
+	    	
+          Calendar toDay = Calendar.getInstance();
+	      String filename =  getProcessInfo().getTitle() + "_" + String.valueOf(toDay.get(Calendar.YEAR)+ "." 
+	              + "00".substring(0, 2 - String.valueOf(toDay.get(Calendar.MONTH) + 1 ).trim().length()) + String.valueOf(toDay.get(Calendar.MONTH) + 1) + "."
+	              +  String.valueOf(toDay.get(Calendar.DAY_OF_MONTH))  ) ;
+
+	      String fullFileName = Path + filename+ ".xls";
+
+	      File file = new File( fullFileName);
+	      int no = 0;
+	      while ( file.exists() )
+	      {
+	    	  no = no + 1;
+	    	  fullFileName =  Path + filename + "(" + no + ").xls";
+		      file = new File( fullFileName );
+	      }
+		  log.info("Write to : " + fullFileName  );
+
+	      WorkbookSettings ws = new WorkbookSettings();
+	      ws.setLocale(new Locale("en", "EN"));
+//	      ws.setLocale(new Locale("fr", "FR"));
+	      
+	      WritableWorkbook workbook = Workbook.createWorkbook(new File(fullFileName), ws);
+	      WritableSheet s = workbook.createSheet("Data", 0);
+	      exported = writeDataSheet(s);
+	      workbook.write();
+	      workbook.close();      
+
+			PgiUtil.promptOpenExportedFile(fullFileName);
+
+	    }
+	    catch (IOException e)
+	    {
+	      e.printStackTrace();
+	    }
+	    catch (WriteException e)
+	    {
+	      e.printStackTrace();
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	    }
+
+	    return "@Processed@ " + exported;
+	}
+	
+
+	private void createTotalDeduction( WritableSheet s, ResultSet rs) throws Exception
+	{
+    	P_Deduction Deduction = P_Deduction.get( Env.getCtx(), oldDeductionID, null);
+
+    	if ( rs != null )
+    	{
+        	oldDeduction  = rs.getString(6);
+        	oldDeductionID = rs.getInt("P_Deduction_ID");
+    	}
+    	endGroupDeduction = currentRow;
+		s.setRowGroup(startGroupDeduction, endGroupDeduction -1 , true);
+
+		
+	    Formula f0 = new Formula(0,currentRow, "A" + endGroupDeduction , cft );
+	    s.addCell(f0);
+	    Formula f1 = new Formula(1,currentRow, "B" + endGroupDeduction , cft );
+	    s.addCell(f1);
+
+	    Formula f2 = new Formula(2,currentRow, "C" + endGroupDeduction , cft );
+	    s.addCell(f2);
+
+	    Formula f3 = new Formula(3,currentRow, "D" + endGroupDeduction , cft );
+	    s.addCell(f3);
+
+	    Label l = new Label(4,currentRow, Deduction.getValue() + " " + Deduction.getName() + " Total",cft);
+	    s.addCell(l);
+		// Si le excel doit être en Francais il faut utilisé le formule SOMME		
+	    Formula f6 = new Formula(5,currentRow, "SUM(F" + (startGroupDeduction + 1) + ":F" + endGroupDeduction + ")", i2 );
+	    s.addCell(f6);
+
+		// Si le excel doit être en Francais il faut utilisé le formule SOMME		
+	    Formula f7 = new Formula(6,currentRow, "SUM(G" + (startGroupDeduction + 1) + ":G" + endGroupDeduction + ")", i2 );
+	    s.addCell(f7);
+
+		// Si le excel doit être en Francais il faut utilisé le formule SOMME		
+//	    Formula f8 = new Formula(7,currentRow, "H" + endGroupDeduction , cft );
+//	    s.addCell(f8);
+
+	    currentRow = currentRow + 1;
+
+	    rowGroupDeduction[nbrDeductionGroup] = currentRow;
+		nbrDeductionGroup = nbrDeductionGroup + 1;
+
+	    startGroupDeduction = currentRow ;
+
+	}
+	
+	private void createTotalEmployee( WritableSheet s, ResultSet rs) throws Exception
+	{
+		if ( rs != null)
+			oldEmployee  = rs.getString(3);
+		
+    	endGroup = currentRow;
+		s.setRowGroup(startGroup, endGroup -1 , true);
+
+	    Formula f0 = new Formula(0,currentRow, "A" + endGroup , cft );
+	    s.addCell(f0);
+	    Formula f1 = new Formula(1,currentRow, "B" + endGroup , cft );
+	    s.addCell(f1);
+
+	    Formula f2 = new Formula(2,currentRow, "C" + endGroup , cft );
+	    s.addCell(f2);
+
+	    Formula f3 = new Formula(3,currentRow, "D" + endGroup , cft );
+	    s.addCell(f3);
+
+	    Label l = new Label(4,currentRow,"Total Employé",cft);
+	    s.addCell(l);
+	    String formula = "";
+		for (int j = 0; j < rowGroupDeduction.length; j++)
+		{
+			if ( rowGroupDeduction[j] != null)
+			{
+				formula = formula + "F" + rowGroupDeduction[j];
+				if ( j != rowGroupDeduction.length )
+					formula = formula + " + ";
+			}
+		}
+		if ( formula.endsWith( "+ "))
+			formula = formula.substring(0, formula.length() - 2);
+
+//	    Formula f6 = new Formula(5,i, "SUM(F" + (startGroup + 1) + ":F" + endGroup + ")", i2 );
+	    Formula f6 = new Formula(5,currentRow, formula, i2 );
+	    s.addCell(f6);
+
+//	    Formula f7 = new Formula(6,i, "SUM(G" + (startGroup + 1) + ":G" + endGroup + ")", i2 );
+	    formula = formula.replace("F", "G");
+	    Formula f7 = new Formula(6,currentRow, formula, i2 );
+	    s.addCell(f7);
+
+//	    Formula f8 = new Formula(7,currentRow, "H" + endGroup,cft );
+//	    s.addCell(f8);
+
+
+	    currentRow = currentRow + 1;
+
+	    rowGroup[ nbrGroup ] = currentRow;
+	    nbrGroup = nbrGroup + 1;
+	    rowGroup = (Integer[])PgiUtil.resizeArray( rowGroup, nbrGroup + 1);
+
+	    startGroup = currentRow ;
+	    
+	    nbrDeductionGroup = 0;
+	    rowGroupDeduction = new Integer[ DeductionList.length ];
+
+	    startGroupDeduction = currentRow ;
+
+	}
+
+	private void createTotal( WritableSheet s ) throws Exception
+	{
+		Label l = new Label(0,currentRow,"Grand Total",cft);
+	    s.addCell(l);
+
+	    String formula = "";
+		for (int j = 0; j < rowGroup.length; j++)
+		{
+			if ( rowGroup[j] != null)
+			{
+				formula = formula + "F" + rowGroup[j];
+				if ( j != rowGroup.length )
+					formula = formula + " + ";
+			}
+		}
+		if ( formula.endsWith( "+ "))
+			formula = formula.substring(0, formula.length() - 2);
+
+		
+	    Formula f6 = new Formula(5,currentRow, formula, i2 );
+	    s.addCell(f6);
+
+	    formula = formula.replace("F", "G");
+
+	    Formula f7 = new Formula(6,currentRow, formula, i2 );
+	    s.addCell(f7);
+	}
+
+	
+	private String oldEmployee = "";
+	private String oldDeduction = "";
+	private int oldDeductionID = 0;
+	private int startGroup = 0;
+	private int endGroup = 0;
+	private int startGroupDeduction = 0;
+	private int endGroupDeduction = 0;
+	private int currentRow = 0;
+	private WritableCellFormat cft;
+	private WritableCellFormat i1;
+	private WritableCellFormat i2;
+	private int nbrDeductionGroup = 0;
+	private Integer[] rowGroupDeduction;
+	private Integer[] rowGroup = new Integer[2];
+	private int nbrGroup = 0;
+	
+	
+	private int writeDataSheet(WritableSheet s) 
+	   throws WriteException
+	  {
+	    /* Format the Font */
+	    WritableFont wf = new WritableFont(WritableFont.ARIAL, 
+	      10, WritableFont.BOLD);
+	    WritableCellFormat cf = new WritableCellFormat(wf);
+	    cf.setWrap(true);
+	    Colour c = Colour.GREY_25_PERCENT;
+	    cf.setBackground(c);
+	    cf.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN);
+
+	    i1 = new WritableCellFormat(NumberFormats.FLOAT);
+	    i2 = new WritableCellFormat(NumberFormats.FLOAT);
+//	    i2.setBackground(c);
+	    i2.setBorder(jxl.format.Border.TOP, jxl.format.BorderLineStyle.THIN);
+
+	    cft = new WritableCellFormat(wf);
+	    cft.setBorder(jxl.format.Border.TOP, jxl.format.BorderLineStyle.THIN);
+
+//	  	P_Deduction Deduction = P_Deduction.get( Env.getCtx(), P_Deduction_ID, null);
+	  	P_Period period1 = P_Period.get( Env.getCtx(), P_Period_Start_ID, null );
+	  	P_Period period2 = P_Period.get( Env.getCtx(), P_Period_End_ID, null );
+
+	  	Label l;
+	  	
+	    l = new Label(0,currentRow,Msg.translate(Env.getCtx(), "P_Deduction_ID" ),cf);
+	    s.addCell(l);
+
+	    String sDeductionList = "";
+		for (int j = 0; j < DeductionList.length; j++)
+		{
+			sDeductionList = sDeductionList + " - " + DeductionList[j];
+		}
+
+	    l = new Label(1,currentRow, sDeductionList ,cf);
+	    s.addCell(l);
+	    currentRow = currentRow + 1;
+
+
+	    l = new Label(0,currentRow,Msg.translate(Env.getCtx(), "P_Period_ID" ),cf);
+	    s.addCell(l);
+	    l = new Label(1,currentRow, period1.getName() + " - " + period2.getName() ,cf);
+	    s.addCell(l);
+	    currentRow = currentRow + 3;
+
+	    /* Creates Label and writes date to one cell of sheet*/
+	    l = new Label(0,currentRow,Msg.translate(Env.getCtx(), "AD_Org_ID" ),cf);
+	    s.addCell(l);
+	    l = new Label(1,currentRow,Msg.translate(Env.getCtx(), "C_Activity_ID" ),cf);
+	    s.addCell(l);
+	    l = new Label(2,currentRow,Msg.translate(Env.getCtx(), "P_Employee_ID" ),cf);
+	    s.addCell(l);
+	    l = new Label(3,currentRow,Msg.translate(Env.getCtx(), "Name" ),cf);
+	    s.addCell(l);
+	    l = new Label(4,currentRow,Msg.translate(Env.getCtx(), "P_Period_ID" ),cf);
+	    s.addCell(l);
+//	    l = new Label(5,i,Msg.translate(Env.getCtx(), "P_Deduction_ID" ),cf);
+//	    s.addCell(l);
+	    l = new Label(5,currentRow,Msg.translate(Env.getCtx(), "Employee_Part" ),cf);
+	    s.addCell(l);
+	    l = new Label(6,currentRow,Msg.translate(Env.getCtx(), "AccumulationAmount" ),cf);
+	    s.addCell(l);
+	    l = new Label(7,currentRow,Msg.translate(Env.getCtx(), "P_Deduction_ID" ),cf);
+	    s.addCell(l);
+
+    	s.setColumnView(0, 30);
+    	s.setColumnView(1, 30);
+    	s.setColumnView(2, 30);
+    	s.setColumnView(3, 30);
+    	s.setColumnView(4, 30);
+    	s.setColumnView(5, 30);
+    	s.setColumnView(6, 30);
+    	s.setColumnView(7, 30);
+    	s.setColumnView(8, 30);
+
+	    WritableFont wf2 = new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD);
+	  	    WritableCellFormat cf2 = new WritableCellFormat(wf2);
+	  	    cf2.setWrap(true);
+
+	  	    
+	    String sqlDeductionList = "'" + DeductionList[0] + "'";
+		for (int j = 1; j < DeductionList.length; j++)
+		{
+			sqlDeductionList = sqlDeductionList + ", '" + DeductionList[j] + "'";
+		}
+
+	  	
+		String sql = "SELECT AD_ORG.NAME "
+				   + ", C_Activity.NAME "
+				   + ", P_Employee.VALUE "
+				   + ", P_Employee.NAME "
+				   + ", P_Period.NAME "
+				   + ", P_Deduction.Value " //  P_Deduction.NAME "
+				   + ", SUM( EMPLOYEE_PART ) "
+				   + ", SUM( AccumulationAmount ) "
+				   + ", MAX( P_Deduction.P_Deduction_ID) as P_Deduction_ID"
+				   + " FROM dbo.P_PAYMENT "
+				   + "INNER JOIN dbo.P_PAYMENT_Deduction ON P_PAYMENT_Deduction.P_PAYMENT_ID = dbo.P_PAYMENT.P_PAYMENT_ID "
+				   + "INNER JOIN dbo.AD_ORG ON AD_ORG.AD_ORG_ID = P_PAYMENT.AD_ORG_ID "
+				   + "INNER JOIN dbo.P_EMPLOYEE ON P_EMPLOYEE.P_EMPLOYEE_ID = P_PAYMENT.P_EMPLOYEE_ID "
+				   + "INNER JOIN dbo.P_Deduction ON dbo.P_Deduction.P_Deduction_ID = dbo.P_PAYMENT_Deduction.P_Deduction_ID "
+				   + "INNER JOIN dbo.C_ACTIVITY ON dbo.C_ACTIVITY.C_ACTIVITY_ID = dbo.P_PAYMENT.C_Activity_ID "
+				   + "INNER JOIN dbo.P_PERIOD ON P_PERIOD.P_PERIOD_ID = P_Payment.P_PERIOD_ID "
+				   + " WHERE P_Deduction.value in ( " + sqlDeductionList + ")" 
+				   + "   AND P_Payment.P_PERIOD_ID BETWEEN " + P_Period_Start_ID + " AND " + P_Period_End_ID
+				   + "GROUP BY "
+				   + "AD_ORG.NAME "
+				   + ", C_Activity.NAME "
+				   + ", P_Employee.VALUE "
+				   + ", P_Employee.NAME "
+				   + ", P_Deduction.VALUE "
+				   + ", P_Deduction.NAME "
+				   + ", P_Period.NAME "
+				   + " ORDER BY "
+				   + "AD_ORG.NAME "
+				   + ", C_Activity.NAME "
+				   + ", P_Employee.VALUE "
+				   + ", P_Employee.NAME "
+				   + ", P_Deduction.VALUE "
+				   + ", P_Period.NAME "
+				   ;
+		PreparedStatement pstmt = null;
+		try
+		{
+			pstmt = DB.prepareStatement(sql, null);
+			ResultSet rs = pstmt.executeQuery();
+
+			rowGroupDeduction = new Integer[ DeductionList.length ];
+			
+			while (rs.next())
+			{
+				currentRow = currentRow + 1;
+			    if ( oldEmployee.length() == 0)
+			    {
+			    	oldEmployee = rs.getString(3);
+			    	startGroup = currentRow  ;
+			    }
+			    if ( oldDeduction.length() == 0)
+			    {
+			    	oldDeduction = rs.getString(6);
+			    	oldDeductionID = rs.getInt("P_Deduction_ID");
+			    	startGroupDeduction = currentRow  ;
+			    }
+
+			    
+			    if ( oldDeduction.equals( rs.getString(6) ) == false || oldEmployee.equals( rs.getString(3) ) == false )
+			    {
+			    	log.info( "   Total Deduction " + oldDeduction); 
+			    	createTotalDeduction( s, rs );
+			    }
+
+			    if ( oldEmployee.equals( rs.getString(3) ) == false  )
+			    {
+			    	log.info( "Total employee " + rs.getString(3) ); 
+			    	createTotalEmployee( s, rs );
+			    }
+
+
+			    
+			    l = new Label(0,currentRow,rs.getString(1),cf2);
+			    s.addCell(l);
+			    l = new Label(1,currentRow,rs.getString(2),cf2);
+			    s.addCell(l);
+			    l = new Label(2,currentRow,rs.getString(3),cf2);
+			    s.addCell(l);
+			    l = new Label(3,currentRow,rs.getString(4),cf2);
+			    s.addCell(l);
+			    l = new Label(4,currentRow,rs.getString(5),cf2);
+			    s.addCell(l);
+//			    l = new Label(5,i,rs.getString(6),cf2);
+//			    s.addCell(l);
+			    Number nI1 = new Number(5,currentRow, rs.getFloat( 7) ,i1);
+			    s.addCell(nI1);
+			    nI1 = new Number(6,currentRow, rs.getFloat(8) ,i1);
+			    s.addCell(nI1);			
+				StringBuffer buf = new StringBuffer();
+				buf.append( "F" + currentRow+1 + " - G" + currentRow+1 );
+
+				l = new Label(7,currentRow,rs.getString(6),cf2);
+			    s.addCell(l);
+			}
+
+//			currentRow = currentRow + 1;
+
+//	    	createTotalDeduction( s, rs );
+	    	
+	    	currentRow = currentRow + 1;
+	    	createTotalDeduction( s, null );
+	    	currentRow = currentRow + 1;
+	    	createTotalEmployee( s, null );
+		    
+	    	currentRow = currentRow + 1;
+
+	    	createTotal( s );
+
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+
+		}
+		catch (Exception e)
+		{
+			System.err.println("ReportPaymentDeductionGroupToExcel - " + e);
+		}
+
+
+		return currentRow;
+	  }
+
+		public static void main (String[] args)
+		{
+			org.compiere.Compiere.startupEnvironment(true);
+			
+			log.info("----------------------------------");
+			new ReportPaymentDeductionGroupToExcel();
+			
+			log.info("----------------------------------");
+		}
+}

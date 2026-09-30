@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du T5 fédéral
+-->
+<report view="RV_P_P_FORM_T5" fontFamily="Serif" fontSize="10" fontStyle="plain" paperHeight="14" recordPerPage="3" marginX="20" marginY="10" deltaY="290">
+   <field id="Year" x="377" y="13" align="center" />
+   <field id="Case24" x="118" y="50" align="currency" />
+   <field id="Case25" x="219" y="50" align="currency" />
+   <field id="Case26" x="318" y="50" align="currency" />
+   <field id="Case13" x="419" y="50" align="currency" />
+   <field id="Case18" x="518" y="50" align="currency" />
+   <field id="Case10" x="118" y="84" align="currency" />
+   <field id="Case11" x="219" y="84" align="currency" />
+   <field id="Case12" x="318" y="84" align="currency" />
+   <field id="Case21" x="369" y="84" align="center" />
+   <field id="Case22" x="425" y="84" align="center" />
+   <field id="Case23" x="519" y="84" align="center" />
+   <field id="Case27" x="180" y="238" align="center" />
+   <field id="Case28" x="256" y="238" align="center" />
+   <field id="Case29" x="363" y="238" align="center" />
+   <field id="EmployeeName" x="42" y="154" />
+   <field id="EmployeeAdresse" x="42" y="165" />
+   <field id="EmployeeAdresse2" x="42" y="177" />
+   <field id="EmployeeVille" x="42" y="188" />
+   <field id="DescriptionCompagnie" x="349" y="154" />
+   <field id="EmployerAdresse1" x="349" y="165" />
+   <field id="EmployerAdresse2" x="349" y="177" />
+   <field id="EmployerVille" x="349" y="188" />
+   <field id="DistributionValue" x="183" y="154" />
+   <fieldTable>
+      <addField labelX="146" labelY="120" x="236" y="120" align="currency" labelAlign="center" />
+      <addField labelX="287" labelY="120" x="380" y="120" align="currency" labelAlign="center" />
+      <addField labelX="431" labelY="120" x="524" y="120" align="currency" labelAlign="center" />
+      <addValue id="Case14" label="30" />
+      <addValue id="Case15" label="32" />
+      <addValue id="Case16" label="34" />
+      <addValue id="Case17" label="36" />
+      <addValue id="Case19" label="38" />
+      <addValue id="Case20" label="40" />
+   </fieldTable>
+</report>

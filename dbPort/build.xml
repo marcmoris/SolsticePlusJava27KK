@@ -1,0 +1,108 @@
+<!-- ============================================= -->
+<!-- dbPort                                        -->
+<!-- ============================================= -->
+<!-- $Header: /cvsrepo/solsticev7/dbPort/build.xml,v 1.1 2007/07/18 15:22:40 marmor01 Exp $ -->
+
+<project name="dbPort" default="dist" basedir=".">
+
+  <description>
+    This buildfile is used to build the dbPort subproject within 
+    the Compiere project.
+  </description>
+
+  <!-- set global properties for this build -->
+  <property environment="env"/>
+  <property name="src" value="src"/>
+  <property name="build.dir" value="build"/>
+  <property name="dist.dir" value="."/>
+  <property name="lib.dir" value="../lib"/>
+  <property name="toolslib.dir" value="../tools/lib"/>
+
+  <!-- set path to include the necessary jar files for javac -->
+  <path id="project.class.path">
+    <pathelement path="${classpath}"/>
+    <pathelement path="${lib.dir}/postgreSQL.jar"/>
+    <pathelement path="${lib.dir}/oracle.jar"/>
+    <pathelement path="${lib.dir}/sqlServer.jar"/>
+    <pathelement path="${lib.dir}/sqljdbc.jar"/>
+    <pathelement path="${lib.dir}/mssql-jdbc.jar"/>
+
+    <pathelement path="${lib.dir}/db2.jar"/>
+ 
+    <pathelement path="${lib.dir}/CSTools.jar"/>
+    <pathelement path="../looks/CLooks.jar"/>
+    <pathelement path="${lib.dir}/jPDF.jar"/>
+    <pathelement path="${toolslib.dir}/junit.jar"/>
+
+    <!-- Recursive relationship: require AppsServer -->
+    <pathelement path="../base/Base.jar"/>
+    <pathelement path="../interfaces/Interfaces.jar"/>
+    <pathelement path="../tools/lib/j2ee.jar"/>
+
+    <!-- Jackson & OkHttp for REST/Graph API -->
+    <pathelement path="${toolslib.dir}/jackson-annotations-3.0-rc5.jar"/>
+    <pathelement path="${toolslib.dir}/jackson-core-2.9.9.jar"/>
+    <pathelement path="${toolslib.dir}/jackson-databind-2.17.3.jar"/>
+    <pathelement path="${toolslib.dir}/okhttp-jvm-5.0.0-alpha.12.jar"/>
+    <pathelement path="${toolslib.dir}/okio-jvm-3.7.0.jar"/>
+  </path>
+
+
+  <target name="init" description="initialization target">
+    <echo message="=========== Build dbPort"/>
+    <!-- create the time stamp -->
+    <tstamp/>
+    <!-- create the build directory structure used by compile -->
+    <mkdir dir="${build.dir}"/>
+    <!-- check for the distribution directory -->
+    <available file="${dist.dir}" type="dir" property="dist.dir.exists"/>
+  </target>
+
+  <target name="makedir" depends="init" unless="dist.dir.exists">
+    <!-- create the distribution directory if not available -->
+    <mkdir dir="${dist}/${dist.dir}"/>
+  </target>
+
+  
+  <target name="compile" depends="makedir">
+    <!-- compile the java code from ${src} into ${build.dir} -->
+    <javac srcdir="${src}" destdir="${build.dir}" 
+    	deprecation="on" debug="on" encoding="ISO-8859-1">
+      <classpath refid="project.class.path"/>
+      <compilerarg value="--add-exports=java.sql.rowset/com.sun.rowset=ALL-UNNAMED"/>
+      <compilerarg value="--add-exports=java.sql.rowset/com.sun.rowset.internal=ALL-UNNAMED"/>
+      <compilerarg value="--add-exports=java.sql.rowset/com.sun.rowset.providers=ALL-UNNAMED"/>
+      <compilerarg value="--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED"/>
+    </javac>
+    <!-- copy all image & sound files from src to the build directory -->
+    <copy todir="${build.dir}">
+      <fileset dir="${src}">
+        <include name="**/images/*"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.wav"/>
+        <include name="**/*.htm"/>
+        <include name="**/*.html"/>
+        <include name="**/*.properties"/>
+        <exclude name="**/package.html"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- =========================================== -->
+  <!-- Distribution                                -->
+  <!-- =========================================== -->
+  <target name="dist" depends="compile">
+    <!-- put everything from ${build.dir} into the dbPort.jar file -->
+    <jar jarfile="${dist.dir}/dbPort.jar" basedir="${build.dir}"/>
+  </target>
+
+
+  <target name="clean">
+    <!-- Delete the ${build.dir} directory trees -->
+    <delete dir="${build.dir}"/>
+    <delete file="${dist.dir}/dbPort.jar" failonerror="false"/>
+  </target>
+
+</project>

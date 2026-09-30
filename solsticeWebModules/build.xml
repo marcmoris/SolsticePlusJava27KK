@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- ======================================================== -->
+<!-- Solstice AvisDepot Application                           -->
+<!-- ======================================================== -->
+<!-- $Header: /cvsrepo/SolsticeV7/solsticeWebModules/build.xml,v 1.2 2007/07/18 21:06:52 marmor01 Exp $-->
+
+<project name="solsticeWebModules" default="main" basedir=".">
+
+  <property name="src.dir" value="${basedir}"/>
+  <property name="src.main.dir" value="${src.dir}/main"/>
+  <property name="src.Crystal.dir" value="${src.dir}/Crystal"/>
+  <property name="src.LoginManager.dir" value="${src.dir}/LoginManager"/>
+
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.deploy.dir" value="${build.dir}/deploy"/>
+
+  <target name="init">
+    <echo message="=========== Build solsticeWebModules"/>
+
+    <tstamp/>
+    <mkdir dir="${build.deploy.dir}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the war archives                                            -->
+  <!-- =================================================================== -->
+  <target name="war" depends="init">
+    <war
+	  warfile="${build.deploy.dir}/Crystal.war"
+	  webxml="${src.Crystal.dir}/WEB-INF/web.xml">
+      <fileset dir="${src.Crystal.dir}" excludes="**/web.xml,**/lib/**,**/classes/**"/>
+      <manifest>
+		<attribute name="Specification-Title" value="Crystal"/>
+		<attribute name="Specification-Version" value="${env.COMPIERE_VERSION}"/>
+		<attribute name="Specification-Vendor" value="(C) 2005 ProGestion, Inc."/>
+		<attribute name="Implementation-Title" value="Solstice ${env.COMPIERE_VERSION}"/>
+		<attribute name="Implementation-Version" value="${env.COMPIERE_VERSION}  ${DSTAMP}-${TSTAMP}"/>
+		<attribute name="Implementation-Vendor" value="${env.COMPIERE_VENDOR}"/>
+		<attribute name="Implementation-URL" value="http://www.progestion.net"/>
+		<attribute name="Class-Path" value="Compiere.jar CompiereSLib.jar compiereApps.jar"/>
+		<attribute name="Permissions" value="all-permissions"/>	
+      </manifest>
+    </war>
+    <war
+	  warfile="${build.deploy.dir}/LoginManager.war"
+	  webxml="${src.LoginManager.dir}/WEB-INF/web.xml">
+      <fileset dir="${src.LoginManager.dir}" excludes="**/web.xml,**/lib/**,**/classes/**"/>
+      <manifest>
+		<attribute name="Specification-Title" value="LoginManager"/>
+		<attribute name="Specification-Version" value="${env.COMPIERE_VERSION}"/>
+		<attribute name="Specification-Vendor" value="(C) 2005 ProGestion, Inc."/>
+		<attribute name="Implementation-Title" value="Solstice ${env.COMPIERE_VERSION}"/>
+		<attribute name="Implementation-Version" value="${env.COMPIERE_VERSION}  ${DSTAMP}-${TSTAMP}"/>
+		<attribute name="Implementation-Vendor" value="${env.COMPIERE_VENDOR}"/>
+		<attribute name="Implementation-URL" value="http://www.progestion.net"/>
+		<attribute name="Class-Path" value="Compiere.jar CompiereSLib.jar compiereApps.jar"/>
+		<attribute name="Permissions" value="all-permissions"/>	
+      </manifest>
+    </war>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the server binary                                           -->
+  <!-- =================================================================== -->
+  <target name="deploy-server" depends="war">
+    <copy file="${src.Crystal.dir}/ear/application.xml" tofile="../lib/Crystal.xml"/>
+    <copy file="${src.LoginManager.dir}/ear/application.xml" tofile="../lib/LoginManager.xml"/>
+    <copy todir="../lib">
+      <fileset dir="${build.deploy.dir}" includes="*.jar,*.war,*.ear"/>
+    </copy>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Creates the binary structure                                        -->
+  <!-- =================================================================== -->
+  <target name="main" depends="deploy-server">
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Cleans up the current build                                         -->
+  <!-- =================================================================== -->
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete file="../lib/Crystal.war" failonerror="false"/>
+    <delete file="../lib/LoginManager.war" failonerror="false"/>
+  </target>
+  
+</project>

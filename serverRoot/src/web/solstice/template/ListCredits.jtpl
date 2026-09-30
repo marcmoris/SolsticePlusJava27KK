@@ -1,0 +1,93 @@
+<!-- BEGIN: main -->
+<html>
+<!-- HEADING: -->
+<body >
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+
+	</tr>
+	<tr>
+		<td colspan="2">
+			<a href="/solstice/index.jsp" class="path">Menu principal</a> &middot;&gt; <a class="path" href="admin.jsp">Menu d'administration</a> &middot;&gt; <a class="path" href="traitement.jsp">Menu des traitements</a> &middot;&gt; <a class="path" href="banque.jsp">Liste des banques de temps</a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<div class="pagetitle">{TITLE}</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">	</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+	<script language="JavaScript">
+		function search()
+		{
+			if(document.mainForm.date.value != "")
+			{
+				document.mainForm.action.value = 'search';
+				document.mainForm.submit();
+			}
+			else
+			{
+				alert("Vous devez obligatoirement saisir une date");
+			}
+		}
+	</script> 
+
+	<form name="mainForm" method="post">
+
+		<input type="hidden" name="action">
+		<p class="sectitle">Recherche</p>
+		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			<tr>
+				<td class="tdlabel">Employ&eacute;</td>
+				<td class="tdlabel">Banque</td>
+				<td class="tdlabel">Date</td>
+
+			</tr>
+			<tr>
+				<td class="tdfield">{ComboBoxEmployee}</td>
+				<td class="tdfield">{ComboBoxCredits}</td>
+				<td class="tdfield">
+	<input type="text" name="date" id="date" size="10" value="2007-04-13" readonly><a href="javascript:show_calendar('mainForm.date');" onMouseOver="window.status='Date Picker'; overlib('Cliquez ici pour choisir une date.'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+</td>
+</tr>
+</table>
+	<div align="right">
+		<input type="button" onClick="search();" value="Lancer la recherche">
+	</div>
+<p class="sectitle">R&eacute;sultats de la recherche</p>
+<table border="0" width="100%">
+<tr>
+<td class="tdlabel" colspan="2">Employ&eacute;</td>
+<td class="tdlabel" colspan="2">Banque</td>
+<td class="tdlabel" colspan="2" align="center">Solde</td>
+</tr>
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}">{EMPLOYEE_NAME}</td>
+<td class="{CELLCLASS}">{EMPLOYEE_NO}</td>
+<td class="{CELLCLASS}">{CREDITS_NAME}</td>
+<td class="{CELLCLASS}">{CREDITS_NO}</td>
+<td class="{CELLCLASS}" align="right">{SOLDE}</td>
+<td class="{CELLCLASS}">{UNIT}</td>
+</tr>
+<!-- END: line --> 
+</table>
+
+</form>
+</td>
+</tr>
+<tr>
+{FOOTING}
+</table>
+</div>		
+</div>	
+</div>
+</body>
+</html>
+
+<!-- END: main -->

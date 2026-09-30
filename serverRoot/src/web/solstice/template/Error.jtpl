@@ -1,0 +1,44 @@
+<!-- BEGIN: main -->
+<html>
+
+	<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<link rel="stylesheet" type="text/css" href="styles/siq.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/thickbox.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/corpo.css" />
+
+		<title>Menu Principal</title>
+	</head>
+	<body>
+<!-- HEADING: -->
+
+		<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> 
+		</td>
+	</tr>
+			<tr>
+				<td colspan="2">
+					<div class="pagetitle">Erreur</div>
+				</td>
+			</tr>
+			<tr>
+	
+	<td colspan="2"><b>{ERRORMSG}</b></td>
+			</tr>	
+			<tr>
+			{FOOTING}	
+			</tr>
+		</table>	
+	</body>
+</html>
+<!-- END: main -->

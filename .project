@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Compiere</name>
+	<comment></comment>
+	<projects>
+		<project>base</project>
+		<project>client</project>
+		<project>dbPort</project>
+		<project>extend</project>
+		<project>install</project>
+		<project>interfaces</project>
+		<project>looks</project>
+		<project>print</project>
+		<project>server</project>
+		<project>serverApps</project>
+		<project>serverRoot</project>
+		<project>tools</project>
+		<project>webCM</project>
+		<project>webStore</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<filteredResources>
+		<filter>
+			<id>1789672097184</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.core.resources.regexFilterMatcher</id>
+				<arguments>node_modules|\.git|__CREATED_BY_JAVA_LANGUAGE_SERVER__</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
+</projectDescription>

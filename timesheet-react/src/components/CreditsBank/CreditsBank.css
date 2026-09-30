@@ -1,0 +1,85 @@
+.credits-bank-container {
+  margin: 0 16px 8px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.credit-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.credit-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+}
+
+.card-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bank-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bank-code-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  background-color: var(--bg-surface-elevated);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+}
+
+.card-values-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.value-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.val-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.val-number {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.val-number.main {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+
+.val-number.variation-neg {
+  color: #f87171;
+}
+
+.val-number.variation-pos {
+  color: #34d399;
+}

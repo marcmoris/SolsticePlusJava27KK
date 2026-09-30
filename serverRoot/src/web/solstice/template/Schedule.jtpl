@@ -1,0 +1,160 @@
+<!-- BEGIN: main -->
+<html>
+<!-- HEADING: -->
+<link rel="stylesheet" type="text/css" media="all" href="../solstice.css">
+ 
+      <script>
+      function msg(message)
+      {
+         if(message!="")
+            document.getElementById("info").innerHTML = message;
+         else
+            document.getElementById("info").innerHTML = "&nbsp;";
+      }
+      </script>
+
+<body>
+  
+<!-- génération du tableau -->
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> </td>
+	</tr>
+	<tr>
+		<td colspan="2"><div class="pagetitle">{TITLE}</div></td>
+	</tr>
+</table>
+
+<center>
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr><td colspan="64">&nbsp;</td></tr>
+      <tr><td colspan="64">
+      <table width="100%">
+         <tr>
+
+            <td width="33%"><a href="{PreviousMonthLink}"><img src="../images/flg.gif" border="0"></a>&nbsp;&nbsp;<a href="{PreviousMonthLink}">{PreviousMonth}</a></td>
+            <td width="33%" align="center"><b>{CurrentMonth}</b></td>
+            <td width="33%" align="right"><a href="{NextMonthLink}">{NextMonth}</a>&nbsp;&nbsp;<a href="{NextMonthLink}"><img src="../images/fld.gif" border="0"></a></td>
+         </tr>
+      </table>
+      </td></tr>
+      <tr><td colspan="64">&nbsp;</td></tr>
+
+     <tr>
+         <td>&nbsp;</td>
+<!-- BEGIN: head -->      
+         <td colspan='2' class='DAY'>{DAY}</td>
+<!-- END: head --> 
+      </tr>
+     <tr><td style="border-bottom: #999999 solid 1px;">&nbsp;</td><td colspan="64" id="info" class="description">&nbsp;</td></tr>
+<!-- BEGIN: line -->      
+     <tr>
+         <td class='Name'>&nbsp;<nobr>{EMPLOYEE_NAME}<nobr>&nbsp;</td>
+         <td class='{CLASS_AM1}' onMouseOver="msg('{Msg_AM1}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM1}' onMouseOver="msg('{Msg_PM1}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM2}' onMouseOver="msg('{Msg_AM2}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM2}' onMouseOver="msg('{Msg_PM2}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM3}' onMouseOver="msg('{Msg_AM3}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM3}' onMouseOver="msg('{Msg_PM3}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM4}' onMouseOver="msg('{Msg_AM4}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM4}' onMouseOver="msg('{Msg_PM4}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM5}' onMouseOver="msg('{Msg_AM5}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM5}' onMouseOver="msg('{Msg_PM5}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM6}' onMouseOver="msg('{Msg_AM6}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM6}' onMouseOver="msg('{Msg_PM6}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM7}' onMouseOver="msg('{Msg_AM7}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM7}' onMouseOver="msg('{Msg_PM7}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM8}' onMouseOver="msg('{Msg_AM8}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM8}' onMouseOver="msg('{Msg_PM8}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM9}' onMouseOver="msg('{Msg_AM9}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM9}' onMouseOver="msg('{Msg_PM9}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM10}' onMouseOver="msg('{Msg_AM10}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM10}' onMouseOver="msg('{Msg_PM10}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM11}' onMouseOver="msg('{Msg_AM11}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM11}' onMouseOver="msg('{Msg_PM11}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM12}' onMouseOver="msg('{Msg_AM12}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM12}' onMouseOver="msg('{Msg_PM12}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM13}' onMouseOver="msg('{Msg_AM13}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM13}' onMouseOver="msg('{Msg_PM13}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM14}' onMouseOver="msg('{Msg_AM14}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM14}' onMouseOver="msg('{Msg_PM14}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM15}' onMouseOver="msg('{Msg_AM15}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM15}' onMouseOver="msg('{Msg_PM15}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM16}' onMouseOver="msg('{Msg_AM16}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM16}' onMouseOver="msg('{Msg_PM16}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM17}' onMouseOver="msg('{Msg_AM17}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM17}' onMouseOver="msg('{Msg_PM17}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM18}' onMouseOver="msg('{Msg_AM18}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM18}' onMouseOver="msg('{Msg_PM18}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM19}' onMouseOver="msg('{Msg_AM19}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM19}' onMouseOver="msg('{Msg_PM19}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM20}' onMouseOver="msg('{Msg_AM20}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM20}' onMouseOver="msg('{Msg_PM20}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM21}' onMouseOver="msg('{Msg_AM21}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM21}' onMouseOver="msg('{Msg_PM21}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM22}' onMouseOver="msg('{Msg_AM22}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM22}' onMouseOver="msg('{Msg_PM22}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM23}' onMouseOver="msg('{Msg_AM23}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM23}' onMouseOver="msg('{Msg_PM23}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM24}' onMouseOver="msg('{Msg_AM24}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM24}' onMouseOver="msg('{Msg_PM24}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_AM25}' onMouseOver="msg('{Msg_AM25}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM25}' onMouseOver="msg('{Msg_PM26}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_AM26}' onMouseOver="msg('{Msg_AM26}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM26}' onMouseOver="msg('{Msg_PM27}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM27}' onMouseOver="msg('{Msg_AM27}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM27}' onMouseOver="msg('{Msg_PM27}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM28}' onMouseOver="msg('{Msg_AM28}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM28}' onMouseOver="msg('{Msg_PM28}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM29}' onMouseOver="msg('{Msg_AM29}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM29}' onMouseOver="msg('{Msg_PM29}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM30}' onMouseOver="msg('{Msg_AM30}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM30}' onMouseOver="msg('{Msg_PM30}')">&nbsp;&nbsp;</td>         
+         <td class='{CLASS_AM31}' onMouseOver="msg('{Msg_AM31}')">&nbsp;&nbsp;</td>
+         <td class='{CLASS_PM31}' onMouseOver="msg('{Msg_PM31}')">&nbsp;&nbsp;</td>         
+     </tr>
+<!-- END: line --> 
+      <!-- génération du tableau -->
+      <tr>
+
+	<td colspan="64" class='Name'>
+      <input type="button" class="button" value="Retour à l'accueil" onclick="javascript:window.location.href='../index.jsp'">
+
+	</td>
+	</tr>
+      <tr><td colspan="64" class='Name'>&nbsp;</td></tr>
+	<tr><td colspan="64" class='Name'>&nbsp;</td></tr>
+	<tr><td colspan="64" class='Name'>&nbsp;</td></tr>
+	<tr><td colspan="64" class='Name'>
+	<table>
+	<tr>
+		<td class="AM_" onmouseover="msg('Au bureau')">&nbsp;&nbsp;</td>
+		<td class='Name'> Au bureau</td>
+	</tr>
+	<tr>
+		<td class="AM_V" onmouseover="msg('cong&eacute;')">&nbsp;&nbsp;</td>
+		<td class='Name'> Absence</td>
+	</tr>
+	<tr>
+		<td class="AM_E" onmouseover="msg('F&eacute;ri&eacute;')">&nbsp;&nbsp;</td>
+		<td class='Name'> F&eacute;ri&eacute;</td>
+	</tr>
+	</table>
+</td>
+</tr>
+      </table>
+
+      </center>
+  
+      <br><br>
+      
+</body>
+ 
+ </div>		
+</div>	
+</div>
+</html>
+<!-- END: main -->	

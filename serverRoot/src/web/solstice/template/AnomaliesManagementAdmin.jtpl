@@ -1,0 +1,181 @@
+<!-- BEGIN: main -->
+<html>
+<head>
+<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+<link rel="stylesheet" type="text/css" href="../styles/siq.css" />
+
+<title>{TITLE}</title>
+<script type="text/javascript" src="../scripts/comboBoxAutoComplete.js"></script>
+<script language="JavaScript" src="../scripts/ValidationTools.js"></script>
+<script language="JavaScript" src="../scripts/ajax_functions.js" type="text/javascript"></script>
+<!-- CALENDRIER -->
+  <script language="JavaScript" src="../scripts/calendarheader.js"></script>
+  <script language="JavaScript" src="../scripts/overlib_mini.js"></script>
+<!-- FIN CALENDRIER -->
+
+<script src="../scripts/ValidationTools.js"></script>
+
+<script language="javascript">
+	function chatWindow(tab,rec)
+    {
+      window.open("chat_window.jsp?tableId="+tab+"&recordId="+rec, "chatWindow", "left=20,top=20,width=990,height=600,toolbar=0,resizable=1,scrollbars=1");
+    }
+</script>
+
+</head>
+<body >
+<div id="overDiv" style="Z-INDEX:1000; VISIBILITY:hidden; POSITION:absolute"></div>
+<!-- HEADING: -->
+
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+<tr>
+	<td colspan="2" class="line"></td>
+</tr>
+<tr>
+	<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> &middot;&gt; <a class="path" href="admconsult.jsp">Approbation des coupures de salaire et reports de temps</a></td>
+</tr>
+<tr>
+	<td colspan="2"><div class="pagetitle">{PAGETITLE}</div></td>
+</tr>
+<tr>
+	<td colspan="2"></td>
+</tr>
+<tr>
+	<td colspan="2"><script language="javascript">
+        function sendAction(action, id)
+        {
+			document.mainForm.action.value = action;
+			document.mainForm.AnomaliesId.value = id;
+			document.mainForm.submit();
+        }
+
+        function sendGlobalAction(action)
+        {
+   	        if((document.mainForm.cStartDate.checked && document.mainForm.startDate.value == "")
+            || (document.mainForm.cEndDate.checked && document.mainForm.endDate.value == ""))
+            {
+	            alert("Si vous cochez une date, vous devez obligatoirement en saisir une");
+            }
+            else
+            {
+				document.mainForm.action.value = action;
+				document.mainForm.submit();
+	        }
+
+        }
+		
+	var startDate = new String();
+	var endDate = new String();
+	function dateListener()
+	{
+		if(startDate != document.mainForm.startDate.value)
+		{
+			startDate = document.mainForm.startDate.value;
+			document.mainForm.cStartDate.checked = (document.mainForm.startDate.value != "");
+		}
+		if(endDate != document.mainForm.endDate.value)
+		{
+			endDate = document.mainForm.endDate.value;
+			document.mainForm.cEndDate.checked = (document.mainForm.endDate.value != "");
+		}
+	}
+
+
+    </script>
+ 
+    <form name="mainForm" method="post" action="admconsult.jsp">
+    
+        <input type="hidden" name="action">
+        <input type="hidden" name="AnomaliesId">
+    <table width="100%" cellspacing="1" cellpadding="1" border="0">
+    <tr>
+        <td class="tdlabel">{LabelManager}</td>
+    </tr>
+    <tr>
+        <td class="tdfield">{Manager}</td>
+    </tr>
+</table><br>
+<table border="0" width="100%">
+<tr>
+<td class="tdlabel">{LabelApplicant}</td>
+
+<td class="tdlabel">{LabelAnomalies}</td>
+<td class="tdlabel">{LabelDate}</td>
+<td class="tdlabel" align="right">{LabelTime}</td>
+<td class="tdlabel">{LabelStatus}</td>
+<td class="tdlabel">{LabelAccept}</td>
+<td class="tdlabel">{LabelRevoke}</td>
+<td class="tdlabel">{LabelNote}</td>
+<td class="tdlabel">&nbsp;</td>
+</tr>
+
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}">{Applicant}</td>
+<td class="{CELLCLASS}">{Anomalies} </td>
+<td class="{CELLCLASS}">{AnomaliesDate}</td>
+<td class="{CELLCLASS}" align="right" {MouseOver}>{Time}</td>
+<td class="{CELLCLASS}">{Status}</td>
+<td class="{CELLCLASS}">{ACCEPT}</td>
+<td class="{CELLCLASS}">{REFUS}</td>
+<td class="{CELLCLASS}"><a href="javascript:chatWindow('3101131','{P_Anomalies_Management_ID}');"><img src="../images/{Notes}.gif" border="0"></a></td>
+<td class="{CELLCLASS}">{GLOBALACTION} <input type="hidden" name="id" value="{P_Anomalies_Management_ID}"></td>
+ 
+</tr>
+<!-- END: line --> 
+
+</table>
+<br />
+<br />
+<table width="100%" border="0" align="right" cellspacing="1" cellpadding="1">
+<tr>
+<td class="tdfield" align="right" >{G_ACCEPT}&nbsp;&nbsp;{G_REFUS}&nbsp;&nbsp;{G_DELETE}</td>
+</tr>
+
+</table>
+<br />
+<br />	        
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+<tr>
+    <td colspan="4" class="tdlabel">{LabelFilter}</td>
+</tr>
+<tr>
+    <td class="tdfield">{LabelDistribution} {SelectDistribution} </td>
+    <td class="tdfield" colspan="2">{LabelEmployee} {SelectEmployee}</td>
+    <td class="tdfield" rowspan="3"><input type="image" src="../images/refresh.gif" onClick="document.mainForm.action.value='recherche'"> </td>
+</tr>
+<tr>
+    <td class="tdfield">{LabelStatus}&nbsp;{SelectStatus}</td>
+    <td class="tdfield" colspan="2">{LabelPeriod}&nbsp;
+   					<input type="checkbox" name="cPeriod" {cPeriod} >&nbsp;
+				    {SelectPeriod}
+	</td>
+</tr>
+<tr>
+    <td class="tdfield">{LabelAnomalies}&nbsp;{SelectAnomalies}</td>
+    <td class="tdfield">{LabelStartDate}
+        <input type="checkbox" name="cStartDate" {cStartDate} onClick="if(!this.checked) document.mainForm.startDate.value = '';">
+        <input type="text" name="startDate" id="startDate" size="10" value="{SelStartDate}" readonly><a href="javascript:show_calendar('mainForm.startDate');" onMouseOver="window.status='Date Picker'; overlib('Cliquez ici pour choisir une date.'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="../images/finddate.gif" width="19" height="17" border="0"></a>
+    </td>
+    <td class="tdfield">{LabelEndDate}
+	<input type="checkbox" name="cEndDate" {cEndDate} onClick="if(!this.checked) document.mainForm.endDate.value = '';">
+        <input type="text" name="endDate" id="endDate" size="10" value="{SelEndDate}" readonly><a href="javascript:show_calendar('mainForm.endDate');" onMouseOver="window.status='Date Picker'; overlib('Cliquez ici pour choisir une date.'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="../images/finddate.gif" width="19" height="17" border="0"></a>
+    </td>    
+
+</tr>
+</table>
+
+  </form>    
+		
+        <script language="javascript">
+            setInterval("dateListener()", 1);
+        </script>
+  </td>
+</tr>
+{FOOTING}
+</table>
+</body>
+</html>
+<!-- END: main -->
+
+

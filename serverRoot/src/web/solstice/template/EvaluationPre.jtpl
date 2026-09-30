@@ -1,0 +1,248 @@
+<!-- BEGIN: main -->
+<html>
+<head>
+ <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+ 	<link rel="stylesheet" type="text/css" href="styles/siq.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/thickbox.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/corpo.css" />
+ 
+ 
+ <title>{TITLE}</title>
+<script language="JavaScript" src="scripts/ajax_functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="scripts/comboBoxAutoComplete.js"></script>
+<script language="JavaScript" src="scripts/ValidationTools.js" type=text/javascript></script>
+<!-- CALENDRIER -->
+  <script language="JavaScript" src="scripts/calendarheader.js" type=text/javascript></script>
+  <script language="JavaScript" src="scripts/overlib_mini.js"></script>
+<!-- FIN CALENDRIER -->
+
+<style type="text/css">
+#mainSection .messageTable .unread td {
+	font-weight: bold;
+	background-color: #ffffcd;
+}
+</style>
+
+
+<style type="text/css">
+.container { width: 400px; border: 3px solid #f7c; }
+.textareaContainer {
+    display: block;
+    border: 3px solid #38c;
+    padding: 10px;
+}
+textarea { width: 100%; margin: 0; padding: 0; border-width: 0; }
+</style>
+
+
+<script language="JavaScript">
+	   function search()
+	   {
+		  document.ListForm.action.value = 'search';
+		  document.ListForm.submit();
+	   }
+	   function saveForm()
+	   {
+	      document.ListForm.action.value = "save";
+	      document.ListForm.submit();
+	   }
+
+	   function exportForm()
+	   {
+		     document.ListForm.action.value = "export";
+		     document.ListForm.submit();
+	   }
+
+		function changeData(idx,Type)
+		{
+		   
+		   var idxval = "";
+		   if (Type == "Comment")
+		      idxval = document.getElementById("Comment["+idx + "]").value;
+		   else if (Type == "EvaluationStatus")
+		   {
+				  if ( document.getElementsByName("EvaluationStatus["+idx + "]")[0].checked )	
+					  idxval = "true";
+				  else
+					  idxval = "false";
+		   }				  
+		   else
+		   {
+			   var mySel = document.getElementById("Cote["+idx + "]");
+			   var idxval = mySel.value;
+		   }
+
+	   
+		   
+	  
+	      var xmlHttp = getXmlHttp();
+	      xmlHttp.onreadystatechange=function()
+	      {
+	         if(xmlHttp.readyState==4)
+	         {
+	            //alert(xmlHttp.responseText);     
+	         }
+	      }
+	   
+	      xmlHttp.open("GET","EvaluationPreAjax.jsp?action=save&ER_Evaluation_Pre_ID="+idx+"&val="+idxval+"&Type="+Type,true);
+	 
+	      xmlHttp.send(null);
+
+		}
+
+		function selectAllEva(){
+			var thisForm = document.getElementById('ListForm');
+			var checkboxArray = thisForm.EvaluationStatus;
+			var currentState = thisForm.selectAll.value;	
+			var setState = false;
+			if (currentState == "false") {
+				setState = true;
+				thisForm.selectAll.value = "true";
+			} else {
+				thisForm.selectAll.value = "false";
+			}
+			if(checkboxArray.length == null){
+		            checkboxArray.checked=setState;
+			}else{
+				for (var i = 0; i < checkboxArray.length; i++){
+					checkboxArray[i].checked=setState;
+				}   
+			}
+		}
+
+	</script> 
+
+<title>{TITLE}</title>
+</head>
+
+<!-- HEADING: -->
+
+<body >
+	<div id="overDiv" style="Z-INDEX:1000; VISIBILITY:hidden; POSITION:absolute"></div>
+<table width="100%" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> 
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div class="pagetitle">{TITLE}</div></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+
+
+<form id="ListForm" name="ListForm" method="post" action="EvaluationPre.jsp" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="action">
+
+ 	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td class="tdlabel" colspan="3">Recherche </td>
+	</tr>
+	<tr>
+		<td class="tdfield">{LabelManager} {ComboBoxManager} &nbsp;&nbsp;&nbsp;{ACTIVITY}</td>
+		<td class="tdfield">{LabelGroup} {ComboBoxGroup} 		</td>
+		<td class="tdfield"><div align="right">	<input type="button" onClick="search();" value="Lancer la recherche"></td>
+	</div>
+
+	</tr>
+
+    </table><br>
+</td>
+</tr>
+<tr>
+<td colspan="2" >
+ 	<table align="right" width="40%" border="0"  cellspacing="1" cellpadding="1">
+	<tr>
+		<th class="tdlabel" ALIGN=CENTER >{CoteA} </th>
+		<th class="tdlabel" ALIGN=CENTER >{CoteBPLUS} </th>
+		<th class="tdlabel" ALIGN=CENTER >{CoteB} </th>
+		<th class="tdlabel" ALIGN=CENTER >{CoteC} </th>
+		<th class="tdlabel" ALIGN=CENTER >{Total} </th>
+	</tr>
+	<tr>
+		<td class="tdfield" ALIGN=CENTER >{NbrCoteA}</td>
+		<td class="tdfield" ALIGN=CENTER >{NbrCoteBPLUS}</td>
+		<td class="tdfield" ALIGN=CENTER >{NbrCoteB}</td>
+		<td class="tdfield" ALIGN=CENTER >{NbrCoteC}</td>
+		<td class="tdfield" ALIGN=CENTER >{NbrTotal}</td>
+	</tr>
+	<tr>
+		<td class="tdfield" ALIGN=CENTER >{PrcCoteA} %</td>
+		<td class="tdfield" ALIGN=CENTER >{PrcCoteBPLUS} %</td>
+		<td class="tdfield" ALIGN=CENTER >{PrcCoteB} %</td>
+		<td class="tdfield" ALIGN=CENTER >{PrcCoteC} %</td>
+		<td class="tdfield" ALIGN=CENTER >100 %</td>
+	</tr>
+	</table><br>
+</td>
+</tr>
+<tr>
+		<td colspan="2" >
+
+<p class="sectitle">R&eacute;sultats de la recherche</p>  
+
+ 
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+<tr>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Nom</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Num&eacute;ro</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Date embauche&nbsp;&nbsp;&nbsp;</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Statut</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Titre emploi</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>A &eacute;valuer</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Nbr jours r&eacute;mun</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>{LabelComparatio}</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>{LabelMid}</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Salaire actuel</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Maximum classe</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Cotes ann&eacute;e pr&eacute;c&eacute;dente</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Cotes pr&eacute;l.</B></TH>
+			<TH scope="col" class="tdlabel" ALIGN=LEFT ><B>Commentaire</B></TH>
+			<TH scope="col" class="tdlabel">Compl&eacute;t&eacute; <INPUT ID="selectAll" name="selectAll" value="false" onclick="javascript:selectAllEva();" type="checkbox"></th>
+</tr>
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}">{NAME}</td>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{VALUE}</TD>
+<TD class="{CELLCLASS}" ALIGN=RIGHT >{HIREDDATE}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{JOBTYPE}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{JOBTITLE}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{IsToEvaluate}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{NBRDAY}</TD>
+<TD class="{CELLCLASS}" ALIGN=RIGHT >{COMPARATIO}</TD>
+<TD class="{CELLCLASS}" ALIGN=RIGHT >{MID}</TD>
+<TD class="{CELLCLASS}" ALIGN=RIGHT >{ANNUALSALARY}</TD>
+<TD class="{CELLCLASS}" ALIGN=RIGHT >{MAXSALARY}</TD>
+<TD class="{CELLCLASS}" ALIGN=CENTER >{OLDCOTE}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT >{COTE}</TD>
+<TD class="{CELLCLASS}" ALIGN=LEFT ><div class="textwrapper"><textarea {DISABLE} name="Comment[{P_ER_Evaluation_Pre_ID}]" id="Comment[{P_ER_Evaluation_Pre_ID}]" size="300" rows="3" onBlur="javascript:changeData('{P_ER_Evaluation_Pre_ID}','Comment')" onchange="javascript:changeData('{P_ER_Evaluation_Pre_ID}','Comment')">{COMMENT}</textarea></div> </TD>
+<TD class="{CELLCLASS}" ALIGN=CENTER ><INPUT {DISABLE2} TYPE=CHECKBOX NAME="EvaluationStatus[{P_ER_Evaluation_Pre_ID}]" ID="EvaluationStatus" {EvaluationStatus} onChange="javascript:changeData('{P_ER_Evaluation_Pre_ID}','EvaluationStatus')"  onclick="javascript:changeData('{P_ER_Evaluation_Pre_ID}','EvaluationStatus')"></td>
+<TD class="tdlabel" ALIGN=LEFT><input type="hidden" name="P_ER_Evaluation_Pre_ID" value="{P_ER_Evaluation_Pre_ID}"></TD>
+
+</tr>
+<!-- END: line --> 
+</table>
+   <p align="right">
+      <input type="button" onClick="saveForm();" value="{Save}" >
+<!--      <input type="button" onClick="exportForm();" value="Export" >  --> 
+   </p>
+  
+</form>
+</td>
+</tr>
+<tr>
+{FOOTING}
+</table>
+</body>
+</html>
+
+<!-- END: main -->
+
+
+ 

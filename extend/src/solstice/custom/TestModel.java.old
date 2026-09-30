@@ -1,0 +1,183 @@
+/*
+ * Created on 14 juil. 2005
+ */
+package solstice.custom;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+
+import solstice.model.P_Absence_Status;
+import solstice.model.P_Payment;
+
+public class TestModel 
+{
+	public static void main(String[] args) throws Exception
+	{
+		org.compiere.Compiere.startupEnvironment(true);
+        
+//        String sql = "delete from T_FRANCIS; insert into T_FRANCIS ( ChaineTexte ) values ( 'yo' + char(13) + char(10) + 'ya' )";
+//        DB.executeUpdate(sql, null);
+        
+//		generateStatementEarning2();
+		
+        /*
+		System.out.println("2005-14");
+		generateStatementEarning("2005-14");
+		System.out.println("2005-15");
+		generateStatementEarning("2005-15");
+		System.out.println("2005-16");
+		generateStatementEarning("2005-16");
+		System.out.println("2005-17");
+		generateStatementEarning("2005-17");
+		System.out.println("2005-18");
+		generateStatementEarning("2005-18");
+		System.out.println("2005-19");
+		generateStatementEarning("2005-19");
+		System.out.println("2005-20");
+		generateStatementEarning("2005-20");
+		System.out.println("2005-21");
+		generateStatementEarning("2005-21");
+		System.out.println("2005-22");
+		generateStatementEarning("2005-22");
+		System.out.println("2005-23");
+		generateStatementEarning("2005-23");
+		System.out.println("2005-24");
+		generateStatementEarning("2005-24");*/
+	}
+	
+	private static void generateAbsenceStatus()
+	{
+		String[] values = new String[] {"INIT", "ATTE", "APPR", "REFU", "SIGN", "DSUP", "TRSF", "SIGD", "DELE"};
+		String[] names = new String[] {"Initiale", "En attente d'approbation", "Approuvée partiellement",
+		        "Refusée", "Approuvée", "En demande de suppression", "Approuvée et transférée au livret de temps",
+		        "Approuvée par délégué", "Supprimée"};
+
+		for(int i = 0; i < values.length; i++)
+		{
+		    System.out.println(values[i] + ":" + names[i]);
+			P_Absence_Status absenceStatus = new P_Absence_Status(Env.getCtx(), -1, null);
+		    absenceStatus.setValue(values[i]);
+		    absenceStatus.setName(names[i]);
+		    absenceStatus.save();
+		}
+		
+		System.out.println("Well done");
+	}
+	
+	private static int getCount(String periodName)
+	{
+	    int count = 0;
+	    String sql 
+	    = "select isnull(count(1), 0)"
+	        + " from P_Payment"
+	        + " where exists ("
+	        + "   select 1"
+	        + "   from P_Period"
+	        + "   where Name = '" + periodName + "'"
+	        + "   and P_Period_ID = P_Payment.P_Period_ID"
+	        + " )"
+	        + " and exists ("
+	        + "   select 1"
+	        + "   from P_Time_Sheet"
+	        + "   where P_Payment_ID = P_Payment.P_Payment_ID"
+	        + "   and SheetType = 'Regular'"
+	        + " )"
+//	        + " and p_employee_id = 1002818"
+	        ;
+	    
+	    try
+	    {
+	        PreparedStatement stmt = DB.prepareStatement(sql, null);
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        if(rs.next())
+	        {
+	            count = rs.getInt(1);
+	        }
+	        
+	        rs.close();
+	        stmt.close();
+	    }
+	    catch (SQLException e)
+	    {
+	        e.printStackTrace(System.out);
+	    }
+	    return count;
+	}
+
+	private static void generateStatementEarning2()
+	{
+	    String sql = "select P_Payment_ID"
+	        + " from P_Payment WHERE p_period_id = 1001728"
+	        + " and p_employee_id = 1002475"
+	        ;
+	    
+	    try
+	    {
+	        PreparedStatement stmt = DB.prepareStatement(sql, null);
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        int i = 1;
+	        while(rs.next())
+	        {
+	            System.out.println("Génération de l'avis de dépot pour le paiment " + rs.getInt("P_Payment_ID") + " (" + (i++) + "/" + 1 + ")");
+	            P_Payment payment = new P_Payment(Env.getCtx(), rs.getInt("P_Payment_ID"), null);
+	            payment.createStatementEarning();
+	        }
+	        
+	        rs.close();
+	        stmt.close();
+	    }
+	    catch (SQLException e)
+	    {
+	        e.printStackTrace(System.out);
+	    }
+	}
+	
+	private static void generateStatementEarning(String periodName)
+	{
+	    int count = getCount(periodName);
+	    String sql 
+	    = "select P_Payment_ID"
+	        + " from P_Payment"
+	        + " where exists ("
+	        + "   select 1"
+	        + "   from P_Period"
+	        + "   where Name = '" + periodName + "'"
+	        + "   and P_Period_ID = P_Payment.P_Period_ID"
+	        + " )"
+	        + " and exists ("
+	        + "   select 1"
+	        + "   from P_Time_Sheet"
+	        + "   where P_Payment_ID = P_Payment.P_Payment_ID"
+	        + "   and SheetType = 'Regular'"
+	        + " )"
+//	        + " and p_employee_id = 1002818"
+	        ;
+	    
+	    try
+	    {
+	        PreparedStatement stmt = DB.prepareStatement(sql, null);
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        int i = 1;
+	        while(rs.next())
+	        {
+	            System.out.println("Génération de l'avis de dépot pour le paiment " + rs.getInt("P_Payment_ID") + " (" + (i++) + "/" + count + ")");
+	            P_Payment payment = new P_Payment(Env.getCtx(), rs.getInt("P_Payment_ID"), null);
+	            payment.createStatementEarning();
+	        }
+	        
+	        rs.close();
+	        stmt.close();
+	    }
+	    catch (SQLException e)
+	    {
+	        e.printStackTrace(System.out);
+	    }
+	}
+}

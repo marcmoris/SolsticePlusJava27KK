@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>Compiere Application Home</title>
+<meta name="description" content="Compiere Application Home">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="standard.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript" type="text/javascript">
+<!--
+var javawsInstalled = false;
+if (navigator.mimeTypes && navigator.mimeTypes.length)
+  javawsInstalled = navigator.mimeTypes['application/x-java-jnlp-file'];
+else
+  isIE = true;
+
+function insertLink (url, name) 
+{
+  if (javawsInstalled) 
+  {
+  }
+  else 
+  {
+    document.write("You need to install Java or configure Java Web Start");
+	document.write("<br>visit ");
+	document.write("<a href=\"http://java.sun.com/j2se/1.5.0/download.html\">" );
+	document.write("Java Installation");
+	document.write("</a><br>");
+  }
+}
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+<script language="VBScript" type="text/vbscript">
+on error resume next
+If isIE Then
+  If Not(IsObject(CreateObject("JavaWebStart.IsInstalled"))) Then
+	javawsInstalled = false
+  Else
+	javawsInstalled = true
+  End If
+End If
+</script>
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="MM_preloadImages('compiere_logo2.gif')">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="100" background="header_banner.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+          <td width="477" align="left" valign="middle"><a href="http://www.compiere.org" target="_blank"><img src="compiere_logo.gif" alt="Compiere ERP &amp; CRM " name="compiere_logo" width="163" height="74" border="0"></a></td>
+          <td align="left" valign="middle"><h1><font color="#FF0000">Compiere&trade; 2.6.1 Home</font></h1></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="60" background="header_bar.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+          <td align="left" valign="middle"><font color="#FFFFFF" size="4" face="Arial, Helvetica, sans-serif">Welcome to the Compiere Home Page!<br>
+            </font><font face="Arial, Helvetica, sans-serif"><a href="http://www.compiere.org/product/status.html" target="_blank"><font size="2">Compiere Product Status</font></a><font size="2"> - <a href="http://www.compiere.org/product/rel252.html" target="_blank">Release Notes</a></font></font><font size="2"><a href="http://www.compiere.org/product/rel252.html" target="_blank"></a></font></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="77"><table width="100%" border="1" cellpadding="5" cellspacing="0" id="Compiere">
+        <!--DWLayoutTable-->
+        <tr>
+          <td width="23%" valign="top" bgcolor="#FFFFFF">
+		  	<h2>
+				<font color="#000066"><img src="C32.gif" alt="Compiere" width="32" height="32" align="absmiddle">Web Start</font>
+			</h2>
+		  </td>
+          <td width="77%" bgcolor="#FFFFFF">
+		    <p>
+			<a href="compiere.jnlp">
+				<img src="webstart.jpg" width="237" height="57" border="0" align="right" alt="Compiere WebStart">
+			</a>
+			<script language="JavaScript" type="text/javascript">
+			<!--
+			insertLink ("compiere.jnlp","Compiere Web Start");
+			// -->
+			</script>
+			Install &nbsp;<a href="http://java.sun.com/j2se/1.5.0/download.html" target="sun">Java 1.5.0 JRE (Runtime)</a>
+			and press WebStart<br>
+            Check also WebStart <a href="http://www.compiere.org/support/install/webStart.html" target="c">Details</a>.<br>
+            If you have trouble starting, try <a href="/admin/compiereHome/compiereDirect.jnlp">this</a>
+			(or via <a href="/admin/applet.html">Applet</a>)
+			</p>
+		  </td>
+        </tr>
+        <tr>
+          <td bgcolor="#FFFFFF"><h2><font color="#000066"><img src="C32.gif" alt="Compiere" width="32" height="32" align="absmiddle">Local Install </font></h2></td>
+          <td bgcolor="#FFFFFF"><a href="/admin/compiereHome/Compiere2Client.zip"><img src="zip.gif" alt="Compiere Client Zip" width="32" height="32" border="0" align="right"></a>Install &nbsp;<a href="http://java.sun.com/j2se/1.5.0/download.html" target="sun">Java 1.5.0 JRE (Runtime)</a>; Download and extract the Compiere Client <a href="/admin/compiereHome/Compiere2Client.zip" title="Download Compiere Client">zip</a> file on your Client;. <br>
+            Start Compiere via RUN_Compiere2 </td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="#FFFFFF"><h2><font color="#000066">Web Application</font></h2></td>
+          <td bgcolor="#FFFFFF"><p><a href="/compiere">Compiere Web Application Login (</a><a href="/compiere/WStart">alternative)</a></p></td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="#FFFFFF"><h2><font color="#000066">Self Service</font></h2></td>
+          <td bgcolor="#FFFFFF"><a href="/wstore/index.jsp">Web Store</a> - Send <a href="/wstore/request.jsp">Request</a></td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="#FFFFFF"><h2><font color="#000066">Server Admin</font></h2></td>
+          <td bgcolor="#FFFFFF"><p><a href="/admin/compiereMonitor">Compiere Server Management</a></p></td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="#FFFFFF"><h2><font color="#000066">Compiere Support</font></h2></td>
+          <td bgcolor="#FFFFFF"><p><a href="http://www.compiere.com/" target="_blank"><img src="ComPiere150x50.gif" alt="Support from ComPiere " width="150" height="50" border="0" align="right"></a><a href="http://sourceforge.net/tracker/index.php?group_id=29057&atid=410216">Support Requests</a> - <a href="http://www.compiere.com/support/">Production&nbsp;Support</a> <br>
+              <a href="http://www.compiere.com/training/index.html">Training</a> - <a href="http://www.compiere.com/wstore/"><strong>Get User Documentation</strong></a></p></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td height="55" background="footer_bar.gif"><table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+          <td>&copy; Copyright 1999-2006 ComPiere, Inc. - All rights reserved - <a href="http://www.compiere.org/license.html" target="_blank">License</a></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<h1>&nbsp;</h1>
+<p>&nbsp;</p>
+<p><img src="http://www.web-stat.com/count.cgi?jjanke3::R260::::::R260::::0" alt="" width="1" height="1" border="0"></p>
+</body>
+</html>

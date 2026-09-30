@@ -1,0 +1,101 @@
+<!-- BEGIN: main -->
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="styles/siq.css" />
+<title>{TITLE}</title>
+<script>
+   function modify(entryid)
+   {
+      document.chatwindow.entryid.value = entryid;
+      document.chatwindow.action.value = "modify";
+      document.chatwindow.submit();
+   }
+   function save(entryid)
+   {
+      if(document.chatwindow.comment.value == "")
+      {
+         alert("{MsgCommentMandatory}");
+      }
+      else
+      {
+         document.chatwindow.entryid.value = entryid;
+         document.chatwindow.action.value = "save";
+         document.chatwindow.submit();
+      }
+   }
+   function deleteE(entryid)
+   {
+      if(confirm("{MsgConfirmDelete}"))
+      {
+         document.chatwindow.entryid.value = entryid;
+         document.chatwindow.action.value = "delete";
+         document.chatwindow.submit();
+      }
+   }
+   function closewin()
+   {
+      window.close();
+   }
+   function refreshNoteList()
+   {
+      var url = window.opener.document.location.href;
+      var opennerpage = url.substring(url.lastIndexOf("/")+1,url.lenth)
+      
+      document.chatwindow.comment.focus();
+      
+      if(opennerpage != "admconsult.jsp")
+      {
+         if(window.opener.document.getElementById("iframechat").contentDocument) //FF
+         {
+            window.opener.document.getElementById("iframechat").contentDocument.location.reload(true);
+         }
+         else if (window.opener.document.getElementById("iframechat").contentWindow) //IE5.5 + IE6.0
+         {
+            window.opener.document.getElementById("iframechat").contentWindow.document.location.reload(true);
+         }
+         else if (window.opener.document.getElementById("iframechat").document) //IE 5
+         {
+            window.opener.document.getElementById("iframechat").document.location.reload(true);
+         }
+      }
+   }
+</script>
+</head>
+<body onload="javascript:refreshNoteList();">
+<form name="chatwindow" id="chatwindow" action="chat_window.jsp" method="post">
+<input type="hidden" name="entryid" value="">
+<input type="hidden" name="action" value="">
+<input type="hidden" name="chatId" value="{chatId}">
+<input type="hidden" name="tableId" value="{tableId}">
+<input type="hidden" name="recordId" value="{recordId}">
+
+
+<table border="0" width="100%">
+<tr>
+ <td class="tdlabel" style='width:20%;'>{LabelUserDate}</td>
+ <td class="tdlabel" style='width:*;'>{LabelComment}</td>
+ <td class="tdlabel" style='width:100px;'>{LabelAction}</td>
+</tr>
+<tr>
+ <td class="tdfield"><nobr>&nbsp;<b>{CurrentUser}</b></nobr><br><nobr>&nbsp;{CurrentDate}</nobr></td>
+ <td class="tdfield">{CurrentComment}</td>
+ <td class="tdfield" style="text-align:center">{CurrentAction}</td>
+</tr>
+
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}"><nobr>&nbsp;<b>{User}</b></nobr><br><nobr>&nbsp;{Date}</nobr></td>
+<td class="{CELLCLASS}">{Comment} </td>
+<td class="{CELLCLASS}" style="text-align:center">{Button}</td>
+</tr>
+<!-- END: line --> 
+</table>
+</form>
+<br>
+<div style="text-align:center"><input type="button" value="{LabelClose}" onclick="javascript:closewin();"></div>
+</body>
+</html>
+<!-- END: main -->
+
+
+

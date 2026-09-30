@@ -1,0 +1,84 @@
+<!-- ============================================= -->
+<!-- Base                                          -->
+<!-- ============================================= -->
+<!-- $Header: /cvsrepo/SolsticeV7/sqlj/build.xml,v 1.2 2007/07/19 15:27:40 marmor01 Exp $ -->
+
+<project name="sqlj" default="sqljDist" basedir=".">
+	
+	<property name="src" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="dist.dir" value="."/>
+	<property environment="env"/>
+
+	
+	<path id="project.class.path">
+	    <pathelement path="${classpath}"/>
+	    <pathelement path="../tools/lib/db2java.zip"/>
+	</path>
+
+
+	<target name="sqljInit" description="initialization target">
+	    <echo message="=========== Build SQLJ"/>
+	    <!-- create the time stamp -->
+	    <tstamp/>
+	    <!-- create the build directory structure used by compile -->
+	    <mkdir dir="${build.dir}"/>
+	</target>
+	
+
+	<!-- =========================================== -->
+	<!-- Compile	                                 -->
+	<!-- =========================================== -->
+	<target name="sqljCompile" depends="sqljInit">
+	    <javac srcdir="${src}" destdir="${build.dir}" 
+	    	deprecation="on" 
+	    	source="1.8" target="1.8" optimize="off" 
+	    	debug="on" encoding="ISO-8859-1">
+	      <classpath refid="project.class.path"/>
+	    </javac>
+	</target>
+	
+
+	<!-- =========================================== -->
+	<!-- Distribution                                -->
+	<!-- =========================================== -->
+	<target name="sqljDist" depends="sqljCompile">
+		<jar jarfile="${dist.dir}/sqlj.jar" 
+			basedir="${build.dir}" 
+			excludes="**/udf/**"
+			compress="no">
+		  <manifest>
+			<attribute name="Specification-Title" value="Compiere SQLJ Oracle Functions"/>
+			<attribute name="Specification-Version" value="sqlj"/>
+			<attribute name="Specification-Vendor" value="ComPiere, Inc."/>
+			<attribute name="Implementation-Title" value="sqlj ${env.COMPIERE_VERSION}"/>
+			<attribute name="Implementation-Version" value="${env.COMPIERE_VERSION} ${DSTAMP}-${TSTAMP}"/>
+			<attribute name="Implementation-Vendor" value="${env.COMPIERE_VENDOR}"/>
+			<attribute name="Implementation-URL" value="http://www.compiere.com"/>
+			<attribute name="Permissions" value="all-permissions"/>	
+		  </manifest>
+		</jar>
+		<jar jarfile="${dist.dir}/sqljDB2.jar" 
+			basedir="${build.dir}" 
+			compress="no">
+		  <manifest>
+			<attribute name="Specification-Title" value="Compiere SQLJ DB2 Functions"/>
+			<attribute name="Specification-Version" value="sqlj"/>
+			<attribute name="Specification-Vendor" value="ComPiere, Inc."/>
+			<attribute name="Implementation-Title" value="sqlj ${env.COMPIERE_VERSION}"/>
+			<attribute name="Implementation-Version" value="${env.COMPIERE_VERSION} ${DSTAMP}-${TSTAMP}"/>
+			<attribute name="Implementation-Vendor" value="${env.COMPIERE_VENDOR}"/>
+			<attribute name="Implementation-URL" value="http://www.compiere.com"/>
+			<attribute name="Permissions" value="all-permissions"/>	
+		  </manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+	    <!-- Delete the ${build.dir} directory trees -->
+	    <delete dir="${build.dir}"/>
+	    <delete file="${dist.dir}/sqlj.jar" failonerror="false"/>
+	</target>
+
+
+</project>

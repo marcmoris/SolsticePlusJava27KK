@@ -1,0 +1,212 @@
+<!-- BEGIN: main -->
+	<html>
+	<head>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+
+		<link rel="stylesheet" type="text/css" href="styles/siq.css">
+		<title>{TITLE}</title>
+		<script type="text/javascript" src="scripts/comboBoxAutoComplete.js"></script>
+<script language="JavaScript" src="scripts/ValidationTools.js" type=text/javascript></script>
+<!-- CALENDRIER -->
+  <script language="JavaScript" src="scripts/calendarheader.js" type=text/javascript></script>
+  <script language="JavaScript" src="scripts/overlib_mini.js"></script>
+
+<!-- FIN CALENDRIER -->
+
+<script language="javascript">
+
+    		function deleteAbsence(id)
+    		{
+        		if(confirm("Voulez-vous vraiment supprimer cet enregistrement?"))
+        		{
+            		document.mainForm.absenceId.value = id;
+            		document.mainForm.action.value = "delete";
+            		document.mainForm.submit();
+                }
+    		}
+    		
+</script>
+
+</head>
+<body >
+	<div id="overDiv" style="Z-INDEX:1000; VISIBILITY:hidden; POSITION:absolute"></div>
+	
+<!-- HEADING: -->
+	
+	<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> &middot;&gt; <a class="path" href="consult.jsp">Consulter la liste de vos absences</a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+				<div class="pagetitle">{PAGETITLE}</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+	
+	    <script language="javascript">
+	        function search()
+	        {
+    	        if((document.mainForm.cStartDate.checked && document.mainForm.startDate.value == "")
+    	            || (document.mainForm.cEndDate.checked && document.mainForm.endDate.value == ""))
+	            {
+    	            alert("Si vous cochez une date, vous devez obligatoirement en saisir une");
+	            }
+				else
+				{
+					document.mainForm.action.value = "search";
+					document.mainForm.submit();
+				}
+	        }
+	        
+	        function askApprob(id)
+	        {
+    	        document.mainForm.action.value = 'askApprob';
+    	        document.mainForm.absenceId.value = id;
+    	        document.mainForm.submit();
+	        }
+<!-- 6 mars 2009 - LL remplacer par function deleteAbsence -->	        
+<!--	        function deleteAA(id)-->
+<!--	        {-->
+<!--    	        document.mainForm.action.value = 'delete';-->
+<!--    	        document.mainForm.absenceId.value = id;-->
+<!--    	        document.mainForm.submit();-->
+<!--	        }-->
+			
+	   		var startDate = new String();
+    		var endDate = new String();
+    		function dateListener()
+    		{
+    			if(startDate != document.mainForm.startDate.value)
+    			{
+    				startDate = document.mainForm.startDate.value;
+    				document.mainForm.cStartDate.checked = (document.mainForm.startDate.value != "");
+    			}
+    			if(endDate != document.mainForm.endDate.value)
+    			{
+    				endDate = document.mainForm.endDate.value;
+    				document.mainForm.cEndDate.checked = (document.mainForm.endDate.value != "");
+    			}
+    		}
+
+	    </script>
+	
+	    <form name="mainForm" method="post">
+
+	        <input type="hidden" name="action">
+	        <input type="hidden" name="absenceId">
+    	    <table width="100%" border="0" cellspacing="1" cellpadding="1">
+    	        <tr>
+    	            <td class="tdlabel">{LabelEmployeeName}</td>
+    	            <td class="tdlabel">{LabelEmployeeNo}</td>
+    	        </tr>
+    	        <tr>
+    	            <td class="tdfield">{EmployeeName}</td>
+    	            <td class="tdfield">{EmployeeNo}</td>
+    	        </tr>
+    	        <tr>
+    	            <td class="tdlabel" colspan="2">{LabelActivity}</td>
+    	        </tr>
+    	        <tr>
+    	            <td class="tdfield" colspan="2">{Activity}</td>
+    	        </tr>
+    	    </table><br>
+<table border="0" width="100%">
+<tr>
+<td class="tdlabel">{LabelReason}</td>
+<td class="tdlabel">{LabelStartDate}</td>
+<td class="tdlabel">{LabelEndDate}</td>
+<td class="tdlabel">{LabelTime}</td>
+<td class="tdlabel">{LabelStatus}</td>
+<td class="tdlabel">{LabelApprove}</td>
+<td class="tdlabel">{LabelEdit}</td>
+<td class="tdlabel">{LabelDelete}</td>
+<td class="tdlabel">&nbsp;</td>
+</tr>
+
+<!-- BEGIN: line --> 
+
+<tr>
+<td class="{CELLCLASS}">{Reason}</td>
+<td class="{CELLCLASS}">{StartDate}</td>
+<td class="{CELLCLASS}">{EndDate}</td>
+<td class="{CELLCLASS}" align="right" {MouseOver}>{Time}</td>
+<td class="{CELLCLASS}">{Status}</td>
+<td class="{CELLCLASS}">{APPROVE}</td>
+<td class="{CELLCLASS}">{EDIT}</td>
+<td class="{CELLCLASS}">{DELETE}</td>
+<td class="{CELLCLASS}"><input type="hidden" name="id" value="{P_Absence_ID}"> </td>
+
+</tr>
+
+<tr>
+<!-- END: line --> 
+
+</tr>
+
+</table>
+<br>
+
+
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+<tr>
+     <td colspan="4" class="tdlabel">{LabelFilter}</td>
+</tr>
+<tr>
+	<td class="tdfield" width="40%"><div>{LabelStatus}&nbsp;{SelectStatus}</div> </td>
+    <td class="tdfield" colspan="2" width="60%">{LabelPeriod}&nbsp;
+			    					<input type="checkbox" name="cPeriod" {cPeriod} >&nbsp;
+    								{SelectPeriod}
+    </td>
+    <td class="tdfield" rowspan="2">
+    	                <a href="javascript:search()">
+    	                    <img src="images/refresh.gif" border="0">
+    	                </a>
+    </td>
+</tr>
+<tr>
+    <td class="tdfield">&nbsp;</td>
+
+  	<td class="tdfield" >
+    	                <div>
+    	                    {LabelStartDate}
+    					<input type="checkbox" name="cStartDate" {cStartDate} onClick="if(!this.checked) document.mainForm.startDate.value = '';">
+	                        <input type="text" name="startDate" id="startDate" size="10" value="{SelStartDate}" readonly><a href="javascript:show_calendar('mainForm.startDate');" onMouseOver="window.status='Date Picker'; overlib('Cliquez ici pour choisir une date.'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+    	                </div>
+    </td>
+    <td class="tdfield" >
+    	                <div>
+    	                    {LabelEndDate}
+    					<input type="checkbox" name="cEndDate" {cEndDate} onClick="if(!this.checked) document.mainForm.endDate.value = '';">
+    	                    <input type="text" name="endDate" id="endDate" size="10" value="{SelEndDate}" readonly><a href="javascript:show_calendar('mainForm.endDate');" onMouseOver="window.status='Date Picker'; overlib('Cliquez ici pour choisir une date.'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+
+    	                </div>
+    </td>    
+</tr>
+
+</table>
+
+    	    
+    	    <p align="right"><input type="button" value="Nouveau" onClick="document.location = 'remplir.jsp';"></p>
+	    </form>
+	    <script language="javascript">
+            setInterval("dateListener()", 1);
+        </script>
+		</td>
+	</tr>
+{FOOTING}
+</table>
+</body>
+</html>
+<!-- END: main -->

@@ -1,0 +1,35 @@
+/*
+	CSS pour SOQUIJ - Principal pour Internet Explorer 6
+	Jeff - egzakt.com
+	2009/09/14
+*/
+
+#bulle_imprimer {
+	background:url('https://soquij.qc.ca/images/ul/graphiques/bulle_imprimer.gif') no-repeat left top !important;
+}
+
+#login_azimut_rapide #bulle_info_login_azimut {
+	background:url('https://soquij.qc.ca/images/ul/graphiques/bulle_info_login_azimut.gif') no-repeat left top !important;
+}
+
+#conteneur_colonnes #fade_colonne_navig {
+	background-image: none;
+	/*behavior: url('https://soquij.qc.ca/js/iepngfix.htc');*/
+}
+
+#catalogue #publications #collection img,
+#medias_sociaux a img {
+	behavior:url('https://soquij.qc.ca/js/iepngfix.htc');
+}
+
+#conteneur_colonnes #colonne_principale {
+	height: 500px;
+}
+
+.fcktexte ol {
+	padding-left: 25px;
+}
+
+#catalogue #azimut #presentation {
+	height: 380px;
+}

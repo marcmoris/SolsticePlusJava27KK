@@ -1,0 +1,479 @@
+<%@page import="java.io.IOException"%>
+<%@page import="org.compiere.util.DB"%>
+<%@page import="org.compiere.db.CConnection"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.ParseException"%>
+
+<%@page import="javax.servlet.ServletException"%>
+<%@page import="javax.servlet.http.HttpServlet"%>
+<%@page import="javax.servlet.http.HttpServletRequest"%>
+<%@page import="javax.servlet.http.HttpServletResponse"%>
+<%@page import="java.math.BigDecimal"%>
+
+<%@page import="com.crystaldecisions.report.web.viewer.ReportExportControl"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.application.ReportClientDocument"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.application.DatabaseController"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.application.SubreportController"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.data.*"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.exportoptions.ExportOptions"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.exportoptions.ReportExportFormat"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.lib.*"%>
+<%@page import="com.crystaldecisions.sdk.occa.report.document.*"%>
+
+
+
+
+<%! private int pinstanceId; %>
+<%! private String reportPath; %>
+<%! private String reportServer; %>
+<%! private String canShowParam; %>
+<%! private String showParam; %>
+<%! private String needParam; %>
+
+<%!
+    private ParameterFieldValue createValue(String str, String strTo, 
+            Number number, Number numberTo, Date date, Date dateTo)
+    {
+        ParameterFieldValue value = null;
+        if(str != null)
+        {
+            if(strTo != null)
+            {
+                value = new ParameterFieldRangeValue();
+                ((ParameterFieldRangeValue)value).setBeginValue(str);
+                ((ParameterFieldRangeValue)value).setEndValue(strTo);
+            }
+            else
+            {
+                value = new ParameterFieldDiscreteValue();
+                ((ParameterFieldDiscreteValue)value).setValue(str);
+            }
+        }
+
+        if(number != null)
+        {
+            //DecimalFormat format = new DecimalFormat("#0");
+            if(numberTo != null)
+            {
+                value = new ParameterFieldRangeValue();
+                ((ParameterFieldRangeValue)value).setBeginValue(new Integer((int)number.doubleValue()));
+                ((ParameterFieldRangeValue)value).setEndValue(new Integer((int)numberTo.doubleValue()));
+            }
+            else
+            {
+                value = new ParameterFieldDiscreteValue ();
+                ((ParameterFieldDiscreteValue)value).setValue(new Integer((int)number.doubleValue()));
+            }
+        }
+
+        if(date != null)
+        {
+            if(dateTo != null)
+            {
+                value = new ParameterFieldRangeValue();
+                ((ParameterFieldRangeValue)value).setBeginValue(date);
+                ((ParameterFieldRangeValue)value).setEndValue(dateTo);
+            }
+            else
+            {
+                value = new ParameterFieldDiscreteValue ();
+                ((ParameterFieldDiscreteValue)value).setValue(date);
+            }
+        }
+        return value;
+    }
+%>
+
+<%!
+	private Fields getParameterFields(Fields old)
+	{
+		Fields fields = new Fields();
+		try 
+		{	
+			for(int i = 0; i < old.size(); i++)
+			{
+				String parameterName = ((IParameterField)old.elementAt(i)).getName();
+								
+
+				if(parameterName.trim().equals("AD_PInstance_ID") || parameterName.trim().equals("AfficherParametre"))
+				{
+					System.out.println(" ");
+				}
+				else
+				{
+   				String sql
+   				= "select P_String, P_String_To, P_Number, P_Number_To, P_Date, P_Date_To"
+   					 + " from AD_PInstance_Para"
+   					 + " where AD_PInstance_ID = " + this.pinstanceId
+   					 + " and ParameterName = '" + parameterName + "'"
+   					 + " order by seqNo";
+   	
+   				ParameterField field = new ParameterField();
+   				field.setName(parameterName);
+   				field.setReportName("");
+   				Values values = new Values();
+   	
+   				PreparedStatement stmt = DB.prepareStatement(sql);
+   				ResultSet rs = stmt.executeQuery();
+   				
+   				boolean sendNull = true;
+   				
+   				// Tant qu'il y a des valeurs
+   				while(rs.next())
+   				{
+   					 // On crée une valeur et on l'ajoute à la liste des valeurs pour ce
+   					 // paramètre
+   					ParameterFieldValue value = this.createValue(
+   								rs.getString("P_String"),
+   								rs.getString("P_String_To"),
+   								rs.getBigDecimal("P_Number"),
+   								rs.getBigDecimal("P_Number_To"),
+   								rs.getTimestamp("P_Date"),
+   								rs.getTimestamp("P_Date_To"));
+   					 
+   					 if(value != null)
+   					 {
+      					 values.add(value);
+      					 sendNull = false;
+   					 }
+   				}
+   				
+   				if(sendNull)
+   				{
+      				String typeString = ((IParameterField)old.elementAt(i)).getType().toString();
+      				if("xsd:decimal".equals(typeString))
+      				{
+         				// On renvoit 0 comme paramètre null
+         				ParameterFieldDiscreteValue value = new ParameterFieldDiscreteValue();
+         				value.setValue(new Integer(0));
+         				values.add(value);
+      				}
+      				else if("xsd:string".equals(typeString))
+      				{
+         				// On renvoit "" comme paramètre null
+         				ParameterFieldDiscreteValue value = new ParameterFieldDiscreteValue();
+         				value.setValue("");
+         				values.add(value);
+      				}
+      				else if("xsd:date".equals(typeString))
+      				{
+         				// On renvoit 1900-01-01 comme paramètre null
+         				SimpleDateFormat format = 
+            				new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+            			Date nullDate = format.parse("1900 01 01 00:00:00");
+         				
+         				ParameterFieldDiscreteValue value = new ParameterFieldDiscreteValue();
+         				value.setValue(nullDate);
+         				values.add(value);
+      				}
+
+   				}
+   				
+   				// On associe la/les valeurs au paramètre courrant
+   				field.setCurrentValues(values);
+   				fields.add(field);
+				}
+			} 
+			
+			if(needParam.trim().equals("Y") && showParam.equals("N"))
+			{
+				ParameterField field1 = new ParameterField();
+				field1.setName("AD_PInstance_ID");
+				field1.setReportName("");
+				Values values1 = new Values();
+				
+				ParameterFieldValue value1 = this.createValue(
+								null,
+								null,
+								new BigDecimal(this.pinstanceId),
+								null,
+								null,
+								null);
+				values1.add(value1);
+				field1.setCurrentValues(values1);
+				fields.add(field1);
+			}
+			else if(showParam.equals("Y"))
+			{
+				ParameterField field1 = new ParameterField();
+				field1.setName("AD_PInstance_ID");
+				field1.setReportName("");
+				Values values1 = new Values();
+				
+				ParameterFieldValue value1 = this.createValue(
+								null,
+								null,
+								new BigDecimal(this.pinstanceId),
+								null,
+								null,
+								null);
+				values1.add(value1);
+				field1.setCurrentValues(values1);
+				fields.add(field1);
+
+				ParameterField field2 = new ParameterField();
+				field2.setName("AfficherParametre");
+				field2.setReportName("");
+				Values values2 = new Values();
+				
+				ParameterFieldValue value2 = this.createValue(
+								"Y",
+								null,
+								null,
+								null,
+								null,
+								null);
+				values2.add(value2);
+				field2.setCurrentValues(values2);
+				fields.add(field2);
+				
+			}
+		} 
+		catch (Exception e) 
+		{
+			System.out.println(e);
+		}
+		return fields;
+	}
+%>
+
+<%!
+
+    private ReportClientDocument createReport() throws ReportSDKException, SQLException
+    {
+        // On récupère le nom du rapport selon le numéro de l'instance dans la table AD_Process
+        String sql
+        	= " select Value, CanShowParam, NeedParam, ShowParam "
+            + " from AD_Process"
+            + " where exists ("
+            + "   select *"
+            + "   from AD_PInstance"
+            + "   where AD_PInstance_ID = " + String.valueOf(this.pinstanceId)
+            + "   and AD_Process_ID = AD_Process.AD_Process_ID"
+            + " )";
+
+        String reportName = null;
+
+        try
+        {
+            System.out.println("Instanciation du ReportClientDocument");
+   	        ReportClientDocument rptDoc = new ReportClientDocument();
+   	        PreparedStatement stmt = DB.prepareStatement(sql);
+   	        ResultSet rs = stmt.executeQuery();
+   	        String rptPath = this.reportPath;
+   	        if(rs.next())
+   	        {
+   	            reportName = rs.getString(1) + ".rpt";
+   	            rptPath += rs.getString(1) + ".rpt";
+   	            canShowParam = rs.getString(2);
+   	            needParam = rs.getString(3);
+   	            showParam = rs.getString(4);
+   	            System.out.println("Rapport à charger : " + rptPath);
+   	        }
+   	        
+   	        rptDoc.setReportAppServer(this.reportServer);
+   	        rptDoc.open(rptPath, 1);
+   			
+   			//Recréer la connection en ADO
+   			//ConnectionInfo connectionInfo = createConnectionInfo();
+   			//setReportConnectionInfo(rptDoc, connectionInfo);
+   			
+   			//Version temporaire, login direct avec les settings de la BD
+   			logonToReport(rptDoc);
+
+			
+	        return rptDoc;
+        }
+        catch (ReportSDKException e)
+        {
+            System.out.println(e);
+            e.printStackTrace(System.out);
+            throw(e);
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e);
+            e.printStackTrace(System.out);
+            throw e;
+        }
+    }
+%>
+
+<%!
+    private void initPath()
+    {
+        String sql 
+        	= " select ReportPath, ReportServer"
+            + " from P_System_Parameters";
+        
+        try
+        {
+            PreparedStatement stmt = DB.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery() ;
+            if(rs.next())
+            {
+                this.reportPath = rs.getString("ReportPath");
+                this.reportServer = rs.getString("ReportServer");
+            }
+        }
+        catch (SQLException e)
+        {
+            this.reportPath = null;
+            this.reportServer = null;
+            System.out.println(e);
+        }
+        
+        System.out.println("Initialisation terminée");
+        System.out.println("-> reportPath = " + this.reportPath);
+        System.out.println("-> reportServer = " + this.reportServer);
+    }
+%>
+
+
+<%!
+    private void setReportConnectionInfo(ReportClientDocument report, ConnectionInfo connectionInfo) throws ReportSDKException
+    {
+		DatabaseController dbController = report.getDatabaseController();
+		SubreportController srController = report.getSubreportController();
+		
+		Database db = (Database)dbController.getDatabase();
+
+		//Spécifier la nouvelle connection pour les tables du rapport principal
+		setTablesConnectionInfo(report, db, connectionInfo, null);
+		
+		Strings subreportNames = (Strings)srController.querySubreportNames();
+		int i = 0;
+		boolean endReached = false;
+		String subReportName;
+		while (!endReached)
+		{
+			try
+			{
+				subReportName = subreportNames.getString(i);
+				db = (Database)srController.getSubreportDatabase(subReportName);
+				//Spécifier la nouvelle connection pour les tables du sous-rapport
+				setTablesConnectionInfo(report, db, connectionInfo, subReportName);
+				
+			}
+			catch (IndexOutOfBoundsException exc)
+			{
+				endReached = true;
+			}
+			i++;
+		}
+
+    }
+%>
+
+<%!
+    private void setTablesConnectionInfo(ReportClientDocument report, Database db, ConnectionInfo connectionInfo, String subReportName) throws ReportSDKException
+    {
+		Table originalTable;
+		Table clonedTable;
+		Tables tables = db.getTables();
+		int i = 0;
+		boolean endReached = false;
+		//Cette boucle est spéciale pcq il n'y a pas de moyen d'obtenir la longeur de Tables, ainsi j'utilise le catch de
+		//l'exception IndexOutOfBoundsException pour faire ma sentinelle
+		while (!endReached)
+		{
+			try
+			{
+				originalTable = (Table)tables.getTable(i);
+				clonedTable = (Table)originalTable.clone(true);
+				clonedTable.setConnectionInfo(connectionInfo);
+				//Si le nom du sous-rapport est passé à la fonction, ça veut dire que la base de donnée utilisé fait partie d'un
+				//sous rapport.  Ensuite on spécifie le nouvel emplacement de la table (la connection)
+				if (subReportName == null)
+				{
+					report.getDatabaseController().setTableLocation(originalTable, clonedTable);
+				}
+				else
+				{
+					report.getSubreportController().setTableLocation(subReportName, originalTable, clonedTable);
+				}
+			}
+			catch (IndexOutOfBoundsException exc)
+			{
+				endReached = true;
+			}
+			i++;
+		}
+    }
+%>
+
+<%!
+    private void logonToReport(ReportClientDocument report) throws ReportSDKException
+    {
+		String userName = CConnection.get().getDbUid(); 
+		String password = CConnection.get().getDbPwd();
+		report.getDatabaseController().logon(userName, password);
+    }
+%>
+
+<%!
+    private ConnectionInfo createConnectionInfo()
+    {
+		//Obtenir de compiere les informations de connection des rapports
+		String databaseName = CConnection.get().getDbName(); 
+		String databaseServer = CConnection.get().getDbHost();
+		String userName = CConnection.get().getDbUid(); 
+		String password = CConnection.get().getDbPwd();
+	
+		//Spécifier le nouvel object de connection
+		ConnectionInfo connectionInfo = new ConnectionInfo();
+		connectionInfo.setKind(ConnectionInfoKind.SQL);
+		connectionInfo.setUserName(userName);
+		connectionInfo.setPassword(password);
+		PropertyBag attributes = new PropertyBag();
+		PropertyBag logonProperties = new PropertyBag();
+		
+		attributes.putBooleanValue(PropertyBagHelper.CONNINFO_CRQE_SQLDB, true);
+		attributes.putStringValue(PropertyBagHelper.CONNINFO_DATABASE_DLL, "crdb_ado.dll");
+		attributes.putStringValue(PropertyBagHelper.CONNINFO_SERVER_NAME, databaseServer);
+		attributes.putStringValue(PropertyBagHelper.CONNINFO_DATABASE_NAME, databaseName);
+		attributes.putStringValue(PropertyBagHelper.CONNINFO_SERVER_TYPE, "OLE DB (ADO)");
+		
+		attributes.put(PropertyBagHelper.CONNINFO_CRQE_LOGONPROPERTIES, logonProperties);
+
+		connectionInfo.setAttributes(attributes);
+		return connectionInfo;
+    }
+%>
+
+<%
+	this.pinstanceId = Integer.parseInt(request.getParameter("AD_PInstance_ID"));
+	this.initPath();
+	try
+	{
+		response.reset();
+		response.setContentType("application/pdf");
+		
+		ReportClientDocument doc = createReport();
+		PrintReportOptions printOptions = new PrintReportOptions();  
+        printOptions.setPrinterName("\\\\Merlot\\RICOH Aficio 3235C PCL 6");
+        printOptions.setJobTitle("Sample Print Job from JRC.");
+        printOptions.setPrinterDuplex(PrinterDuplex.horizontal);
+        printOptions.setPaperSource(PaperSource.auto);
+        printOptions.setPaperSize(PaperSize.paperLetter);
+        printOptions.setNumberOfCopies(1);
+        printOptions.setCollated(false);
+
+        doc.getPrintOutputController().printReport(printOptions);
+
+//		doc.printReport( printOptions );
+		
+		doc.close();
+
+        System.out.println("Successfully send report to the printer.");
+		
+		
+	}
+	catch (ReportSDKExceptionBase e)
+	{
+		System.out.println(e);
+	}
+%>

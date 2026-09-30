@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jnlp spec = "1.5+" version = "2.6.1" 
+	codebase = "$$context/compiereHome" 
+	href = "$$context/solstice/solstice.jnlp">  
+	<information>
+		<title>Solstice</title>
+		<vendor>ProGestion Informatique </vendor>
+		<homepage href = "http://www.progestion.net"/>
+		<offline-allowed/>
+		<description>Solstice - Paie et ressources humaines</description>
+		<description kind = "short">Solstice</description>
+		<description kind = "one-line">Solstice</description>
+		<description kind = "tooltip">Solstice</description>
+		<icon href = "$$context/solstice/C32.gif"/>
+		<shortcut online="true">
+			<desktop/>
+			<menu submenu="Solstice"/>
+		</shortcut>
+	</information>  
+	<resources>
+		<j2se version = "1.5+" href = "http://java.sun.com/products/autodl/j2se" initial-heap-size = "32m" max-heap-size = "512m"/>
+		<jar href = "Compiere.jar" main = "true" download = "eager"/>
+		<jar href = "CompiereCLib.jar" main = "false" download = "eager"/>
+		<property name="solsticeJNLP" value="$$context"/> 
+	</resources>  
+	<application-desc main-class = "org.compiere.Compiere"/>  
+	<security>
+		<all-permissions/>  
+	</security>
+</jnlp>

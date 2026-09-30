@@ -1,0 +1,40 @@
+/* Titre de l'application */
+.apptitle { FONT-WEIGHT: bolder; FONT-SIZE: 24px; COLOR: black; FONT-FAMILY: arial; TEXT-DECORATION: none }
+
+/* Titre de page */
+.pagetitle {FONT-WEIGHT: bolder; FONT-SIZE: 16px; COLOR:#253049; FONT-FAMILY: arial; TEXT-DECORATION: none }
+
+/* Titre de section */
+.sectitle {FONT-WEIGHT: bolder; font-style: normal;FONT-SIZE: 11px; COLOR:#4D4D26; FONT-FAMILY: tahoma; TEXT-DECORATION: none }
+
+/* note en bas de page */
+.footnote {font-style: normal;FONT-SIZE: 11px; COLOR:#000000; FONT-FAMILY: tahoma; TEXT-DECORATION: none }
+
+/* Ligne décoratrice en début et fin de document 6D6D36 */
+.line{background-color:#4D4D26; height: 4px}
+
+/* Le text Societe immobiliere du Quebec */
+.siqname {FONT-WEIGHT: bolder; FONT-SIZE: 12px;  FONT-FAMILY: arial; TEXT-DECORATION: none}
+
+/* hyperliens de navigation, chemin -> ... -> */
+A.path,A.path:visited{font-family:Arial;color:#003399;FONT-SIZE: 11px;FONT-WEIGHT: bolder;}
+A.path:hover{font-family:Arial; color: #6D6D36;FONT-SIZE: 11px;FONT-WEIGHT: bolder;}
+.pathtext{font-family:Arial; color:#253049;FONT-SIZE: 11px;FONT-WEIGHT: bolder;}
+
+/* hyperliens de navigation pour les pages de menu */
+A.menu,A.menu:visited{font-family:Arial;color:#003399;FONT-SIZE: 14px;FONT-WEIGHT: bolder;TEXT-DECORATION: underline}
+A.menu:hover{font-family:Arial; color: #6D6D36;FONT-SIZE: 14px;FONT-WEIGHT: bolder;TEXT-DECORATION:underline}
+
+/* cellules d'un formulaire */
+.tdlabel{background-color:#CCCC99;font-family:Arial;FONT-SIZE: 12px;FONT-WEIGHT: bolder;}
+.tdfield{background-color:#EBEEF5;font-family:Arial;FONT-SIZE: 12px}
+.tdfieldalt{background-color:#ACB8CA;font-family:Arial;FONT-SIZE: 12px}
+.tdsimple{background-color:#FFFFFF;font-family:Arial;FONT-SIZE: 12px}
+.tdfont {font-family:Arial;FONT-SIZE: 12px}
+
+/* cellule de calendrier*/
+.tdlabelcal{background-color:#CCCC99;font-family:Arial;FONT-SIZE: 12px;FONT-WEIGHT: bolder; border-style:solid;border-color:#4D4D26;border-width:1px}
+.tdcal{background-color:#FFFFFF;font-family:Arial;FONT-SIZE: 12px; border-style:solid;border-color:#4D4D26;border-width:1px}
+.tdfullselectcal{font-family:Arial;FONT-SIZE: 12px;background-color:#CBA874; border-style:solid;border-color:#6C5128;border-width:1px;color:rgb(78,49,20);}
+.tdautreselectcal{font-family:Arial;FONT-SIZE: 12px;background-color:rgb(247,236,164); border-style:solid;border-color:#4D4D26;border-width:1px;color:#4D4D26;}
+.tdselectcal{background-color:rgb(221,227,183);font-family:Arial;FONT-SIZE: 12px;border-style:solid;border-color:#4D4D26;border-width:1px;color:#000000}

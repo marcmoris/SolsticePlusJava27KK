@@ -1,0 +1,20 @@
+<!-- BEGIN: main -->
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="styles/siq.css" />
+<title>{TITLE}</title>
+</head>
+<body>
+
+
+<table border="0" width="100%">
+<!-- BEGIN: line --> 
+ <tr>
+  <td class="{CELLCLASS}">{Comment} </td>
+ </tr>
+<!-- END: line --> 
+</table>
+</form>
+</body>
+</html>
+<!-- END: main -->

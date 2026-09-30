@@ -1,0 +1,93 @@
+<!-- BEGIN: main -->
+<html>
+<!-- HEADING: -->
+
+<table width="800" align="center" border="0" cellspacing="2" cellpadding="0">
+	<tr>
+		<td colspan="2" class="line"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> 
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div class="pagetitle">{TITLE}</div></td>
+	</tr>
+		<tr>
+		<td colspan="2">
+
+<script language="JavaScript">
+		function search()
+		{
+			document.mainForm.action.value = 'search';
+			document.mainForm.submit();
+		}
+
+		function sendAction(action, id)
+	        {
+	            document.mainForm.formID.value = id;
+				document.mainForm.action.value = action;
+				document.mainForm.submit();
+	        }
+
+</script> 
+
+<form name="mainForm" method="post" >
+	<input type="hidden" name="action">
+	<input type="hidden" name="formID">
+ 	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+	<tr>
+		<td class="tdlabel" colspan="3">Recherche </td>
+	</tr>
+	<tr>
+		<td class="tdfield">{LabelYear} {ComboBoxYear} 		</td>
+		<td class="tdfield">{LabelEmployee} {ComboBoxEmployee} 		</td>
+		<td class="tdfield"><div align="right">	<input type="button" onClick="search();" value="Lancer la recherche"></td>
+	</div>
+
+	</tr>
+
+    </table><br>
+</td>
+</tr>
+
+<tr>
+		<td colspan="2">
+
+<p class="sectitle">R&eacute;sultats de la recherche</p>
+
+
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+<tr>
+<td class="tdlabel" >{LabelForm}</td>
+<td class="tdlabel" >{LabelType}</td>
+<td class="tdlabel" >{LabelEmployer}</td>
+<td class="tdlabel" >{LabelView}</td>
+</tr>
+
+<!-- BEGIN: line --> 
+<tr>
+<td class="{CELLCLASS}">{FORM}</td>
+<td class="{CELLCLASS}">{TYPE}</td>
+<td class="{CELLCLASS}">{EMPLOYER}</td>
+<td class="{CELLCLASS}">{VIEW}</td>
+</tr>
+<!-- END: line --> 
+</table>
+	</form>
+
+</form>
+</td>
+</tr>
+<tr>
+{FOOTING}
+</table>
+</div>		
+</div>	
+</div>	
+</body>
+</html>
+
+<!-- END: main -->

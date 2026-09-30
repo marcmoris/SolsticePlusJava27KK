@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="add-exports" value="java.naming/com.sun.jndi.ldap=ALL-UNNAMED:java.sql.rowset/com.sun.rowset=ALL-UNNAMED:java.sql.rowset/com.sun.rowset.internal=ALL-UNNAMED:java.sql.rowset/com.sun.rowset.providers=ALL-UNNAMED"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="accessible" pattern="com/sun/jndi/ldap/**"/>
+			<accessrule kind="accessible" pattern="com/sun/rowset/**"/>
+			<accessrule kind="accessible" pattern="com/sun/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="/tools"/>
+	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
+	<classpathentry kind="src" path="/looks"/>
+	<classpathentry kind="lib" path="/interfaces/Interfaces.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/jnlp.jar"/>
+	<classpathentry kind="lib" path="/lib/jPDF.jar"/>
+	<classpathentry kind="lib" path="/lib/oracle.jar"/>
+	<classpathentry kind="lib" path="/lib/db2.jar"/>
+	<classpathentry kind="lib" path="/lib/postgreSQL.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/jackson-annotations-3.0-rc5.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/jackson-core-2.9.9.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/jackson-databind-2.17.3.jar"/>
+		<classpathentry kind="lib" path="/tools/lib/poi-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/poi-ooxml-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/poi-ooxml-lite-5.2.2.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/xmlbeans-5.0.3.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-compress-1.21.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/commons-io-2.15.0.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/SparseBitSet-1.2.jar"/>
+	<classpathentry kind="output" path="lib"/>
+</classpath>

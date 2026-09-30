@@ -1,0 +1,158 @@
+/*
+ * Created on 2005-09-16
+ */
+package solstice.process;
+
+import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+
+import org.compiere.model.MRole;
+import org.compiere.process.ProcessInfoParameter;
+import org.compiere.process.SvrProcess;
+import org.compiere.util.DB;
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+
+import solstice.model.P_Payment;
+import solstice.model.P_Time_Sheet;
+
+/**
+ * @author frafor01
+ * 
+ * Ce processus génère les avis de dépôt pour une période en particulier
+ */
+public class P_GenerateStatementEarning extends SvrProcess
+{
+	private int Org_ID = 0;
+    private int periodId;
+    private int Frequency_ID = 0;
+    private int Distribution_ID = 0;
+    private int Distribution_Booklet_ID = 0;
+    private int Employee_ID = 0;
+	private int	m_inserted = 0;
+    
+    public P_GenerateStatementEarning()
+    {
+        super();
+    }
+
+    /**
+     * On récupère la période
+     */
+    protected void prepare()
+    {
+        ProcessInfoParameter[] para = getParameter();
+        for (int i = 0; i < para.length; i++)
+  	    {
+  	        String name = para[i].getParameterName();
+  	      
+  	        if (para[i].getParameter() == null)
+  		    ;
+			else if (name.equals("AD_Org_ID"))
+				Org_ID = para[i].getParameterAsInt();
+  	        else if (name.equals("P_Frequency_ID"))
+               Frequency_ID = ((BigDecimal)para[i].getParameter()).intValue();
+            else if (name.equals("P_Period_ID"))
+  	           periodId = ((BigDecimal)para[i].getParameter()).intValue();
+            else if (name.equals("P_Distribution_ID"))
+               Distribution_ID = ((BigDecimal)para[i].getParameter()).intValue();
+            else if (name.equals("P_Distribution_Booklet_ID"))
+                Distribution_Booklet_ID = ((BigDecimal)para[i].getParameter()).intValue();
+            else if (name.equals("P_Employee_ID"))
+                Employee_ID = ((BigDecimal)para[i].getParameter()).intValue();
+            else 
+  		       log.log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
+  	    }
+        
+    }
+
+    /**
+     * Génération des avis de dépôt
+     */
+    protected String doIt() throws Exception
+    {
+        if (periodId == 0)
+        {
+            log.log(Level.SEVERE, "Create StagementEarning - Period not found");
+            return ("*** Error - Period not found *");
+        }
+        if (Frequency_ID == 0)
+        {
+            log.log(Level.SEVERE, "Create StagementEarning - Frequency not found");
+            return ("*** Error - Frequency not found");
+        }
+        
+        try
+        {
+            generateStatementEarning();
+        }
+        catch (Exception e)
+        {
+            return Msg.translate(Env.getLanguage(Env.getCtx()), "ProcessFailed") + " : " + e.getMessage();
+        }
+//        return Msg.translate(Env.getLanguage(Env.getCtx()), "Success");
+		return "@Inserted@ = " + m_inserted;
+
+    }
+
+	/**
+	 * Cette méthode crée les avis de dépot
+	 * @param periodName
+	 */
+	private void generateStatementEarning() throws Exception
+	{
+	    String sql 
+	    = "select P_Payment_ID"
+	        + " from P_Payment"
+	        + " where P_Period_ID = " + periodId
+	        + "   and P_Frequency_ID = " + Frequency_ID;
+
+	    if ( Org_ID != 0 )
+	        sql = sql + "   and AD_Org_ID = " + Org_ID;
+
+	    if ( Distribution_ID != 0 )
+	        sql = sql + "   and P_Distribution_id = " + Distribution_ID;
+	    
+	    if ( Distribution_Booklet_ID != 0 )
+	        sql = sql + "   and P_Distribution_Booklet_ID = " + Distribution_Booklet_ID;
+	    
+	    if ( Employee_ID != 0 )
+	        sql = sql + "   and P_Employee_ID = " + Employee_ID;
+
+	    
+	    sql = sql + "   AND PaymentTypeDoc in ( '" + P_Payment.PAYMENTTYPEDOC_Regular + "', '" + P_Payment.PAYMENTTYPEDOC_Complementary + "' , '" + "', '" +  P_Payment.PAYMENTTYPEDOC_HolidayPayment + "' , '" + "', '" +  P_Payment.PAYMENTTYPEDOC_ExpenseAccount + "' , '"+  P_Payment.PAYMENTTYPEDOC_SeparationPay + "') ";
+/*
+	    sql = sql
+	        + " and exists ("
+	        + "   select 1"
+	        + "   from P_Time_Sheet"
+	        + "   where P_Payment_ID = P_Payment.P_Payment_ID"
+	        + "   AND SheetType in ( '" + P_Time_Sheet.SHEETTYPE_Regular + "', '" +  P_Time_Sheet.SHEETTYPE_Complementary + "' , '" + "', '" +  P_Time_Sheet.SHEETTYPE_HolidayPayment + "' , '" + "', '" +  P_Time_Sheet.SHEETTYPE_ExpenseAccount + "' , '"+  P_Time_Sheet.SHEETTYPE_SeparationPay + "') "
+//	        + "   and SheetType = 'Regular'"
+	        + " )";
+*/	        
+	    
+		sql = MRole.getDefault().addAccessSQL (sql, "P_Payment", true, false);	// fully qualidfied - RO 
+
+	    
+        PreparedStatement stmt = DB.prepareStatement(sql, null);
+        ResultSet rs = stmt.executeQuery();
+        
+        int i = 1;
+        while(rs.next())
+        {
+            P_Payment payment = new P_Payment(Env.getCtx(), rs.getInt("P_Payment_ID"), null);
+            payment.createStatementEarning();
+            P_Time_Sheet timeSheet = P_Time_Sheet.GetWithPaymentID( Env.getCtx(), rs.getInt("P_Payment_ID"), null);
+//            timeSheet.setTimeSheetStatus( P_Time_Sheet.TIMESHEETSTATUS_Issued);
+            timeSheet.save();
+
+            m_inserted++;
+        }
+        
+        rs.close();
+        stmt.close();
+	}
+}

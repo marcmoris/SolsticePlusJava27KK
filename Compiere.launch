@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+    <listEntry value="/Compiere/dbPort/src/org/compiere/Compiere.java" />
+  </listAttribute>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+    <listEntry value="1" />
+  </listAttribute>
+  <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false" />
+  <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true" />
+  <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true" />
+  <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false" />
+  <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.compiere.Compiere" />
+  <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="" />
+  <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Compiere" />
+  <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--enable-native-access=ALL-UNNAMED --patch-module java.desktop=d:/SolsticeKK-main/tools/lib/japplet-compat.jar --add-exports=java.desktop/java.applet=ALL-UNNAMED --add-exports=java.desktop/sun.security.action=ALL-UNNAMED --add-exports=java.desktop/sun.swing=ALL-UNNAMED --add-exports=java.sql.rowset/com.sun.rowset=ALL-UNNAMED --add-exports=java.sql.rowset/com.sun.rowset.internal=ALL-UNNAMED --add-exports=java.sql.rowset/com.sun.rowset.providers=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.desktop/java.awt=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-opens=java.desktop/sun.swing=ALL-UNNAMED" />
+</launchConfiguration>

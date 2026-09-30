@@ -1,0 +1,339 @@
+package org.solstice.apps.form;
+
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+
+import org.compiere.util.CLogger;
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+
+
+import solstice.utils.PgiUtil;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.biff.formula.FormulaParser;
+
+import org.compiere.apps.*;
+import org.compiere.plaf.*;
+import org.compiere.swing.*;
+import org.compiere.apps.form.FormFrame;
+import org.compiere.apps.form.FormPanel;
+
+
+public class ManulifExtractProcess extends CPanel implements FormPanel, ActionListener
+{
+	private String inputFile;
+    private String outputFile;
+
+    private String Path;
+    
+	protected void prepare() 
+	{
+		
+	}
+
+	/**
+	 *	Initialize Panel
+	 *  @param WindowNo window
+	 *  @param frame frame
+	 */
+	public void init (int WindowNo, FormFrame frame)
+	{
+
+    	Path = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPathManulif");
+    	if ( ! Path.endsWith("\\") )
+    		Path = Path + "\\";
+
+		log.info("");
+		m_WindowNo = WindowNo;
+		m_frame = frame;
+		try
+		{
+			jbInit();
+			dynInit();
+			frame.getContentPane().add(northPanel, BorderLayout.NORTH);
+			frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
+			frame.getContentPane().add(confirmPanel, BorderLayout.SOUTH);
+		}
+		catch(Exception e)
+		{
+			log.log(Level.SEVERE, "init", e);
+		}
+	}	//	init
+
+	/**	Window No			*/
+	private int         		m_WindowNo = 0;
+	/**	FormFrame			*/
+	private FormFrame 			m_frame;
+
+	private ArrayList<String>	m_data = new ArrayList<String>();
+	/**	Logger			*/
+	private static CLogger log = CLogger.getCLogger(ManulifSendProcess.class);
+	//
+//	private static final String s_none = "----";	//	no format indicator
+	//
+	private CPanel northPanel = new CPanel();
+	private JButton bFile = new JButton();
+	private CPanel centerPanel = new CPanel();
+	private BorderLayout centerLayout = new BorderLayout();
+	private JScrollPane rawDataPane = new JScrollPane();
+	private JTextArea rawData = new JTextArea();
+	private JScrollPane previewPane = new JScrollPane();
+	private CPanel previewPanel = new CPanel();
+	private ConfirmPanel confirmPanel = new ConfirmPanel(true);
+	private JLabel info = new JLabel();
+	private GridBagLayout previewLayout = new GridBagLayout();
+	private JLabel record = new JLabel();
+	
+//	private File[] file = null;
+
+	/**
+	 *	Static Init
+	 *  @throws Exception
+	 */
+	private void jbInit() throws Exception
+	{
+		CompiereColor.setBackground(this);
+		bFile.setText(Msg.getMsg(Env.getCtx(), "FileExportFile"));
+		bFile.setToolTipText(Msg.getMsg(Env.getCtx(), "FileExportFileInfo"));
+		bFile.addActionListener(this);
+		info.setText("   ");
+		//
+
+		//
+		northPanel.setBorder(BorderFactory.createEtchedBorder());
+		northPanel.add(bFile, null);
+		northPanel.add(info, null);
+		northPanel.add(record, null);
+		//
+		centerPanel.setLayout(centerLayout);
+		rawData.setFont(new java.awt.Font("Monospaced", 0, 10));
+		rawData.setColumns(80);
+		rawData.setRows(5);
+		rawDataPane.getViewport().add(rawData, null);
+		centerPanel.add(rawDataPane, BorderLayout.NORTH);
+		centerPanel.add(previewPane, BorderLayout.CENTER);
+		//
+		previewPanel.setLayout(previewLayout);
+		previewPane.getViewport().add(previewPanel, null);
+		previewPane.setPreferredSize(new Dimension(700,80));
+		//
+		confirmPanel.addActionListener(this);
+	}	//	jbInit
+
+	/**
+	 * 	Dispose
+	 */
+	public void dispose()
+	{
+		if (m_frame != null)
+			m_frame.dispose();
+		m_frame = null;
+	}	//	dispose
+
+	/**
+	 *	Dynamic Init
+	 */
+	private void dynInit()
+	{
+		confirmPanel.getOKButton().setEnabled(false);
+	}	//	dynInit
+
+	
+	/**************************************************************************
+	 *	Action Listener
+	 *  @param e event
+	 */
+	public void actionPerformed (ActionEvent e)
+	{
+		if (e.getSource() == bFile)
+		{
+			cmd_loadFile();
+			invalidate();
+			m_frame.pack();
+		}
+		
+		else if (e.getActionCommand().equals(ConfirmPanel.A_OK))
+		{
+			m_frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//			confirmPanel.setEnabled(false);
+			m_frame.setBusy(true);
+
+			try
+			{
+				read( 0 );
+				read( 1 );
+				m_data.clear();
+				rawData.append( "Fichiers manulif générés ");
+				rawData.append("\n");
+				rawData.setCaretPosition(0);
+			}
+			catch (Exception ex)
+			{
+				log.log(Level.SEVERE, "", ex);
+				bFile.setText(Msg.getMsg(Env.getCtx(), "FileExportFile"));
+			}
+
+			m_frame.setBusy(false);
+			m_frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+	        //
+			//  when you need the result:
+			//	x = worker.get();   //  this blocks the UI !!
+		}
+		else if (e.getActionCommand().equals(ConfirmPanel.A_CANCEL))
+		{
+			dispose();
+		}
+
+		confirmPanel.getOKButton().setEnabled(true);
+
+
+	}	//	actionPerformed
+
+	FileFilter ff = new FileFilter(){
+		public boolean accept(File f){
+			if(f.isDirectory()) return false;
+			else if(f.getName().endsWith(".xls")) return true;
+				else return false;
+		}
+		public String getDescription(){
+			return "Manulif File";
+		}
+	};
+	
+	/**************************************************************************
+	 *	Load File
+	 */
+	private void cmd_loadFile() 
+	{
+    	String directory = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPathManulif");
+/*			org.compiere.Compiere.getCompiereHome() 
+			+ File.separator + "data" 
+			+ File.separator + "import";
+*/			
+		log.config(directory);
+		//
+		JFileChooser chooser = new JFileChooser(directory);
+	    chooser.setFileFilter(ff);
+	    
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setDialogTitle("Sélectionner les fichiers à enregistrer");
+		if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+			return;
+//	file = chooser.getSelectedFiles();
+
+		setInputFile( chooser.getSelectedFile().getAbsolutePath() );
+//		Path = chooser.getSelectedFile().getPath();
+
+		rawData.append( "Fichier prêt à être extrait ");
+		rawData.append("\n");
+		rawData.setCaretPosition(0);
+
+		
+//		setInputFile( file[0].getAbsoluteFile().getPath() );
+	}	//	cmd_loadFile
+
+
+
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
+	}
+
+	public void read( int sheetNo) throws IOException  
+	{
+
+		File inputWorkbook = new File(inputFile);
+		outputFile = inputWorkbook.getName() + ".txt";
+		Workbook w;
+		try {
+			w = Workbook.getWorkbook(inputWorkbook);
+			// Get the first sheet
+			Sheet sheet = w.getSheet( sheetNo );
+			// Loop over first 10 column and lines
+
+			StringBuffer excelInfo = new StringBuffer();
+			for (int i = 0; i < sheet.getRows(); i++) {
+				for (int j = 0; j < sheet.getColumns(); j++) {
+					Cell cell = sheet.getCell(j, i);
+					CellType type = cell.getType();
+					if ( type.equals( CellType.NUMBER_FORMULA))
+					{
+						excelInfo.append( cell.getContents()).append( "\t");
+					}
+					else excelInfo.append( cell.getContents()).append( "\t");
+/*					if (cell.getType() == CellType.LABEL) {
+						System.out.println("I got a label "
+								+ cell.getContents());
+					}
+
+					if (cell.getType() == CellType.NUMBER) {
+						System.out.println("I got a number "
+								+ cell.getContents());
+					}
+*/
+				}
+				excelInfo.append("\r\n");
+			}
+			System.out.println( excelInfo.toString() );
+	    	WriteToFile( excelInfo, sheet.getName() ,null  );
+
+ 
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+	   public void WriteToFile( StringBuffer sb,  String name, String trxName )
+	    {
+	    	String filename =  Path + name + ".txt";
+	  	    File aFile = null;
+	  	    aFile = new File( filename ); 
+	        FileOutputStream out; // declare a file output object
+	        PrintStream p; // declare a print stream object
+	        try
+	        {
+	              out = new FileOutputStream(aFile);
+	              // Connect print stream to the output stream
+	              p = new PrintStream( out );
+
+	              p.println (sb.toString());
+	              System.out.println(sb.toString());
+	              p.close();
+
+
+	        }
+	        catch (Exception e)
+	        {
+	        	log.log (Level.SEVERE, "Error writing to file :", e);
+	        }
+
+
+	    }
+
+}

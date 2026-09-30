@@ -1,0 +1,631 @@
+package org.solstice.apps.form;
+
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+
+import org.compiere.Compiere;
+import org.compiere.util.CLogger;
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+
+
+import com.sshtools.net.SocketTransport;
+import com.sshtools.publickey.ConsoleKnownHostsKeyVerification;
+import com.sshtools.sftp.SftpClient;
+import com.sshtools.sftp.SftpFile;
+import com.sshtools.sftp.SftpFileAttributes;
+import com.sshtools.ssh.HostKeyVerification;
+import com.sshtools.ssh.PasswordAuthentication;
+import com.sshtools.ssh.SshAuthentication;
+import com.sshtools.ssh.SshClient;
+import com.sshtools.ssh.SshConnector;
+import com.sshtools.ssh.components.SshPublicKey;
+import com.sshtools.ssh2.Ssh2Client;
+import com.sshtools.ssh2.Ssh2Context;
+
+/*
+import com.sshtools.common.authentication.PasswordAuthenticationDialog;
+import com.sshtools.j2ssh.SftpClient;
+import com.sshtools.j2ssh.SshClient;
+import com.sshtools.j2ssh.authentication.AuthenticationProtocolState;
+import com.sshtools.j2ssh.authentication.PasswordAuthenticationClient;
+import com.sshtools.j2ssh.transport.ConsoleKnownHostsKeyVerification;
+import com.sshtools.j2ssh.transport.InvalidHostFileException;
+import com.sshtools.j2ssh.transport.publickey.SshPublicKey;
+*/
+import solstice.utils.PgiUtil;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
+
+import org.compiere.apps.*;
+import org.compiere.plaf.*;
+import org.compiere.swing.*;
+import org.compiere.apps.form.FormFrame;
+import org.compiere.apps.form.FormPanel;
+
+
+public class ManulifSendProcess extends CPanel implements FormPanel, ActionListener
+{
+	private String inputFile;
+    private String outputFile;
+
+    private String Path;
+    
+	protected void prepare() 
+	{
+		
+	}
+
+	/**
+	 *	Initialize Panel
+	 *  @param WindowNo window
+	 *  @param frame frame
+	 */
+	public void init (int WindowNo, FormFrame frame)
+	{
+
+    	Path = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPathManulif");
+    	if ( ! Path.endsWith("\\") )
+    		Path = Path + "\\";
+
+		log.info("");
+		m_WindowNo = WindowNo;
+		m_frame = frame;
+		try
+		{
+			jbInit();
+			dynInit();
+			frame.getContentPane().add(northPanel, BorderLayout.NORTH);
+			frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
+			frame.getContentPane().add(confirmPanel, BorderLayout.SOUTH);
+		}
+		catch(Exception e)
+		{
+			log.log(Level.SEVERE, "init", e);
+		}
+	}	//	init
+
+	/**	Window No			*/
+	private int         		m_WindowNo = 0;
+	/**	FormFrame			*/
+	private FormFrame 			m_frame;
+
+	private ArrayList<String>	m_data = new ArrayList<String>();
+	/**	Logger			*/
+	private static CLogger log = CLogger.getCLogger(ManulifSendProcess.class);
+	//
+//	private static final String s_none = "----";	//	no format indicator
+	//
+	private CPanel northPanel = new CPanel();
+	private JButton bFile = new JButton();
+	private CPanel centerPanel = new CPanel();
+	private BorderLayout centerLayout = new BorderLayout();
+	private JScrollPane rawDataPane = new JScrollPane();
+	private JTextArea rawData = new JTextArea();
+	private JScrollPane previewPane = new JScrollPane();
+	private CPanel previewPanel = new CPanel();
+	private ConfirmPanel confirmPanel = new ConfirmPanel(true);
+	private JLabel info = new JLabel();
+	private GridBagLayout previewLayout = new GridBagLayout();
+	private JLabel record = new JLabel();
+	
+//	private File[] file = null;
+
+	/**
+	 *	Static Init
+	 *  @throws Exception
+	 */
+	private void jbInit() throws Exception
+	{
+		CompiereColor.setBackground(this);
+		bFile.setText(Msg.getMsg(Env.getCtx(), "FileExportFile"));
+		bFile.setToolTipText(Msg.getMsg(Env.getCtx(), "FileExportFileInfo"));
+		bFile.addActionListener(this);
+		info.setText("   ");
+		//
+
+		//
+		northPanel.setBorder(BorderFactory.createEtchedBorder());
+		northPanel.add(bFile, null);
+		northPanel.add(info, null);
+		northPanel.add(record, null);
+		//
+		centerPanel.setLayout(centerLayout);
+		rawData.setFont(new java.awt.Font("Monospaced", 0, 10));
+		rawData.setColumns(80);
+		rawData.setRows(5);
+		rawDataPane.getViewport().add(rawData, null);
+		centerPanel.add(rawDataPane, BorderLayout.NORTH);
+		centerPanel.add(previewPane, BorderLayout.CENTER);
+		//
+		previewPanel.setLayout(previewLayout);
+		previewPane.getViewport().add(previewPanel, null);
+		previewPane.setPreferredSize(new Dimension(700,80));
+		//
+		confirmPanel.addActionListener(this);
+	}	//	jbInit
+
+	/**
+	 * 	Dispose
+	 */
+	public void dispose()
+	{
+		if (m_frame != null)
+			m_frame.dispose();
+		m_frame = null;
+	}	//	dispose
+
+	/**
+	 *	Dynamic Init
+	 */
+	private void dynInit()
+	{
+		confirmPanel.getOKButton().setEnabled(false);
+	}	//	dynInit
+
+	
+	/**************************************************************************
+	 *	Action Listener
+	 *  @param e event
+	 */
+	public void actionPerformed (ActionEvent e)
+	{
+		if (e.getSource() == bFile)
+		{
+			cmd_loadFile();
+			invalidate();
+			m_frame.pack();
+		}
+		
+		else if (e.getActionCommand().equals(ConfirmPanel.A_OK))
+		{
+			m_frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//			confirmPanel.setEnabled(false);
+			m_frame.setBusy(true);
+
+//			SendFileSFTP( Path,  "RPP Contribution Details.txt"  );
+//			SendFileSFTP( Path,  "RSP Contribution Details.txt"  );
+//	        SendFileSFTP( Path,  "ManulifDemographicFile.txt"  );
+
+			try {
+				SendFileSFTP( Path,  inputFile  );
+			}
+			catch(Exception exception)
+		    {
+				rawData.append( "Fichier " + inputFile + " transféré en erreur " + exception.toString() );
+
+		        exception.printStackTrace();
+		    }
+
+			m_frame.setBusy(false);
+			m_frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+	        //
+			//  when you need the result:
+			//	x = worker.get();   //  this blocks the UI !!
+		}
+		else if (e.getActionCommand().equals(ConfirmPanel.A_CANCEL))
+		{
+			dispose();
+		}
+
+		confirmPanel.getOKButton().setEnabled(true);
+
+
+	}	//	actionPerformed
+
+	FileFilter ff = new FileFilter(){
+		public boolean accept(File f){
+			if(f.isDirectory()) return false;
+			else if(f.getName().endsWith("DEMOFTP.TXT")) return true;
+				else return false;
+		}
+		public String getDescription(){
+			return "Demographique File";
+		}
+	};
+	
+	/**************************************************************************
+	 *	Load File
+	 */
+	private void cmd_loadFile() 
+	{
+    	String directory = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPathManulif");
+/*			org.compiere.Compiere.getCompiereHome() 
+			+ File.separator + "data" 
+			+ File.separator + "import";
+*/			
+		log.config(directory);
+		//
+		JFileChooser chooser = new JFileChooser(directory);
+	    chooser.setFileFilter(ff);
+	    
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setDialogTitle("Sélectionner les fichiers à enregistrer");
+		if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+			return;
+//	file = chooser.getSelectedFiles();
+
+		setInputFile( chooser.getSelectedFile().getName() );
+
+//		setInputFile( file[0].getAbsoluteFile().getPath() );
+		try
+		{
+//			read( 0 );
+//			read( 1 );
+			m_data.clear();
+			rawData.append( "Fichiers prêt à être transférés ");
+			rawData.append("\n");
+			rawData.setCaretPosition(0);
+		}
+		catch (Exception e)
+		{
+			log.log(Level.SEVERE, "", e);
+			bFile.setText(Msg.getMsg(Env.getCtx(), "FileExportFile"));
+		}
+	}	//	cmd_loadFile
+
+
+
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
+	}
+
+	public void read( int sheetNo) throws IOException  
+	{
+
+		File inputWorkbook = new File(inputFile);
+		outputFile = inputWorkbook.getName() + ".txt";
+		Workbook w;
+		try {
+			w = Workbook.getWorkbook(inputWorkbook);
+			// Get the first sheet
+			Sheet sheet = w.getSheet( sheetNo );
+			// Loop over first 10 column and lines
+
+			StringBuffer excelInfo = new StringBuffer();
+			for (int i = 0; i < sheet.getRows(); i++) {
+				for (int j = 0; j < sheet.getColumns(); j++) {
+					Cell cell = sheet.getCell(j, i);
+					CellType type = cell.getType();
+					excelInfo.append( cell.getContents()).append( "\t");
+/*					if (cell.getType() == CellType.LABEL) {
+						System.out.println("I got a label "
+								+ cell.getContents());
+					}
+
+					if (cell.getType() == CellType.NUMBER) {
+						System.out.println("I got a number "
+								+ cell.getContents());
+					}
+*/
+				}
+				excelInfo.append("\r\n");
+			}
+			System.out.println( excelInfo.toString() );
+	    	WriteToFile( excelInfo, sheet.getName() ,null  );
+
+ 
+		} catch (BiffException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+	   public void WriteToFile( StringBuffer sb,  String name, String trxName )
+	    {
+	    	String filename =  Path + name + ".txt";
+	  	    File aFile = null;
+	  	    aFile = new File( filename ); 
+	        FileOutputStream out; // declare a file output object
+	        PrintStream p; // declare a print stream object
+	        try
+	        {
+	              out = new FileOutputStream(aFile);
+	              // Connect print stream to the output stream
+	              p = new PrintStream( out );
+
+	              p.println (sb.toString());
+	              System.out.println(sb.toString());
+	              p.close();
+
+
+	        }
+	        catch (Exception e)
+	        {
+	        	log.log (Level.SEVERE, "Error writing to file :", e);
+	        }
+
+
+	    }
+
+		private boolean SendFileSFTP( String path, String fileName) throws Exception
+		{
+			boolean send = false;
+			boolean success = true;
+			
+			String hostname = getIP_Address() ;
+			String username = getUserName();
+			String password = getPassword();
+			int port = 22;
+			
+			String cmd = null;
+			
+
+			String directory = PgiUtil.getSolsticeParameter(Env.getCtx(), "TransfertPathManulif");
+//			cmd = " " + directory + "winscp /command \"open sftp://pfsCanHelicopter:G00dtime@sftp.cdn.manulife.com\" \"put  " + path + fileName + " Inbound/\" \"exit\" ";
+
+//			cmd = " " + directory + "winscp /command \"open sftp://INST_CanHelicptrGRS_Test:H9=HkPDVnd=86yVh@mftdev.manulife.com \" \"put  " + path + fileName + " /in_MLI/\" \"exit\" ";
+			cmd = " " + directory + "winscp /command \"open sftp://" + username + ":"+ password + "@"+ hostname + "\" \"cd /in_MLI\" \"put  " + path + fileName + " /in_MLI/\" \"exit\" ";
+
+			Process p = Runtime.getRuntime().exec("cmd /c " + cmd);
+            p.waitFor();
+
+/*			
+//			 * Create an SshConnector instance
+			SshConnector con = SshConnector.createInstance();
+
+//		 SshContext context = con.getContext(SshConnector.SSH1);
+
+			con.getContext().setHostKeyVerification( new ConsoleKnownHostsKeyVerification());
+			
+//			con.getContext().setPreferredPublicKey(	Ssh2Context.PUBLIC_KEY_SSHDSS);  AES128Cbc Ssh2DsaPublicKey
+			con.getContext().setPreferredPublicKey(	Ssh2Context.PUBLIC_KEY_SSHDSS);
+			
+//			con.getContext().setPreferredKeyExchange(Ssh2Context.KEX_DIFFIE_HELLMAN_GROUP_EXCHANGE_SHA256);
+			
+//			 * Connect to the host
+			SocketTransport t = new SocketTransport("sftp.cdn.manulife.com", port);
+//			t.setTcpNoDelay(true);
+//			t.setConnectTimeout(1000);
+
+			SshClient ssh = null;
+//				ssh = con.connect(t, username );
+			ssh = con.connect(t, "pfsCanHelicopter" );
+
+			Ssh2Client ssh2 = (Ssh2Client) ssh;
+//			 * Authenticate the user using password authentication
+			PasswordAuthentication pwd = new PasswordAuthentication();
+
+			do {
+				System.out.print("Password: ");
+				pwd.setPassword( password );
+			} while (ssh2.authenticate(pwd) != SshAuthentication.COMPLETE
+					&& ssh.isConnected());
+
+//			 * Start a session and do basic IO
+			if (ssh.isAuthenticated()) {
+
+				SftpClient sftp = new SftpClient(ssh2);
+				
+	//			 * Perform some text mode operations
+				sftp.setTransferMode(SftpClient.MODE_BINARY);
+				
+			    // Change directory
+			    cmd = "cd /" + getManulifServerPath();
+				log.info("cmd " + cmd);
+
+			    sftp.cd("/" + getManulifServerPath());
+
+				sftp.put( path + '/' + fileName );
+				rawData.append( "Fichier " + fileName + " transféré avec succès");
+				send = true;
+			
+				sftp.quit();
+			}
+
+			rawData.append("\n");
+			rawData.setCaretPosition(0);
+
+			ssh.disconnect();
+*/			
+			rawData.append( "Fichier " + fileName + " transféré avec succès");
+			rawData.append("\n");
+			rawData.setCaretPosition(0);
+
+            return success;
+			
+		}
+
+		/*
+		private boolean SendFileSFTP( String path, String fileName) //throws Exception
+		{
+			Boolean success = true;
+			String hostname = getIP_Address() ;
+			String username = getUserName();
+			String password = getPassword();
+
+			String cmd = null;
+			SshClient ssh = new SshClient();
+			
+			try {
+			  // Connect to the host
+			  ssh.connect(hostname,new AlwaysAllowingConsoleKnownHostsKeyVerification());
+			  // Create a password authentication instance
+			  PasswordAuthenticationClient pwd = new PasswordAuthenticationClient();
+			  // Get the users name
+			  pwd.setUsername(username);
+			  // Get the password
+			  pwd.setPassword(password);
+			  
+			  PasswordAuthenticationDialog dialog = new PasswordAuthenticationDialog();
+	          pwd.setAuthenticationPrompt(dialog);
+
+			  // Try the authentication
+			  int result = ssh.authenticate(pwd);
+			  // Evaluate the result
+			  if (result == AuthenticationProtocolState.COMPLETE) 
+			  {
+					log.info("Connected to " + getIP_Address() + " as " + getUserName());
+		
+				    // The connection is authenticated we can now do some real work!
+				    SftpClient sftp = ssh.openSftpClient();
+		
+				    // Change directory
+				    cmd = "cd /" + getManulifServerPath();
+					log.info("cmd " + cmd);
+
+				    sftp.cd("/" + getManulifServerPath());
+		
+				    // Change the local directory
+				    cmd = "lcd " + path;
+					log.info("cmd " + cmd);
+				    sftp.lcd(path);
+		
+				    // Upload a file
+					log.info("Upload file " + fileName);
+					cmd = "put " + fileName;
+					log.info("cmd " + cmd);
+
+					rawData.append( "Fichier " + fileName + " transféré avec succès");
+					sftp.umask(027);
+					boolean send = false;
+					int i = 0;
+					// try to send the file 10 times.
+					while ( i < 10 && send == false )
+					{
+						try {
+							sftp.put(fileName, fileName);
+							send = true;
+						}
+						catch (Exception e) 
+						{
+							Thread.sleep(10000); // suspendu pendant 10 seconde (chiffre en millisecondes)
+							send = false;
+						}
+						i++;
+					}
+						
+
+					rawData.append("\n");
+					rawData.setCaretPosition(0);
+
+					// Quit
+			        sftp.quit();
+			        ssh.disconnect();
+
+
+			  
+			  }
+			  else
+			  {
+					log.warning("Could NOT connect to " + getIP_Address() + " as " + getUserName());
+			  }
+			}
+			catch (Exception e) {
+				log.log(Level.SEVERE, cmd, e);
+				success = false;
+//				throw new CompiereUserError( "Export to Cornerstone error : " + e.toString());
+			}
+			return success;
+			
+		}
+*/
+		private String getIP_Address() 
+		{
+//			return "mftdev.manulife.com";
+			return  PgiUtil.getSolsticeParameter(Env.getCtx(), "ManulifHost");
+	    }
+
+		private String getUserName() 
+		{
+//			return "INST_CanHelicptrGRS_Test";
+			return PgiUtil.getSolsticeParameter(Env.getCtx(), "ManulifUserName");
+	    }
+
+		private String getPassword() 
+		{
+//			return "H9=HkPDVnd=86yVh";
+			return PgiUtil.getSolsticeParameter(Env.getCtx(), "ManulifPassword");
+
+	    }
+
+		private String getManulifServerPath() 
+		{
+			return "in_MLI/";
+
+//			return "pfscanhelicopter/Inbound/";
+	    }
+
+		private String getManulifTransfertPath() 
+		{
+			return PgiUtil.getSolsticeParameter(Env.getCtx(), "ManulifTransfertPath");
+	    }
+
+		
+	public static void main(String[] args) throws IOException {
+		Compiere.startup(true);
+//		ManulifSendProcess test = new ManulifSendProcess();
+//		test.setInputFile("D:/fichiers transfert/Gl/Manulif CHL Contribution 2011-16.xls");
+//		test.read( 0);
+	}
+
+	/*
+	public class AlwaysAllowingConsoleKnownHostsKeyVerification extends
+    ConsoleKnownHostsKeyVerification {
+
+		public AlwaysAllowingConsoleKnownHostsKeyVerification()
+		        throws InvalidHostFileException {
+		    super();
+		    // Don't not do anything else
+		}
+	
+		@Override
+		public void onHostKeyMismatch(String s, SshPublicKey sshpublickey,
+		        SshPublicKey sshpublickey1) {
+		    try
+		    {
+		        System.out.println("The host key supplied by " + s + " is: " + sshpublickey1.getFingerprint());
+		        System.out.println("The current allowed key for " + s + " is: " + sshpublickey.getFingerprint());
+		        System.out.println("~~~Using Custom Key verification, allowing to pass through~~~");
+		        allowHost(s, sshpublickey, false);
+		    }
+		    catch(Exception exception)
+		    {
+		        exception.printStackTrace();
+		    }
+		}
+	
+		@Override
+		public void onUnknownHost(String s, SshPublicKey sshpublickey) {
+		    try
+		    {
+		        System.out.println("The host " + s + " is currently unknown to the system");
+		        System.out.println("The host key fingerprint is: " + sshpublickey.getFingerprint());
+		        System.out.println("~~~Using Custom Key verification, allowing to pass through~~~");
+		        allowHost(s, sshpublickey, false);
+		    }
+		    catch(Exception exception)
+		    {
+		        exception.printStackTrace();
+		    }
+		}
+	
+	}	
+*/
+}

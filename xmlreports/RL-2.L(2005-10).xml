@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du Relevé 2 provincial
+-->
+<report view="RV_P_P_FORM_R2" fontFamily="Serif" fontSize="8" fontStyle="plain" recordPerPage="3" marginX="20" marginY="15" deltaY="263">
+   <field id="Year" x="287" y="22" fontSize="12" align="center" />
+   <field id="NumeroFormulaire" x="495" y="8" align="center" />
+   <field id="CaseA" x="76" y="55" align="currency" />
+   <field id="CaseB" x="169" y="55" align="currency" />
+   <field id="CaseC" x="251" y="55" align="currency" />
+   <field id="CaseD" x="348" y="55" align="currency" />
+   <field id="CaseE" x="440" y="55" align="currency" />
+   <field id="CaseF" x="526" y="55" align="currency" />
+   <field id="CaseG" x="76" y="92" align="currency" />
+   <field id="CaseH" x="169" y="92" align="currency" />
+   <field id="CaseI" x="251" y="92" align="currency" />
+   <field id="CaseJ" x="348" y="92" align="currency" />
+   <field id="CaseK" x="440" y="92" align="currency" />
+   <field id="CaseL" x="526" y="92" align="currency" />
+   <field id="CaseM" x="440" y="113" align="currency" />
+   <field id="CaseN_P1" x="456" y="148" align="center" />
+   <field id="CaseN_P2" x="484" y="148" align="center" />
+   <field id="CaseN_P3" x="512" y="148" align="center" />
+   <field id="CaseO" x="526" y="113" align="currency" />
+   <field id="EmployeeSin_P1" x="326" y="148" align="center" />
+   <field id="EmployeeSin_P2" x="355" y="148" align="center" />
+   <field id="EmployeeSin_P3" x="383" y="148" align="center" />
+   <field id="EmployeeName" x="19" y="153" />
+   <field id="EmployeeAdresse" x="19" y="164" />
+   <field id="EmployeeAdresse2" x="19" y="175" />
+   <field id="EmployeeVille" x="19" y="186" />
+   <field id="DescriptionCompagnie" x="310" y="171" />
+   <field id="EmployerAdresse1" x="310" y="182" />
+   <field id="EmployerAdresse2" x="310" y="193" />
+   <field id="EmployerVille" x="310" y="205" />
+   <field id="FormType" x="338" y="22" align="center" />
+   <field id="CasePR" x="402" y="22" align="center" />
+   <field id="DistributionValue" x="160" y="131" />
+</report>

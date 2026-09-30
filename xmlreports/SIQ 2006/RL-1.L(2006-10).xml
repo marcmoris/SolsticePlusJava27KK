@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+   Impression du Relevé 1 provincial
+-->
+<report view="RV_P_P_FORM_R1" fontFamily="Serif" fontSize="8" fontStyle="plain" recordPerPage="3" marginX="20" marginY="15" deltaY="268">
+   <field id="Note"  x="100" y="199" />
+   <field id="CaseA" x="93" y="44" align="currency" />
+   <field id="CaseB" x="177" y="44" align="currency" />
+   <field id="CaseC" x="263" y="44" align="currency" />
+   <field id="CaseD" x="349" y="44" align="currency" />
+   <field id="CaseE" x="442" y="44" align="currency" />
+   <field id="CaseF" x="528" y="44" align="currency" />
+   <field id="CaseG" x="93" y="69" align="currency" />
+   <field id="CaseH" x="177" y="69" align="currency" />
+   <field id="CaseI" x="263" y="69" align="currency" />
+   <field id="CaseJ" x="349" y="69" align="currency" />
+   <field id="CaseK" x="442" y="69" align="currency" />
+   <field id="CaseL" x="528" y="69" align="currency" />
+   <field id="CaseM" x="93" y="92" align="currency" />
+   <field id="CaseN" x="177" y="92" align="currency" />
+   <field id="CaseO" x="263" y="92" align="currency" />
+   <field id="CaseP" x="349" y="92" align="currency" />
+   <field id="CaseQ" x="442" y="92" align="currency" />
+   <field id="CaseR" x="528" y="92" align="currency" />
+   <field id="CaseS" x="93" y="117" align="currency" />
+   <field id="CaseT" x="177" y="117" align="currency" />
+   <field id="CaseU" x="263" y="117" align="currency" />
+   <field id="CaseV" x="349" y="117" align="currency" />
+   <field id="CaseW" x="442" y="117" align="currency" />
+   <field id="CaseN1" x="263" y="140" align="currency" />
+   <field id="CaseN2" x="263" y="165" align="currency" />
+   <field id="CaseN3" x="263" y="188" align="currency" />
+   <field id="CaseN4" x="263" y="213" align="currency" />
+   <field id="CaseCO" x="477" y="117" align="center" />
+   <field id="EmployeeSin_P1" x="353" y="162" align="center" />
+   <field id="EmployeeSin_P2" x="388" y="162" align="center" />
+   <field id="EmployeeSin_P3" x="422" y="162" align="center" />
+   <field id="EmployeeValue" x="460" y="162" />
+   <field id="NameNote1" x="200" y="126" fontSize="6" />
+   <field id="NameNote2" x="200" y="151" fontSize="6" />
+   <field id="NameNote3" x="200" y="174" fontSize="6" />
+   <field id="NameNote4" x="200" y="199" fontSize="6" />
+   <field id="EmployeeName" x="22" y="148" />
+   <field id="EmployeeAdresse" x="22" y="160" />
+   <field id="EmployeeAdresse2" x="22" y="171" />
+   <field id="EmployeeVille" x="22" y="182" />
+   <field id="DescriptionCompagnie" x="332" y="185" />
+   <field id="EmployerAdresse1" x="332" y="196" />
+   <field id="EmployerAdresse2" x="332" y="207" />
+   <field id="EmployerVille" x="332" y="219" />
+   <field id="NumeroFormulaire" x="481" y="10" align="center" />
+   <field id="FormType" x="312" y="22" fontSize="14" specialMethod="compiere.process.report.CustomReportMethod.drawModified" />
+   <field id="DistributionValue" x="163" y="148" />
+</report>

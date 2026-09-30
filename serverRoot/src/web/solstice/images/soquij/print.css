@@ -1,0 +1,99 @@
+body {
+	background: rgb(255, 255, 255) !important;
+}
+#fond_site {
+	background: rgb(255, 255, 255) !important;
+}
+#entete {
+	background: rgb(255, 255, 255) !important;
+}
+#fond_colonne_navig {
+	background: rgb(255, 255, 255) !important;
+}
+#fade_colonne_navig {
+	background: rgb(255, 255, 255) !important;
+}
+#conteneur_colonnes {
+	background: rgb(255, 255, 255) !important;
+}
+#entete {
+	height: 100px;
+}
+#wrapper {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+#slogan h1 {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+#conteneur_colonnes {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+#colonne_principale {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+.contenu_padding {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+#fade_colonne_navig {
+	margin: 0px !important; padding: 0px !important; width: 100% !important; height: auto !important; float: none !important;
+}
+#utilitaires {
+	display: none !important;
+}
+#pied {
+	display: none !important;
+}
+#slogan {
+	display: none !important;
+}
+#navig_corpo {
+	display: none !important;
+}
+#colonne_navig {
+	display: none !important;
+}
+#colonne_complements {
+	display: none !important;
+}
+#actions {
+	display: none !important;
+}
+#jugements_decision ul#ariane {
+	display: none !important;
+}
+.zone_deroulante {
+	display: block !important;
+}
+#slogan {
+	visibility: hidden;
+}
+ul#ariane {
+	margin-bottom: 15px;
+}
+.fcktexte a:link::after {
+	font-size: 0.9em; text-decoration: none; content: " [" attr(href) "] ";
+}
+.fcktexte a:visited::after {
+	font-size: 0.9em; text-decoration: none; content: " [" attr(href) "] ";
+}
+.fcktexte a[href='']::after {
+	content: "";
+}
+.fcktexte a[href='.']::after {
+	content: "";
+}
+.fcktexte a[href^='/']::after {
+	content: " [http://soquij.qc.ca" attr(href) "] ";
+}
+body.nous_joindre#popup h1 {
+	display: none;
+}
+body.nous_joindre#popup a#fermer {
+	display: none;
+}
+body.nous_joindre#popup #logo {
+	padding-bottom: 15px; display: block;
+}
+#entete h1 a img {
+	display: block !important;
+}

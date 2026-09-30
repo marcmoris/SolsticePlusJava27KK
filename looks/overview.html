@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Compiere Looks Overview</title>
+</head>
+<body>
+<p> <a href="http://www.compiere.org/looks/index.html"> <img align="right" src="http://www.compiere.org/looks/CompiereLooks120x60.gif" width="120" height="60" alt="Compiere Looks" border="0"> 
+  </a> Compiere Looks is a 3D extension of the Java Metal Look and Feel. </p>
+<p>For updates 
+  check <a href="http://www.compiere.org/looks/index.html">http://www.compiere.org/looks</a>.</p>
+<h2>Overview</h2>
+<p>Compiere Looks was inspired by the <a href="http://www.incors.org" target="_blank">Kunststoff</a> 
+  Look and Feel and adds color capabilities as well as texture backgrounds. Compiere 
+  Looks is free and Open Source.</p>
+<p>Compiere Looks are based on Java 1.4.0.</p>
+<p>Compiere Looks Utilities allow you to change the Look and Feel of your application 
+  by the individual user. This is not restricted to the standard and Compiere 
+  Looks, but also <a href="http://www.incors.org" target="_blank">Kunststoff</a>. 
+  You can also define your own Theme.</p>
+<p><b><a href="constant-values.html">Constants</a></b></p>
+<h2>Start Options</h2>
+<h3>Change the default Look &amp; Feel</h3>
+<p>You can change the default Look &amp; Feel by editing or adding the file <a href="/looks/swing.properties">swing.properties</a> 
+  in the folder $JAVA_HOME/jre/lib</p>
+<h3>Start via CompierePLAF</h3>
+<p>You can change the Look &amp; Feel to the one selected by starting via CompmierePLAF. 
+  Example:</p>
+<pre>  java -cp CompiereLooks.jar;SwingSet2.jar 
+    org.compiere.plaf.CompierePLAF SwingSet2</pre>
+<p>This tries to invoke the <i>main</i> method of the class of if not found the 
+  constructor without parameters.</p>
+<h3>Modify <i>main</i> Method</h3>
+<p>Just add the line:</p>
+<pre>  CompierePLAF.setPLAF();</pre>
+<h3>Change the Look &amp; Feel</h3>
+<p>You set the Look &amp; Feel by invoking the Compiere PLAF Editor:</p>
+<p>Stand alone:</p>
+<pre>  java -jar CompiereLooks.jar
+  java -cp CompiereLooks.jar org.compiere.plaf.CompierePLAF</pre>
+<p>or within your program by</p>
+<pre>  new CompierePLAFEditor ();</pre>
+<p>and from a Dialog or Frame to change the Look and Feel of your current windows 
+  via</p>
+<pre>  new CompierePLAFEditor (this);
+</pre>
+<p>You can also set the Compiere Look directly:</p>
+<pre>  UIManager.setLookAndFeel
+    (new org.compiere.plaf.CompiereLookAndFeel());</pre>
+<p>&nbsp;</p>
+</body>
+</html>

@@ -1,0 +1,124 @@
+package solstice.fop;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.sql.SQLException;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.avalon.framework.logger.ConsoleLogger;
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.fop.apps.Driver;
+import org.apache.fop.apps.FOPException;
+import org.apache.fop.messaging.MessageHandler;
+
+import solstice.model.P_System_Parameters;
+
+/**
+ * Cette classe sert à générer un PDF à partir d'un XSLT-FO et d'un XML
+ * @author frafor01
+ */
+public class PdfGenerator
+{
+
+	/**
+	* Constructeur
+	**/
+	public PdfGenerator() throws Exception
+	{
+	}
+	
+	/**
+	 * Cette méthode sert à générer un PDF à partir d'un générateur de XML et du
+	 * nom d'une ressource dans le jar courant
+	 * @param xmlGenerator
+	 * @param xslt Le nom du fichier XSLT-FO sur le serveur web
+	 * @param outputStream Le flux de sortie pour le PDF
+	 */
+	public void generatePdf(IXmlGenerator xmlGenerator, String xsltFile, OutputStream outputPdf)
+		throws IOException, FOPException, TransformerException, SQLException
+	{
+		InputStream inputXslt = null;
+		ByteArrayInputStream inputXml = null;
+		ByteArrayOutputStream outputXml = null;
+
+		String webAppURL = String.valueOf(P_System_Parameters.getParameterValue("WebAppURL"));
+
+		try
+		{
+			outputXml = new ByteArrayOutputStream();
+			xmlGenerator.setBaseUrl(webAppURL + "xslt/");
+			xmlGenerator.generateXml(outputXml);
+			if(xmlGenerator.containsData())
+			{
+				inputXml = new ByteArrayInputStream(outputXml.toByteArray());
+				
+				URL xsltURL = new URL(webAppURL + "xslt/" + xsltFile);
+				inputXslt = xsltURL.openStream();
+				
+				this.convertXML2PDF(inputXml, inputXslt, outputPdf);
+				outputPdf.flush();
+			}
+		}
+		finally
+		{
+			if(inputXml != null)
+				inputXml.close();
+			
+			if(inputXslt != null)
+				inputXslt.close();
+			
+			if(outputXml != null)
+				outputXml.close();
+		}
+	}
+	
+	/**
+	* methode pour créer un pdf a partir d'un xml,xsl
+	* @params xml,xslt,pdf
+	* @author xml.apache
+	**/
+	private void convertXML2PDF(InputStream inputXml, InputStream inputXslt, OutputStream outputPdf)
+			throws IOException, FOPException, TransformerException
+	{
+		//Construct driver
+		Driver driver = new Driver();
+		
+        //Setup logger
+        Logger logger = new ConsoleLogger(ConsoleLogger.LEVEL_INFO);
+        driver.setLogger(logger);
+        MessageHandler.setScreenLogger(logger);
+
+        //Setup Renderer (output format)
+		driver.setRenderer(Driver.RENDER_PDF);
+		
+		//Setup output
+		driver.setOutputStream(outputPdf);
+		
+		//Setup XSLT
+		TransformerFactory factory = TransformerFactory.newInstance();
+
+		Source xsltSource = new StreamSource(inputXslt);
+		Transformer transformer = factory.newTransformer(xsltSource);
+		
+		//Setup input for XSLT transformation
+		Source xmlSource = new StreamSource(inputXml);
+
+		//Resulting SAX events (the generated FO) must be piped through to FOP
+		Result res = new SAXResult(driver.getContentHandler());
+		
+		//Start XSLT transformation and FOP processing
+		transformer.transform(xmlSource, res);
+	}
+	
+}

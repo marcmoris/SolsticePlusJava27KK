@@ -1,0 +1,915 @@
+<!-- BEGIN: main -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" type="text/css" href="styles/siq.css" />
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>{TITLE}</title>
+
+<link href="CentralController_data/time.css" rel="stylesheet" type="text/css">
+<link href="index.php_fichiers/style.css" rel="stylesheet" type="text/css">
+<!--[if lte IE 6]>
+<link href="../../themes/orange/css/IE6_style.css" rel="stylesheet" type="text/css"/>
+<![endif]-->
+<!--[if IE]>
+<link href="../../themes/orange/css/IE_style.css" rel="stylesheet" type="text/css"/>
+<![endif]-->
+
+<script language="javascript" type="text/javascript">  
+
+ /*Usage
+  * var request = getHTTPObject();
+  * if(request){
+  * AJAX CODE HERE
+  * }
+  *
+  * If getHTTPObject returns false, the browser isn't Ajax compatible. The if
+  * statement checks to see if it exists, then runs the code.
+  */
+ function getHTTPObject() 
+ {
+	var xhr = false;//set to false, so if it fails, do nothing
+	if(window.XMLHttpRequest) 
+	{//detect to see if browser allows this method
+	   var xhr = new XMLHttpRequest();//set var the new request
+ 	} 
+ 	else if(window.ActiveXObject) 
+ 	{//detect to see if browser allows this method
+ 	  try 
+ 	  {
+	    var xhr = new ActiveXObject("Msxml2.XMLHTTP");//try this method first
+   	  } catch(e) 
+   	  {//if it fails move onto the next
+ 	    try 
+ 	    {
+ 	       var xhr = new ActiveXObject("Microsoft.XMLHTTP");//try this method next
+ 	    } catch(e) 
+ 	    {//if that also fails return false.
+ 	    xhr = false;
+            }
+          }
+        }
+   return xhr;//return the value of xhr
+}
+var xmlHttp  
+function showPhase(value, id)  
+{
+   xmlHttp=getHTTPObject();
+   //getXmlHttpObject();  
+   alert("1");  
+   if (xmlHttp==null)  
+   {
+     alert("inside if");  
+     alert ("Browser does not support HTTP Request")  
+     return  
+   }   
+   alert("outside");  
+   var url="getState.jsp"  
+   url=url+"?project="+id  
+   xmlHttp.onreadyprojectchange=projectChange  
+   xmlHttp.open("GET",url,true)  
+   xmlHttp.send(null)  
+}  
+
+function projectChange()   
+{   
+  if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")  
+  {   
+    document.getElementById("phase").innerHTML=xmlHttp.responseText   
+  }   
+}   
+</script>  
+
+
+<script type="text/javascript" src="index.php_fichiers/archive.js"></script>
+<script type="text/javascript" src="CentralController_data/time.js"></script>
+<script type="text/javascript" src="CentralController_data/style.js"></script>
+<link type="text/css" rel="stylesheet" href="CentralController_data/fonts.css">
+<link type="text/css" rel="stylesheet" href="CentralController_data/container.css">
+<link type="text/css" rel="stylesheet" href="CentralController_data/calendar.css">
+<link type="text/css" rel="stylesheet" href="CentralController_data/button.css">
+
+<script type="text/javascript" src="CentralController_data/yahoo-min.js"></script>
+<script type="text/javascript" src="CentralController_data/event-min.js"></script>
+<script type="text/javascript" src="CentralController_data/dom-min.js"></script>
+<script type="text/javascript" src="CentralController_data/container-min.js"></script>
+<script type="text/javascript" src="CentralController_data/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="CentralController_data/element-beta-min.js"></script>
+
+<script type="text/javascript" src="CentralController_data/calendar.js"></script>
+<script type="text/javascript" src="CentralController_data/button-beta-min.js"></script>
+
+<script type="text/javascript" src="CentralController_data/animation-min.js"></script>
+<script type="text/javascript" src="CentralController_data/autocomplete-min.js"></script>
+
+<script type="text/javascript">
+YAHOO.namespace("Solstice.autocomplete");
+
+// TODO: Add functions common to autocomplete here (eg: formatAutoCompleteField)
+YAHOO.Solstice.autocomplete.formatAutoCompleteField = function (obj) {
+	if (obj.value == 'Start Typing for Hints...') {
+		obj.value = '';
+		obj.style.color = '#000000';
+	}
+}
+</script>
+<link type="text/css" rel="stylesheet" href="CentralController_data/autocomplete-skin.css">
+
+<!-- Add common CSS of autocomplete here (eg: #employeeSearchAC) --></head><body class="yui-skin-sam">
+
+<style type="text/css">
+
+.tableTopLeft {
+    background: none;
+}
+.tableTopMiddle {
+    background: none;
+}
+.tableTopRight {
+    background: none;
+}
+.tableMiddleLeft {
+    background: none;
+}
+.tableMiddleRight {
+    background: none;
+}
+.tableBottomLeft {
+    background: none;
+}
+.tableBottomMiddle {
+    background: none;
+}
+.tableBottomRight {
+    background: none;
+}
+
+td {
+    text-align:center;
+}
+
+.durationTd {
+    width:70px;
+}
+
+.selectTd {
+    width:120px;
+}
+
+#frmTimegrid input[type=text] {
+    border: 1px solid #888888;
+    width: 50px;
+}
+
+#frmTimegrid select {
+    width: 120px;
+}
+
+.commentBox {
+    margin-top: 10px;
+    display: none;
+}
+
+</style>
+
+</head>
+<body >
+<div id="overDiv" style="Z-INDEX:1000; VISIBILITY:hidden; POSITION:absolute"></div>
+<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+<tr>
+	<td align="center" valign="middle">{HEADING1}</td>
+	<td align="center" valign="middle">{HEADING2}</td>
+</tr>
+<tr>
+	<td colspan="2" align="center" valign="middle">	<div class="apptitle">{SUBTITLE}</div></td>
+</tr>
+<tr>
+	<td colspan="2" class="line"></td>
+</tr>
+<tr>
+	<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> &middot;&gt; <a class="path" href="admconsult.jsp">Consulter la liste des absences de vos employ&eacute;s à approuver</a></td>
+</tr>
+<tr>
+	<td colspan="2"><div class="pagetitle">{PAGETITLE}</div></td>
+</tr>
+<tr>
+	<td colspan="2"></td>
+</tr>
+</table><br>
+
+<div class="outerbox" style="width: 980px;"><div class="top"><div class="left"></div><div class="right"></div><div class="middle"></div></div><div class="maincontent">
+
+
+
+<!-- Message box: Begins -->
+<!-- Message box: Ends -->
+
+<div class="mainHeading">
+<h2>Edit timesheet for week starting 2007-06-25</h2>
+</div>
+
+<form id="frmTimegrid" name="frmTimegrid" method="post" action="/lib/controllers/CentralController.php?timecode=Time&amp;action=Update_Timeesheet_Grid">
+<table id="tblTimegrid" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<thead>
+
+		<tr>
+			<th class="tableTopLeft"></th>
+	    	<th class="tableTopMiddle" width="120px"></th>
+	    	<th class="tableTopMiddle" width="120px"></th>
+
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+			<th class="tableTopMiddle"></th>
+
+			<th class="tableTopRight"></th>
+		</tr>
+
+		<tr>
+			<th class="tableMiddleLeft"></th>
+			<th class="tableMiddleMiddle">Project</th>
+			<th class="tableMiddleMiddle">Activity</th>
+
+			<th class="tableMiddleMiddle">
+			Monday 2007-06-25			<input name="hdnReportedDate-0" value="2007-06-25" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Tuesday 2007-06-26			<input name="hdnReportedDate-1" value="2007-06-26" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Wednesday 2007-06-27			<input name="hdnReportedDate-2" value="2007-06-27" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Thursday 2007-06-28			<input name="hdnReportedDate-3" value="2007-06-28" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Friday 2007-06-29			<input name="hdnReportedDate-4" value="2007-06-29" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Saturday 2007-06-30			<input name="hdnReportedDate-5" value="2007-06-30" type="hidden">
+			</th>
+			<th class="tableMiddleMiddle">
+			Sunday 2007-07-01			<input name="hdnReportedDate-6" value="2007-07-01" type="hidden">
+			</th>
+
+			<th class="tableMiddleRight"></th>
+
+		</tr>
+
+	</thead>
+
+	<tbody>
+		<tr id="row-0">
+
+			<td class="tableMiddleLeft"></td>
+
+			<td class="selectTd" id="cmbProject-0-td">
+					<select name="cmbProject-0" id="project" onchange="showPhase(this.value, this.id)">
+												<option value="1">
+				Internal - Internal				</option>
+								<option value="1000003" selected="selected">
+				Janet Billinks - Brochures				</option>
+								<option value="1000004">
+				New Office Technologies Pvt Ltd - AccountingSys				</option>
+								<option value="1000005">
+				New Office Technologies Pvt Ltd - BillingSys				</option>
+								</select>
+			</td>
+
+			<td class="selectTd" id="cmbActivity-0-td">
+								<select name="cmbActivity-0" id="cmbActivity-0">
+								<option value="4" selected="selected">
+				Brochures				</option>
+
+				</select>
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-0" id="txtDuration-0-0" maxlength="5" type="text">
+				<textarea name="txtComment-0-0" rows="2" cols="8" class="commentBox"></textarea>
+				
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-1" value="6" id="txtDuration-0-1" maxlength="5" type="text">
+				<textarea name="txtComment-0-1" rows="2" cols="8" class="commentBox">Rearch on the material requierments</textarea>
+				
+								<input name="hdnTimeEventId-0-1" value="3" type="hidden">
+				<input name="hdnDuration-0-1" value="6" type="hidden">
+				<input name="hdntxtComment-0-1" value="Rearch on the material requierments" type="hidden">
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-2" id="txtDuration-0-2" maxlength="5" type="text">
+				<textarea name="txtComment-0-2" rows="2" cols="8" class="commentBox"></textarea>
+				
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-3" id="txtDuration-0-3" maxlength="5" type="text">
+				<textarea name="txtComment-0-3" rows="2" cols="8" class="commentBox"></textarea>
+				
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-4" value="7" id="txtDuration-0-4" maxlength="5" type="text">
+				<textarea name="txtComment-0-4" rows="2" cols="8" class="commentBox">SEarch for the prinitn agency</textarea>
+				
+								<input name="hdnTimeEventId-0-4" value="4" type="hidden">
+				<input name="hdnDuration-0-4" value="7" type="hidden">
+				<input name="hdntxtComment-0-4" value="SEarch for the prinitn agency" type="hidden">
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-5" id="txtDuration-0-5" maxlength="5" type="text">
+				<textarea name="txtComment-0-5" rows="2" cols="8" class="commentBox"></textarea>
+				
+					
+							
+			</td>
+			<td calss="durationTd">
+				<input name="txtDuration-0-6" id="txtDuration-0-6" maxlength="5" type="text">
+				<textarea name="txtComment-0-6" rows="2" cols="8" class="commentBox"></textarea>
+				
+					
+							
+			</td>
+
+			<td class="tableMiddleRight"></td>
+
+		<input name="hdnProject-0" value="4" type="hidden">
+		<input name="hdnActivity-0" value="4" type="hidden">
+
+		</tr>
+
+
+
+	</tbody>
+
+	<tfoot>
+
+	  	<tr>
+			<td class="tableBottomLeft"></td>
+			<td class="tableBottomMiddle"></td>
+			<td class="tableBottomMiddle"></td>
+
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+			<td class="tableBottomMiddle">
+			</td>
+
+			<td class="tableBottomRight"></td>
+		</tr>
+  	</tfoot>
+</table>
+
+<p id="controls">
+
+
+<input name="txtEmployeeId" value="2" type="hidden">
+<input name="txtTimesheetId" value="2" type="hidden">
+<input name="txtStartDate" value="2007-06-25" type="hidden">
+<input name="txtEndDate" value="2007-07-01" type="hidden">
+<input name="hdnGridCount" id="hdnGridCount" value="1" type="hidden">
+<input name="hdnDatesCount" id="hdnDatesCount" value="7" type="hidden">
+<input name="hdnShowComments" id="hdnShowComments" value="No" type="hidden">
+
+
+</p><div class="formbuttons">
+
+<input class="updatebutton" onclick="backToTimesheetView(); return false;" onmouseover="moverButton(this);" onmouseout="moutButton(this);" name="btnBack" id="btnBack" value="Back" type="button">
+<input class="updatebutton" onclick="addRow(); return false;" onmouseover="moverButton(this);" onmouseout="moutButton(this);" name="btnAddRow" id="btnAddRow" value="Add Row" type="button">
+<input class="updatebutton" onclick="removeRow(); return false;" onmouseover="moverButton(this);" onmouseout="moutButton(this);" name="btnRemoveRow" id="btnRemoveRow" value="Remove Row" type="button">
+<input class="savebutton savebuttonhov" onclick="actionUpdate(); return false;" onmouseover="moverButton(this);" onmouseout="moutButton(this);" name="btnSave" id="btnSave" value="Save" type="button">
+<input class="resetbutton" onclick="resetTimesheetGrid()" onmouseover="moverButton(this);" onmouseout="moutButton(this);" value="Reset" type="button">
+<input class="updatebutton" onmouseover="moverButton(this);" onmouseout="moutButton(this);" name="toggleComments" id="toggleComments" value="Add Comments" type="button">
+</div>
+
+</form>
+
+</div><div class="bottom"><div class="left"></div><div class="right"></div><div class="middle"></div></div></div>
+
+<div class="requirednotice">
+	Deleted projects/activities are marked with an asterik <span class="error">*</span>. Click on a project/activity to edit.</div>
+
+<form method="post" id="resetForm" action="/lib/controllers/CentralController.php?timecode=Time&amp;action=Edit_Timesheet_Grid" style="display: none;">
+	<input name="txtTimesheetId" value="2" type="hidden">
+	<input name="txtEmployeeId" value="2" type="hidden">
+	<input name="txtTimesheetPeriodId" value="1" type="hidden">
+	<input name="txtStartDate" value="2007-06-25" type="hidden">
+	<input name="txtEndDate" value="2007-07-01" type="hidden">	
+</form>
+
+<script type="text/javascript" src="CentralController_data/jquery.js"></script>
+<script type="text/javascript">
+	//<![CDATA[
+
+	function trimResponse(value) {
+	    return value.replace(/^\s+|\s+$/g,"");
+	}
+
+	/* Populate project activities: Ends */
+
+	/* Going back to Timesheet view */
+
+	function backToTimesheetView() {
+		document.frmTimegrid.action = '/lib/controllers/CentralController.php?timecode=Time&action=View_Timesheet';
+		document.frmTimegrid.submit();
+	}
+
+	/* Submitting Timegrid */
+
+	function actionUpdate() {
+		if (validateTimegrid()) {
+			document.frmTimegrid.submit();
+		}
+	}
+
+	/* Adding a row to grid: Begins */
+
+	function addRow() {
+
+		var tbody = $s('tblTimegrid').getElementsByTagName('tbody')[0];
+		var rowNo = tbody.rows.length;
+		row = document.createElement('tr');
+
+		/* Adding left most td */
+		leftCell = document.createElement('td');
+		leftCell.className = 'tableMiddleLeft';
+		row.appendChild(leftCell);
+
+		/* Adding projects select box */
+		projectCell = document.createElement('td');
+
+		selectName = 'cmbProject-'+ rowNo;
+
+		projectSelect = '<select name="' + selectName + '" id="' + selectName + '"';
+		projectSelect += 'onchange="showPhase($s(\'' + selectName + '\').value, \'' + selectName + '\');"';
+		projectSelect += '>';
+
+		projectSelect += '<option value="-1">-- Select a Project --</option>';
+				projectSelect += '<option value="1">Internal - Internal</option>';
+				projectSelect += '<option value="4">Janet Billinks - Brochures</option>';
+				projectSelect += '<option value="2">New Office Technologies Pvt Ltd - AccountingSys</option>';
+				projectSelect += '<option value="3">New Office Technologies Pvt Ltd - BillingSys</option>';
+		
+		projectSelect += '</select>';
+
+		projectCell.innerHTML = projectSelect;
+		row.appendChild(projectCell);
+
+		/* Adding activities select box */
+		activityCell = document.createElement('td');
+		var activitySelect = document.createElement('select');
+		activitySelect.style.width= "125px";
+		activitySelect.name = 'cmbActivity-'+ rowNo;
+		activitySelect.id = 'cmbActivity-'+ rowNo;
+		activitySelect.options[0] = new Option('-- Select a Project First --', '-1');
+		activityCell.appendChild(activitySelect);
+		row.appendChild(activityCell);
+
+		/* Adding duration input boxes */
+
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 0;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 0;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 0;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 1;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 1;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 1;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 2;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 2;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 2;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 3;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 3;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 3;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 4;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 4;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 4;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 5;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 5;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 5;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		durationCell = document.createElement('td');
+		
+		/* Adding input box */
+		var durationInput = document.createElement('input');
+		durationInput.type = 'text';
+  		durationInput.name = 'txtDuration-' + rowNo + '-' + 6;
+  		durationInput.id = 'txtDuration-' + rowNo + '-' + 6;
+  		durationInput.maxLength = 5;
+  		durationCell.appendChild(durationInput);
+		
+		/* Adding text area */
+		var durationComment = document.createElement('textarea');
+		var durationCommentName = 'txtComment-' + rowNo + '-' + 6;
+		durationComment.setAttribute("name", durationCommentName);
+		durationComment.setAttribute("cols","8");
+		durationComment.setAttribute("rows","2");
+		durationComment.setAttribute("class","commentBox");
+		if (!displayComments) {
+			durationComment.setAttribute("style","display:none");
+		} else {
+		    durationComment.setAttribute("style","display:block");
+		}
+		durationCell.appendChild(durationComment);
+		
+		row.appendChild(durationCell);
+		
+		
+		/* Adding right most td */
+		rightCell = document.createElement('td');
+		rightCell.className = 'tableMiddleRight';
+		row.appendChild(rightCell);
+
+		tbody.appendChild(row);
+
+		/* Incrementing grid count (Grid count is used in EXTRACTOR_TimeEvent) */
+
+		var gridCount =	$s('hdnGridCount');
+		gridCount.value = parseInt(gridCount.value) + 1;
+
+	}
+
+	/* Adding a row to grid: Ends */
+
+	/* Removing a row from grid */
+
+	function removeRow() {
+
+		var tbody = $s('tblTimegrid').getElementsByTagName('tbody')[0];
+		var rowNo = tbody.rows.length;
+		var gCount = 1;
+
+		if (rowNo > gCount) {
+
+		    tbody.deleteRow(rowNo-1);
+
+			/* Decrementing grid count (Grid count is used in EXTRACTOR_TimeEvent) */
+
+			var gridCount =	$s('hdnGridCount');
+			gridCount.value = parseInt(gridCount.value) - 1;
+
+		}
+
+	}
+
+	function changeDeletedProject(id) {
+		$s(id + '-td').removeChild($s(id + '-span'));
+		$s(id).style.display = 'block';
+		$s(id).disabled = false;
+
+		activitySelectBoxId = id.replace('Project', 'Activity');
+		if ($s(activitySelectBoxId).disabled) {
+			changeDeletedProject(activitySelectBoxId);
+		}
+	}
+
+	function changeDeletedActivity(id) {
+		$s(id + '-td').removeChild($s(id + '-span'));
+		$s(id).style.display = 'block';
+		$s(id).disabled = false;
+
+		projectSelectBoxId = id.replace('Activity', 'Project');
+		if ($s(projectSelectBoxId).disabled) {
+			changeDeletedProject(projectSelectBoxId);
+		}
+	}
+
+	function resetTimesheetGrid() {
+		$s('resetForm').submit();
+	}
+
+	/* Validating timegrid: Begins */
+
+	function validateTimegrid() {
+
+	    var gridCount =	$s('hdnGridCount').value;
+	    var datesCount = $s('hdnDatesCount').value;
+
+		/* Checking durations entered */
+
+	    var pattern = /^\d+.?\d*$/;
+	    var durationFlag = true;
+
+	    for (var i=0; i<gridCount; i++) {
+
+	        for (var j=0; j<datesCount; j++) {
+
+	            var durationId = 'txtDuration-'+i+'-'+j;
+	            var duration = $s(durationId).value;
+
+	            if (duration != '' && duration.match(pattern)==null) {
+					durationFlag = false;
+	            } else if (duration > 24) {
+	                durationFlag = false;
+	            }
+
+	        }
+
+	    }
+
+	    if (!durationFlag) {
+	        alert('Invalid duration specified');
+	        return false;
+	    }
+
+	    /* Checking for duplicate rows */
+
+		var duplicateFlag = true;
+	    var activities = new Array();
+	    var duplicates = new Array();
+
+	    for (var i=0; i<gridCount; i++) {
+
+	    	var projectId = $s('cmbProject-'+i).value;
+	    	var activityId = $s('cmbActivity-'+i).value;
+
+	    	if (projectId > -1 && activityId > -1) { // Checking whether projectId and activityId are not negative
+
+	    		var value = projectId+'-'+activityId;
+
+		    	if (activities.length > 0) {
+
+		    	    for (var j=0; j<i; j++) {
+
+		    	        if (activities[j] == value) {
+		    	        	duplicates[duplicates.length] = value;
+		    	        } else {
+		    	            activities[activities.length] = value;
+		    	        }
+
+		    	    }
+
+		    	} else {
+		    	    activities[activities.length] = value;
+		    	}
+
+	    	}
+
+	    }
+
+		if (duplicates.length > 0) {
+		    alert('Duplicate rows found');
+		    return false;
+		}
+
+		/* For checking all empty rows */
+
+		var emptyProjectFlag = true;
+		var emptyActivityFlag = true;
+
+		for (var i=0; i<gridCount; i++) {
+
+			var projectId = $s('cmbProject-'+i).value;
+			if (!($s('cmbProject-'+i).disabled) && projectId == -1) {
+			    emptyProjectFlag = false;
+			}
+
+			var activityId = $s('cmbActivity-'+i).value;
+			if (!($s('cmbActivity-'+i).disabled) && activityId == -1) {
+			    emptyActivityFlag = false;
+			}
+
+		}
+
+		if (!emptyProjectFlag) {
+		    alert('Please select a project');
+		    return false;
+		}
+
+		if (!emptyActivityFlag) {
+		    alert('Please select an activity');
+		    return false;
+		}
+
+		/* Checking whether day's total duration is more than 24 hours */
+
+		for (var i=0; i<datesCount; i++) {
+
+			var dayTotal = 0;
+
+		    for (var j=0; j<gridCount; j++) {
+
+		        dayTotal = dayTotal + Number($s('txtDuration-'+j+'-'+i).value);
+
+		    }
+
+		    if (dayTotal > 24) {
+		        alert('Total duration of a day cannot exceed 24 hours');
+		        return false;
+		    }
+
+		}
+
+		return true;
+
+	}
+
+	/* Validating timegrid: Ends */
+
+	/* Making table corners round */
+
+	currFocus = $s("cmbProject-0");
+	currFocus.focus();
+	if (document.getElementById && document.createElement) {
+	    roundBorder('outerbox');
+	}
+	
+	/* ID function that doesn't conflict with jQuery */
+	
+	function $s(id) {
+		return document.getElementById(id);
+	}
+	
+	/* Toggling comments */
+	
+	var displayComments = false;
+	
+	$(document).ready(function() {
+		
+		$('#toggleComments').click(function(){
+			
+			if (!displayComments) {
+			    $('.commentBox').show();
+			    $('#toggleComments').attr('value', 'Hide Comments');
+			    $('#hdnShowComments').attr('value', 'Yes');
+			    displayComments = true;
+			} else {
+			    $('.commentBox').hide();
+			    $('#toggleComments').attr('value', 'Add Comments');
+			    $('#hdnShowComments').attr('value', 'No');
+			    displayComments = false;
+			}
+			
+		});
+		
+	});
+
+	//]]>
+</script>
+</body></html>
+<!-- END: main -->

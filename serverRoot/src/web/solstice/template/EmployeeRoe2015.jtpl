@@ -1,0 +1,763 @@
+<!-- BEGIN: main -->
+<html>
+	<head>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<link rel="stylesheet" type="text/css" href="styles/siq.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/principal.css?v=3" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/thickbox.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="/solstice/soquij/css/corpo.css" />
+<script language="javascript">
+   function saveForm()
+   {
+      document.mainForm.action.value = "save";
+      document.mainForm.submit();
+   }
+
+   function updatedForm()
+   {
+      if(confirm("Voulez-vous vraiment recalculer ce relevé d'emploi?"))
+      {
+    	  document.mainForm.action.value = "updated";
+	      document.mainForm.submit();
+      }
+   }
+
+   function copyForm()
+   {
+      if(confirm("Voulez-vous vraiment copier ce relevé d'emploi?"))
+      {
+    	  document.mainForm.action.value = "copy";
+	      document.mainForm.submit();
+      }
+   }
+
+   function exportForm()
+   {
+	     document.mainForm.action.value = "export";
+	     document.mainForm.submit();
+   }
+	   
+   
+   function deleteRoe()
+   {
+      if(confirm("Voulez-vous vraiment supprimer ce relevé d'emploi?"))
+      {
+         document.mainForm.action.value = "delete";
+         document.mainForm.submit();
+      }
+   }
+</script>
+	</head>
+	
+<!-- HEADING: -->
+
+		<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+
+			<tr>
+				<td colspan="2">
+				   
+					<a href="/solstice/index.jsp" class="path">Menu principal</a> 
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+
+					<div class="pagetitle">{TITLE}</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				</td>
+			</tr>
+			<tr>
+
+				<td colspan="2">
+
+<form name="mainForm" method="post">
+
+   <input type="hidden" name="action" value="idle">
+   <input type="hidden" name="employeeRoeId" value="{hiddenEmployeeRoeId}">
+   <input type="hidden" name="employeeId" value="{hiddenEmployeeID}">
+     <br />
+      <br />
+  <input type="checkbox" id="OvertimeIncluded" name="OvertimeIncluded" {isOvertimeIncluded} >{OvertimeIncluded} 				   
+     <br />
+      <br />
+   <table border="0" cellspacing="2" cellpadding="0">
+      <tr>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/1.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label01}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{Row01}</td>
+         </tr>
+      </table>
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/2.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label02}</td>
+         </tr>
+         <tr>
+            <td class="tdfield"><input type="text" name="Row2" id="Row2" size="10" value="{Row02}" ></td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/3.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label03}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{Row03}</td>
+         </tr>
+      </table>
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2" rowspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/4.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label04}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{Row04}</td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/5.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label05}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield">{Row05}</td>
+         </tr>
+      </table>
+
+         </td>
+
+      </tr>
+      <tr>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/6.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label06}</td>
+         </tr>
+
+         <tr>
+            <td class="tdfield">
+            	<select name="PayPeriodType" id="PayPeriodType" >
+ 					{PayPeriodType}
+				</select> 
+			</td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+
+      <tr>
+         <td valign="top" colspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/7.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label07}</td>
+         </tr>
+         <tr>
+
+            <td class="tdfield">{Row07}</td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/8.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label08}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{Row08}</td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2" rowspan="3">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/9.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label09}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{Row09}</td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+         <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/10.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label10}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield"><input type="text" name="FirstDayWorked" id="FirstDayWorked" size="10" value="{FirstDayWorked}" ><a href="javascript:show_calendar('mainForm.FirstDayWorked');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a></td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/11.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label11}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield">
+               <input type="text" name="LastDayForWhichPaid" id="LastDayForWhichPaid" size="10" value="{LastDayForWhichPaid}" ><a href="javascript:show_calendar('mainForm.LastDayForWhichPaid');" onMouseOver="window.status='Date Picker'; ('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+
+                        </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/12.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label12}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield">
+
+               <input type="text" name="FinalPayPeriodEndingDate" id="FinalPayPeriodEndingDate" size="10" value="{FinalPayPeriodEndingDate}" ><a href="javascript:show_calendar('mainForm.FinalPayPeriodEndingDate');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+
+                        </td>
+         </tr>
+<!--         <tr> -->
+<!--            <td class="tdlabel" rowspan="2" valign="top" align="center"></td> -->
+<!--           <td class="tdlabel"  width="100%">{LabelPeriod}</td> -->
+<!--         </tr> -->
+<!--         <tr> -->
+<!--            <td class="tdfield">{SelectPeriod}</td> -->
+<!--         </tr> -->
+         
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/13.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label13}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield"> <input type="text" name="EmployeeOccupation" id="EmployeeOccupation" size="60" value="{EmployeeOccupation}" ></td>
+         </tr>
+      </table>
+
+         </td>
+
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/14.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label14}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">
+
+               <table width="100%" cellspacing="0" cellpadding="0" border="0">   
+                  <tr>
+                     <td class="tdfield"><input type="radio" name="ExpectedRecallCode" value="Y" {ExpectedRecallCodeY}>&nbsp;{LabelExpectedRecallCodeY}</td>
+                     <td class="tdfield"><input type="text" name="ExpectedDateOfRecall" id="ExpectedDateOfRecall" size="10"  value="{ExpectedDateOfRecall}" ><a href="javascript:show_calendar('mainForm.ExpectedDateOfRecall');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a>
+</td>
+                  </tr>
+                  <tr> 
+                     <td class="tdfield"><input type="radio" name="ExpectedRecallCode" value="N" {ExpectedRecallCodeN}>&nbsp;{LabelExpectedRecallCodeN}</td>
+
+                     <td class="tdfield">&nbsp;</td>
+                  </tr>
+                  <tr>
+                     <td class="tdfield"><input type="radio" name="ExpectedRecallCode" value="U" {ExpectedRecallCodeU}>&nbsp;{LabelExpectedRecallCodeU}</td>
+                     <td class="tdfield">&nbsp;</td>
+                  </tr>
+               </table>
+
+                        </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/15a.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label15a}</td>
+         </tr>
+         <tr>
+            <td class="tdfield"><div align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="TotalInsurableHours" value="{TotalInsurableHours}" style="text-align: right"></div> </td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top" rowspan="2">
+         <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/16.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+
+            <td class="tdlabel" width="100%">{Label16}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">
+
+					<select name="ReasonForIssuingThisROE">
+ 						{ReasonForIssuingThisRoe}
+					</select> 
+					<br>
+					<br>{LabelInfo} 
+					<table width="100%" cellspacing="0" cellpadding="1" > 
+					<tr>
+					    <td class="tdfield"><input type="text" style="width: 100%" name="FirstNameContactPerson" maxlength="40" value="{FirstNameContactPerson}"></td>
+					    <td class="tdfield"><input type="text" style="width: 100%" name="LastNameContactPerson" maxlength="40" value="{LastNameContactPerson}"></td>
+					</tr>
+			         </table>
+					 <br>
+			         <table width="100%" cellspacing="0" cellpadding="1" >
+			         <tr>
+            			<td class="tdfield">{LabelPhoneAreaCode} <input type="text" style="width: 100%" name="PhoneAreaCode" size="3" maxlength="3" value="{PhoneAreaCode}"> </td> 
+						<td class="tdfield">{LabelPhone} <input type="text" style="width: 100%" size="20" name="Phone" maxlength="20" value="{Phone}"> </td>
+						<td class="tdfield">{LabelPhoneExt} <input type="text" style="width: 100%" name="PhoneExt" size="10" maxlength="10" value="{PhoneExt}"></td>
+			         </tr>
+			         </table>
+           </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/15b.gif" border="0"><br><img src="images/star.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label15b}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield"><div align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="TotalInsurableEarnings" value="{TotalInsurableEarnings}" style="text-align: right"></div></td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/15c.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label15c}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield">
+
+               <table width="100%" cellspacing="1" cellpadding="1">
+                  <tr>
+                     <td class="tdlabel">P.P</td>
+                     <td class="tdlabel">{ROE_Block15C2}</td>
+
+                     <td class="tdlabel">P.P</td>
+                     <td class="tdlabel">{ROE_Block15C2}</td>
+                     <td class="tdlabel">P.P</td>
+                     <td class="tdlabel">{ROE_Block15C2}</td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">01</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod01" value="{Row15c01}" style="text-align: right"></td>
+                     <td class="tdlabel">02</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod02" value="{Row15c02}" style="text-align: right"></td>
+                     <td class="tdlabel">03</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod03" value="{Row15c03}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">04</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod04" value="{Row15c04}" style="text-align: right"></td>
+                     <td class="tdlabel">05</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod05" value="{Row15c05}" style="text-align: right"></td>
+                     <td class="tdlabel">06</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod06" value="{Row15c06}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">07</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod07" value="{Row15c07}" style="text-align: right"></td>
+                     <td class="tdlabel">08</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod08" value="{Row15c08}" style="text-align: right"></td>
+                     <td class="tdlabel">09</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod09" value="{Row15c09}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">10</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod10" value="{Row15c10}" style="text-align: right"></td>
+                     <td class="tdlabel">11</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod11" value="{Row15c11}" style="text-align: right"></td>
+                     <td class="tdlabel">12</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod12" value="{Row15c12}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">13</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod13" value="{Row15c13}" style="text-align: right"></td>
+                     <td class="tdlabel">14</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod14" value="{Row15c14}" style="text-align: right"></td>
+                     <td class="tdlabel">15</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod15" value="{Row15c15}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">16</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod16" value="{Row15c16}" style="text-align: right"></td>
+                     <td class="tdlabel">17</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod17" value="{Row15c17}" style="text-align: right"></td>
+                     <td class="tdlabel">18</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod18" value="{Row15c18}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">19</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod19" value="{Row15c19}" style="text-align: right"></td>
+                     <td class="tdlabel">20</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod20" value="{Row15c20}" style="text-align: right"></td>
+                     <td class="tdlabel">21</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod21" value="{Row15c21}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">22</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod22" value="{Row15c22}" style="text-align: right"></td>
+                     <td class="tdlabel">23</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod23" value="{Row15c23}" style="text-align: right"></td>
+                     <td class="tdlabel">24</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod24" value="{Row15c24}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">25</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod25" value="{Row15c25}" style="text-align: right"></td>
+                     <td class="tdlabel">26</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod26" value="{Row15c26}" style="text-align: right"></td>
+                     <td class="tdlabel">27</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod27" value="{Row15c27}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">28</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod28" value="{Row15c28}" style="text-align: right"></td>
+                     <td class="tdlabel">29</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod29" value="{Row15c29}" style="text-align: right"></td>
+                     <td class="tdlabel">30</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod30" value="{Row15c30}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">31</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod31" value="{Row15c31}" style="text-align: right"></td>
+                     <td class="tdlabel">32</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod32" value="{Row15c32}" style="text-align: right"></td>
+                     <td class="tdlabel">33</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod33" value="{Row15c33}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">34</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod34" value="{Row15c34}" style="text-align: right"></td>
+                     <td class="tdlabel">35</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod35" value="{Row15c35}" style="text-align: right"></td>
+                     <td class="tdlabel">36</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod36" value="{Row15c36}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">37</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod37" value="{Row15c37}" style="text-align: right"></td>
+                     <td class="tdlabel">38</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod38" value="{Row15c38}" style="text-align: right"></td>
+                     <td class="tdlabel">39</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod39" value="{Row15c39}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">40</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod40" value="{Row15c40}" style="text-align: right"></td>
+                     <td class="tdlabel">41</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod41" value="{Row15c41}" style="text-align: right"></td>
+                     <td class="tdlabel">42</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod42" value="{Row15c42}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">43</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod43" value="{Row15c43}" style="text-align: right"></td>
+                     <td class="tdlabel">44</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod44" value="{Row15c44}" style="text-align: right"></td>
+                     <td class="tdlabel">45</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod45" value="{Row15c45}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">46</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod46" value="{Row15c46}" style="text-align: right"></td>
+                     <td class="tdlabel">47</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod47" value="{Row15c47}" style="text-align: right"></td>
+                     <td class="tdlabel">48</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod48" value="{Row15c48}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">49</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod49" value="{Row15c49}" style="text-align: right"></td>
+                     <td class="tdlabel">50</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod50" value="{Row15c50}" style="text-align: right"></td>
+                     <td class="tdlabel">51</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod51" value="{Row15c51}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdlabel">52</td>
+
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod52" value="{Row15c52}" style="text-align: right"></td>
+                     <td class="tdlabel">53</td>
+                     <td class="tdfield" align="right"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="EarningsForPayPeriod53" value="{Row15c53}" style="text-align: right"></td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/17.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label17}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">
+               {Label17a} &nbsp; {Label17b}
+               <table width="100%" cellspacing="0" cellpadding="1">
+                  <tr>
+                     <td class="tdfield">$<input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="VacationPayAmount" size="10" value="{VacationPayAmount}" style="text-align: right"></td>
+                     <td class="tdfield"><input type="text" name="StatutoryHolidayPayDate01" id="StatutoryHolidayPayDate01" size="10" value="{StatutoryHolidayPayDate01}" ><a href="javascript:show_calendar('mainForm.StatutoryHolidayPayDate01');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a></td>
+                     <td class="tdfield">$<input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" size="10" name="StatutoryHolidayPayAmount01" value="{StatutoryHolidayPayAmount01}" style="text-align: right"></td>
+
+                  </tr>
+                  <tr>
+                     <td class="tdfield">&nbsp;</td>
+                     <td class="tdfield"><input type="text" name="StatutoryHolidayPayDate02" id="StatutoryHolidayPayDate02" size="10" value="{StatutoryHolidayPayDate02}" ><a href="javascript:show_calendar('mainForm.StatutoryHolidayPayDate02');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a></td>
+                     <td class="tdfield">$<input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" size="10" name="StatutoryHolidayPayAmount02" value="{StatutoryHolidayPayAmount02}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdfield">&nbsp;</td>
+                     <td class="tdfield"><input type="text" name="StatutoryHolidayPayDate03" id="StatutoryHolidayPayDate03" size="10" value="{StatutoryHolidayPayDate03}" ><a href="javascript:show_calendar('mainForm.StatutoryHolidayPayDate03');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a></td>
+                     <td class="tdfield">$<input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" size="10" name="StatutoryHolidayPayAmount03" value="{StatutoryHolidayPayAmount03}" style="text-align: right"></td>
+                  </tr>
+               </table>
+               
+               <br><br>
+               
+               {Label17c}
+               
+               <table border="0">
+                  <tr>
+
+                     <td class="tdfield">
+                        <select name="OtherMoniesCode01">
+	                        {OtherMoniesCode01}
+                        </select>
+                     </td>
+                     <td class="tdfield"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="OtherMoniesAmount01" value="{OtherMoniesAmount01}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdfield">
+
+                        <select name="OtherMoniesCode02">
+	                        {OtherMoniesCode02}
+                        </select>
+                     </td>
+                     <td class="tdfield"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="OtherMoniesAmount02" value="{OtherMoniesAmount02}" style="text-align: right"></td>
+                  </tr>
+                  <tr>
+                     <td class="tdfield">
+                        <select name="OtherMoniesCode03">
+	                        {OtherMoniesCode03}
+                        </select>
+                     </td>
+
+                     <td class="tdfield"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="OtherMoniesAmount03" value="{OtherMoniesAmount03}" style="text-align: right"></td>
+                  </tr>
+               </table>
+                        </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+
+      <tr>
+         <td colspan="2" valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/19.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label19}</td>
+         </tr>
+         <tr>
+
+            <td class="tdfield">
+
+               <table width="100%" border="0">
+                  <tr>
+                     <td class="tdlabel">{Label19b}</td>
+                     <td class="tdlabel">{Label19c}</td>
+                     <td class="tdfield" rowspan="2">
+                        <input type="radio" name="PaidSickPeriod" value="D" {PaidSickPeriodD} >&nbsp; {LabelPaidSickPeriodD} <br>
+                        <input type="radio" name="PaidSickPeriod" value="W" {PaidSickPeriodW} >&nbsp; {LabelPaidSickPeriodW} <br>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="tdfield"><input type="text" name="PaidSickDate" id="PaidSickDate" size="10" value="{PaidSickDate}" ><a href="javascript:show_calendar('mainForm.PaidSickDate');" onMouseOver="window.status='Date Picker'; overlib('{OverLib}'); return true;"onMouseOut="window.status=''; nd(); return true;"><img src="images/finddate.gif" width="19" height="17" border="0"></a></td>
+                     <td class="tdfield"><input onFocus="if(this.value == '&nbsp;') this.value = '';" type="text" name="PaidSickAmount" value="{PaidSickAmount}" style="text-align: right"></td>
+                  </tr>
+
+               </table>
+                        </td>
+         </tr>
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/18.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label18}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">
+
+               <input type="text" style="width: 100%" name="CommentsLine01" maxlength="40" value="{CommentsLine01}"><br>
+               <input type="text" style="width: 100%" name="CommentsLine02" maxlength="40" value="{CommentsLine02}"><br>
+               <input type="text" style="width: 100%" name="CommentsLine03" maxlength="40" value="{CommentsLine03}"><br>
+               <input type="text" style="width: 100%" name="CommentsLine04" maxlength="40" value="{CommentsLine04}"><br>
+                        </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+      <tr>
+         <td valign="top" colspan="2">
+
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/20.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label20}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{ComboBoxLanguage}</td>
+
+         </tr>
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/23.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label23}</td>
+         </tr>
+         <tr>
+            <td class="tdfield">{ComboBoxPrintingLanguage}</td>
+
+         </tr>
+         
+      </table>
+
+         </td>
+         <td valign="top">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/21.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label21}</td>
+
+         </tr>
+         <tr>
+            <td class="tdfield"><input type="text" style="width: 100%" name="Phone2" maxlength="20" value="{Phone2}"> {LabelPhoneExt} <input type="text" style="width: 100%" name="PhoneExt2" maxlength="10" value="{PhoneExt2}"></td>
+         </tr>
+      </table>
+
+         </td>
+
+      </tr>
+      <tr>
+         <td valign="top" colspan="3">
+                  <table height="100%" width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000000">
+         <tr>
+            <td class="tdlabel" rowspan="2" valign="top" align="center"><img src="images/22.gif" border="0"></td>
+            <td class="tdlabel" width="100%">{Label22}</td>
+         </tr>
+
+         <tr>
+            <td class="tdfield">{LabelSignataire} <input type="text" style="width: 100%" name="Signataire2" maxlength="40" value="{Signataire2}"> </td>
+         </tr>
+      </table>
+
+         </td>
+      </tr>
+
+   </table>
+
+   <p align="right">
+      <input type="button" onClick="document.location = 'index.jsp';" value="{Search}">
+<!-- BEGIN: update -->
+      <input type="button" onClick="deleteRoe();" value="{Delete}" >
+      <input type="button" onClick="saveForm();" value="{Save}" >
+      <input type="button" onClick="updatedForm();" value="{Updated}" >
+      <input type="button" onClick="copyForm();" value="{Copy}" >
+<!-- END: update -->
+      <input type="button" onClick="exportForm();" value="Export" >
+   </p>
+   
+</form>
+   
+</td>
+</tr>
+<tr>
+{FOOTING}
+</tr>
+</table>
+</body>
+</html>
+<!-- END: main -->

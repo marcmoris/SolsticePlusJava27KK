@@ -1,0 +1,60 @@
+<!-- BEGIN: main --> 
+
+	<head>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+<link rel="stylesheet" type="text/css" href="{STYLES}">
+
+<style type="text/css">
+	#mainSection .messageTable .lastRow td { border-bottom:1px solid black !important; }
+	
+	#mainSection .messageTable .unread td {
+	font-weight: bold;
+	background-color: #ffffcd;
+}
+	
+</style>
+		<title>Liste des messages &agrave; consulter</title>
+	</head>
+
+	<body>
+
+<!-- HEADING: -->
+
+		<table width="900" align="center" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+				<td colspan="2" class="line"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><a href="/solstice/index.jsp" class="path">Menu principal</a> </td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="pagetitle"><b>Message:</b></div>
+				</td>
+			</tr>
+			<tr>
+	
+	<td colspan="2"></td>
+			</tr>	
+
+			<tr>
+	<td colspan="2"></td>
+			</tr>	
+
+			<tr>
+	
+	<td colspan="2">{MSG}</td>
+			</tr>	
+
+			<tr>
+	<td  valign="top" align="left" >{Attachment} {AttachmentMsg}</td>
+	<td  valign="top" align="right" >{Attachment2} {AttachmentMsg2}</td>
+			</tr>	
+
+	{FOOTING}
+		</table>				
+
+
+	</body>
+</html>
+<!-- END: main -->
