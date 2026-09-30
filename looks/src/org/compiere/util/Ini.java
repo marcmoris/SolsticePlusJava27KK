@@ -311,6 +311,20 @@ public final class Ini implements Serializable
 		}
 	}	//	deleteProperties
 	
+	// 2025-10-29
+	// Encrypt les informaiton pour le fichier properties.
+	public static Properties encryptProperty( )
+	{
+		//	Check/set properties	defaults
+		for (int i = 0; i < PROPERTIES.length; i++)
+		{
+			if (VALUES[i].length() > 0)
+				checkProperty(PROPERTIES[i], VALUES[i]);
+		}
+
+		return s_prop;
+	}
+	
 	/**
 	 *	Load property and set to default, if not existing
 	 *
