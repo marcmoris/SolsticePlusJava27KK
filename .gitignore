@@ -2,6 +2,7 @@
 /bin/
 *.class
 *.zip
+!tools/lib/*.zip
 client/build/
 dbPort/build/
 looks/build/
