@@ -510,18 +510,17 @@ public class TimeValidationServerV2 implements Runnable {
 			Period = P_Period.get(Env.getCtx(), Period_ID, getTrxName());
 
 		for (SheetRecord rec : records) {
-			CalculNet cal = new CalculNet(Env.getCtx(), (Period != null ? Period.getPayDate() : null), getTrxName());
-
 			Trx trx = null;
 			try {
-				String trxName = null;
+				String trxName = Trx.createTrxName("TimeVal_TS_" + rec.timeSheetId);
+				trx = Trx.get(trxName, true);
 				setTrxName(trxName);
 
-				trx = null;
+				CalculNet cal = new CalculNet(Env.getCtx(), (Period != null ? Period.getPayDate() : null), trxName);
 				cal.resetTrxName(trxName);
 
-				Employee = P_Employee.get(Env.getCtx(), rec.employeeId, getTrxName());
-				Period = P_Period.get(Env.getCtx(), rec.periodId, getTrxName());
+				Employee = P_Employee.get(Env.getCtx(), rec.employeeId, trxName);
+				Period = P_Period.get(Env.getCtx(), rec.periodId, trxName);
 
 				TimeSheet = new P_Time_Sheet(Env.getCtx(), rec.timeSheetId, getTrxName());
 
@@ -675,24 +674,36 @@ public class TimeValidationServerV2 implements Runnable {
 						localInserted++;
 					}
 				}
-				if (trx != null)
+				if (trx != null) {
 					trx.commit();
+				}
 			} catch (Exception e) {
-				if (trx != null)
-					trx.rollback();
+				if (trx != null) {
+					try {
+						trx.rollback();
+					} catch (Exception exRollback) {
+						log.log(Level.WARNING, "Rollback failed", exRollback);
+					}
+				}
 				P_Time_Sheet_Error.NewMessage(TimeSheet, P_Time_Sheet_Error.ALERT_SEVERITY_LEVEL_Error,
 						" Internal error - Exception  " + e.toString(), null);
 
 				if (TimeSheet != null) {
 					TimeSheet.setTimeSheetStatus(P_Time_Sheet.TIMESHEETSTATUS_Error);
 					TimeSheet.setIsError(true);
-					TimeSheet.save(m_trxName);
+					TimeSheet.save();
 				}
 
 				log.log(Level.SEVERE, "Validation - timesheet " + rec.timeSheetId, e);
 			} finally {
-				if (trx != null)
-					trx.close();
+				if (trx != null) {
+					try {
+						trx.close();
+					} catch (Exception exClose) {
+						log.log(Level.WARNING, "Close failed", exClose);
+					}
+				}
+				setTrxName(null);
 			}
 		}
 		return localInserted;

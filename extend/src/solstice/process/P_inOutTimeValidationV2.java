@@ -143,8 +143,13 @@ public class P_inOutTimeValidationV2 extends SvrProcess
 				  
 				  MClient m_client = MClient.get(m_model.getCtx(), m_model.getAD_Client_ID());
 				  
-//			      int nbrThread = 500;
-		  		  int nbrThread = Integer.parseInt( PgiUtil.getSolsticeParameter(Env.getCtx(), "CalculPayrollThread") ); 
+			      int nbrThread = 500;
+				  try {
+					  String pThread = PgiUtil.getSolsticeParameter(Env.getCtx(), "CalculPayrollThread");
+					  if (pThread != null && !pThread.trim().isEmpty()) {
+						  nbrThread = Integer.parseInt(pThread.trim());
+					  }
+				  } catch (Exception e) {}
 					
 				  if ( nbrThread > m_model.m_stack.size() )  nbrThread = m_model.m_stack.size();
 				  

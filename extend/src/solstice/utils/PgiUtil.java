@@ -327,8 +327,20 @@ public class PgiUtil
 	}
 
 	
+	private static final java.util.concurrent.ConcurrentHashMap<String, String> s_paramCache = new java.util.concurrent.ConcurrentHashMap<String, String>();
+
+	public static void clearSolsticeParameterCache() {
+		s_paramCache.clear();
+	}
+
 	public static String getSolsticeParameter (Properties ctx, String ParameterName )
 	{
+		if (ParameterName == null)
+			return null;
+		String cached = s_paramCache.get(ParameterName);
+		if (cached != null)
+			return cached;
+
 		String Parameter = null;
 	    String sql = "select top 1 Parameter from P_Solstice_Parameters Where Value = '" + ParameterName + "'";
         PreparedStatement stmt = DB.prepareStatement(sql, null);
@@ -349,6 +361,8 @@ public class PgiUtil
 			return null;
 		}
 		
+		if (Parameter != null)
+			s_paramCache.put(ParameterName, Parameter);
 	    return Parameter;
 	}
 
@@ -1154,7 +1168,13 @@ public class PgiUtil
 	
 	public static void setSolsticeParameter (Properties ctx, String ParameterName, String value )
 	{
-  	    DB.executeUpdate("UPDATE P_Solstice_Parameters set Parameter = '" + value + "' where value = '" + ParameterName + "'", null);		
+  	    DB.executeUpdate("UPDATE P_Solstice_Parameters set Parameter = '" + value + "' where value = '" + ParameterName + "'", null);
+		if (ParameterName != null) {
+			if (value != null)
+				s_paramCache.put(ParameterName, value);
+			else
+				s_paramCache.remove(ParameterName);
+		}
 	}
 
 
