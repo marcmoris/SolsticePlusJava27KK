@@ -1,5 +1,5 @@
 package org.compiere.util;
-// EmailMicrosoftGraphApi — Java 8 compatible
+// EmailMicrosoftGraphApi  -  Java 8 compatible
 
 import java.io.*;
 import java.net.*;
@@ -70,7 +70,7 @@ public final class EmailMicrosoftGraphApi implements Serializable
     }
 
     // =========================================================
-    // send() — utilise HttpURLConnection (Java 8)
+    // send()  -  utilise HttpURLConnection (Java 8)
     // =========================================================
 
     public String send()
@@ -103,9 +103,9 @@ public final class EmailMicrosoftGraphApi implements Serializable
 
             int statusCode = conn.getResponseCode();
 
-            if (statusCode == 202)   // 202 Accepted = succès
+            if (statusCode == 202)   // 202 Accepted = succes
             {
-                log.fine("Success - Graph API sendMail accepted");
+                log.fine("success - Graph API sendMail accepted");
                 m_sentMsg = SENT_OK;
             }
             else
@@ -125,7 +125,7 @@ public final class EmailMicrosoftGraphApi implements Serializable
     }
 
     // =========================================================
-    // OAuth2 — client credentials flow (Java 8)
+    // OAuth2  -  client credentials flow (Java 8)
     // =========================================================
 
     private String getAccessToken() throws Exception
@@ -166,7 +166,7 @@ public final class EmailMicrosoftGraphApi implements Serializable
     }
 
     // =========================================================
-    // Utilitaire — lecture d'un InputStream (remplace readAllBytes)
+    // Utilitaire  -  lecture d'un InputStream (remplace readAllBytes)
     // =========================================================
 
     private String readStream(InputStream is) throws IOException
@@ -231,7 +231,7 @@ public final class EmailMicrosoftGraphApi implements Serializable
             msg.set("replyTo", ra);
         }
 
-        // Pièces jointes
+        // Pieces jointes
         if (m_attachments != null && !m_attachments.isEmpty()) {
             ArrayNode aa = mapper.createArrayNode();
             for (Object att : m_attachments) {
@@ -284,7 +284,7 @@ public final class EmailMicrosoftGraphApi implements Serializable
     }
 
     // =========================================================
-    // Inner class — remplace ByteArrayDataSource
+    // Inner class  -  remplace ByteArrayDataSource
     // =========================================================
 
     public static class RawAttachment {
