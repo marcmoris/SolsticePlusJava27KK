@@ -4,7 +4,6 @@
 *.zip
 client/build/
 dbPort/build/
-lib/
 looks/build/
 print/build/
 tools/build/

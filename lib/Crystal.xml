@@ -1,0 +1,21 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+
+<!DOCTYPE application PUBLIC '-//Sun Microsystems, Inc.//DTD 
+J2EE Application 1.2//EN'
+'http://java.sun.com/j2ee/dtds/application_1_2.dtd'>
+<application>
+	<display-name>Crystal</display-name>
+	<description>Crystal</description>
+	<module>
+		<web>
+			<web-uri>Crystal.war</web-uri>
+			<context-root>/Crystal</context-root>
+		</web>
+	</module>
+	<module>
+		<java>Compiere.jar</java>
+	</module>
+	<module>
+		<java>CompiereSLib.jar</java>
+	</module>
+</application>
