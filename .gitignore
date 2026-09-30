@@ -13,7 +13,8 @@ extend/build/
 base/Base.jar
 dbPort/dbPort.jar
 extend/Extend.jar
-install/
+install/build/
+install/lib/
 serverApps/build/
 serverRoot/build/
 solsticeWebModules/build/
