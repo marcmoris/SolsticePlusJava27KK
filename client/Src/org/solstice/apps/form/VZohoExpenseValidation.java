@@ -87,6 +87,7 @@ import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.KeyNamePair;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.solstice.util.ExcelExportUtil;
 
 import okhttp3.FormBody;
@@ -999,8 +1000,11 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                 "FROM P_Payment p " +
                 "INNER JOIN P_Payment_Gain pg ON pg.P_Payment_ID = p.P_Payment_ID " +
                 "INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16', 'GL16NB', 'GL16NS') " +
+                "INNER JOIN P_Employee ON P_Employee.P_Employee_ID = P.P_Employee_ID " +
                 "WHERE p.AD_Client_ID = " + Env.getAD_Client_ID(m_ctx) + " " +
                 "  AND p.P_Period_ID IN (" + periodInClause + ") " +
+                // Exclure les camionneurs (convention collective n'utilisant pas Zoho).
+                "  AND (P_Employee.P_Collective_Labour_Agr_ID IS NULL OR P_Employee.P_Collective_Labour_Agr_ID <> 1000007) " +
 //                "  AND p.TimeSheetStatus NOT IN ('VO', 'RE') " +
                 "GROUP BY p.P_Payment_ID, p.P_Employee_ID, p.P_Period_ID, p.PayDate, p.TimeSheetStatus, p.NetPay";
 
@@ -1890,8 +1894,8 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                     {
                         PeriodInfo pi = new PeriodInfo();
                         pi.periodId = rs.getInt("P_Period_ID");
-                        pi.startDate = rs.getTimestamp("StartDate");
-                        pi.endDate = rs.getTimestamp("EndDate");
+                        pi.startDate = TimeUtil.trunc(rs.getTimestamp("StartDate"), TimeUtil.TRUNC_DAY);
+                        pi.endDate = TimeUtil.trunc(rs.getTimestamp("EndDate"), TimeUtil.TRUNC_DAY);
                         pi.periodNo = rs.getInt("PeriodNo");
                         pi.name = rs.getString("Name");
                         periods.add(pi);
@@ -2007,7 +2011,23 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                     int empOrgId = orgIdObj != null ? orgIdObj : Env.getAD_Org_ID(m_ctx);
 
                     // R\u00e9soudre la p\u00e9riode
-                    Date refDate = approvedDate != null ? approvedDate : (reimbDate != null ? reimbDate : submittedDate);
+                    // La paie est trait\u00e9e le lundi ou mardi suivant les dates de fin de p\u00e9riode (samedi).
+                    // Si un compte de d\u00e9penses est approuv\u00e9 le lundi ou mardi de traitement, il est pay\u00e9 imm\u00e9diatement.
+                    // On prend donc la date d'approbation (ou de remboursement) - 3 jours pour cibler la bonne p\u00e9riode de paie.
+                    Timestamp refDate = null;
+                    if (approvedDate != null)
+                    {
+                        refDate = TimeUtil.addDays(approvedDate, -3);
+                    }
+                    else if (reimbDate != null)
+                    {
+                        refDate = TimeUtil.addDays(reimbDate, -3);
+                    }
+                    else if (submittedDate != null)
+                    {
+                        refDate = TimeUtil.trunc(submittedDate, TimeUtil.TRUNC_DAY);
+                    }
+
                     int matchedPeriodId = 0;
                     if (refDate != null)
                     {
