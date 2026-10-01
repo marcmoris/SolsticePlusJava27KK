@@ -358,25 +358,24 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         JPanel btnBox = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         btnBox.setOpaque(false);
 
-        btnSyncZoho = createActionButton("\uD83D\uDCE5 Actualiser Zoho Expense", new Color(124, 58, 237));
+        btnSyncZoho = createActionButton("Actualiser Zoho Expense", "Import16.gif");
         btnSyncZoho.setToolTipText("R\u00e9importer et synchroniser les rapports et d\u00e9tails depuis Zoho Expense vers P_Employee_Expensereports_Validation");
 
-        btnRefresh = createActionButton("Actualiser", new Color(37, 99, 235));
+        btnRefresh = createActionButton("Actualiser", "Refresh16.gif");
         btnRefresh.setToolTipText("Recharger et auditer les donn\u00e9es pour les p\u00e9riodes s\u00e9lectionn\u00e9es");
 
-        btnExportExcel = createActionButton("Exporter Excel (.xlsx)", new Color(22, 101, 52));
+        btnExportExcel = createActionButton("Exporter Excel (.xlsx)", "Export16.gif");
         btnExportExcel.setToolTipText("G\u00e9n\u00e9rer un rapport Excel d\u00e9taill\u00e9 avec codes couleurs et synth\u00e8se");
 
-        btnZoomTS = createActionButton("Zoom Feuille de Temps", new Color(107, 114, 128));
+        btnZoomTS = createActionButton("Zoom Feuille Temps", "Zoom16.gif");
         btnZoomTS.setToolTipText("Ouvrir la feuille de temps Solstice de la ligne s\u00e9lectionn\u00e9e");
 
-        btnZoomPay = createActionButton("Zoom Paiement", new Color(107, 114, 128));
+        btnZoomPay = createActionButton("Zoom Paiement", "Zoom16.gif");
         btnZoomPay.setToolTipText("Ouvrir le paiement Solstice de la ligne s\u00e9lectionn\u00e9e");
 
-        btnZoomEmp = createActionButton("Zoom Employ\u00e9", new Color(107, 114, 128));
+        btnZoomEmp = createActionButton("Zoom Employ\u00e9", "Zoom16.gif");
         btnZoomEmp.setToolTipText("Ouvrir la fiche employ\u00e9");
 
-        btnSyncZoho.addActionListener(this);
         btnBox.add(btnSyncZoho);
         btnBox.add(btnRefresh);
         btnBox.add(btnExportExcel);
@@ -492,14 +491,18 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         return panel;
     }
 
-    private JButton createActionButton(String text, Color bg)
+    private JButton createActionButton(String text, String iconName)
     {
         JButton btn = new JButton(text);
+        if (iconName != null)
+        {
+            javax.swing.Icon icon = Env.getImageIcon(iconName);
+            if (icon != null)
+                btn.setIcon(icon);
+        }
         btn.setFont(new Font("Segoe UI", Font.BOLD, 11));
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(bg);
+        btn.setForeground(new Color(25, 35, 60));
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.addActionListener(this);
         return btn;
