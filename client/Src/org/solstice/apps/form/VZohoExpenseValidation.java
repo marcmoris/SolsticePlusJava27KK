@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -88,12 +89,21 @@ import org.compiere.util.KeyNamePair;
 import org.compiere.util.Msg;
 import org.solstice.util.ExcelExportUtil;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 /**
  * Interface d'audit et de validation des remboursements Zoho Expense vs Paie Solstice.
  * <p>
  * Permet de r\u00e9concilier sur une ou plusieurs p\u00e9riodes de paie :
  * <ul>
- *   <li>Les d\u00e9penses import\u00e9es depuis Zoho Expense (P_Employee_Expensereports & Detail)</li>
+ *   <li>Les d\u00e9penses import\u00e9es depuis Zoho Expense (P_Employee_Expensereports_Validation & Detail)</li>
  *   <li>Les feuilles de temps de comptes de d\u00e9penses g\u00e9n\u00e9r\u00e9es (P_Time_Sheet)</li>
  *   <li>Les paiements r\u00e9ellement vers\u00e9s dans la paie (P_Payment & P_Payment_Gain)</li>
  * </ul>
@@ -135,11 +145,16 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
     private JTextField txtSearch;
 
     // Boutons d'action
+    private JButton btnSyncZoho;
     private JButton btnRefresh;
     private JButton btnExportExcel;
     private JButton btnZoomTS;
     private JButton btnZoomPay;
     private JButton btnZoomEmp;
+
+    // Cache jeton OAuth2 Zoho
+    private static String s_cachedToken = null;
+    private static long s_tokenExpiryTime = 0;
 
     // Cartes KPIs
     private JLabel lblKpiZohoTotal;
@@ -343,6 +358,9 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         JPanel btnBox = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         btnBox.setOpaque(false);
 
+        btnSyncZoho = createActionButton("\uD83D\uDCE5 Actualiser Zoho Expense", new Color(124, 58, 237));
+        btnSyncZoho.setToolTipText("R\u00e9importer et synchroniser les rapports et d\u00e9tails depuis Zoho Expense vers P_Employee_Expensereports_Validation");
+
         btnRefresh = createActionButton("Actualiser", new Color(37, 99, 235));
         btnRefresh.setToolTipText("Recharger et auditer les donn\u00e9es pour les p\u00e9riodes s\u00e9lectionn\u00e9es");
 
@@ -358,6 +376,8 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         btnZoomEmp = createActionButton("Zoom Employ\u00e9", new Color(107, 114, 128));
         btnZoomEmp.setToolTipText("Ouvrir la fiche employ\u00e9");
 
+        btnSyncZoho.addActionListener(this);
+        btnBox.add(btnSyncZoho);
         btnBox.add(btnRefresh);
         btnBox.add(btnExportExcel);
         btnBox.add(btnZoomTS);
@@ -700,7 +720,7 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         comboPeriodFrom.removeAllItems();
         comboPeriodTo.removeAllItems();
 
-        String sql = "SELECT p.P_Period_ID, p.PeriodNo, p.Name, p.StartDate, p.EndDate, p.Status, y.FiscalYear " +
+        String sql = "SELECT p.P_Period_ID, p.PeriodNo, p.Name, p.StartDate, p.EndDate, p.PeriodStatus Status, y.Year FiscalYear " +
                      "FROM P_Period p " +
                      "INNER JOIN P_Year y ON y.P_Year_ID = p.P_Year_ID " +
                      "WHERE p.AD_Client_ID = " + Env.getAD_Client_ID(m_ctx) + " " +
@@ -861,17 +881,17 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
 
         try
         {
-            // 1. Charger tous les rapports Zoho import\u00e9s dans la p\u00e9riode
+            // 1. Charger tous les rapports Zoho import\u00e9s dans la p\u00e9riode depuis la table permanente P_Employee_Expensereports_Validation
             String sqlZoho = "SELECT " +
-                " zr.P_Employee_Expensereports_ID, zr.Report_Id, zr.Report_Number, zr.Report_Name, zr.Description, " +
+                " zr.P_Employee_Expensereports_Validation_ID, zr.P_Employee_Expensereports_ID, zr.Report_Id, zr.Report_Number, zr.Report_Name, zr.Description, " +
                 " zr.P_Employee_ID, zr.Employee_Number AS Zoho_Emp_No, emp.Value AS Solstice_Emp_No, " +
                 " emp.Name AS Emp_LastName, emp.FirstName AS Emp_FirstName, " +
                 " zr.P_Period_ID, per.Name AS Period_Name, per.PeriodNo, " +
                 " zr.P_Time_Sheet_ID, zr.P_Payment_ID, " +
                 " zr.Reimbursable_Total, zr.Amount_To_Be_Reimbursed, zr.Total, " +
                 " zr.Status AS Zoho_Status, zr.Approved_Date, zr.Submitted_Date, zr.Reimbursement_Date, " +
-                " zr.Is_Reimbursable " +
-                "FROM P_Employee_Expensereports zr " +
+                " CASE WHEN zr.Reimbursable_Total > 0 THEN 'Y' ELSE 'N' END AS Is_Reimbursable " +
+                "FROM P_Employee_Expensereports_Validation zr " +
                 "LEFT JOIN P_Employee emp ON emp.P_Employee_ID = zr.P_Employee_ID " +
                 "LEFT JOIN P_Period per ON per.P_Period_ID = zr.P_Period_ID " +
                 "WHERE zr.AD_Client_ID = " + Env.getAD_Client_ID(m_ctx) + " " +
@@ -889,7 +909,8 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                 while (rs.next())
                 {
                     ZohoRowRaw z = new ZohoRowRaw();
-                    z.expenseReportId = rs.getInt("P_Employee_Expensereports_ID");
+                    int valId = rs.getInt("P_Employee_Expensereports_Validation_ID");
+                    z.expenseReportId = valId > 0 ? valId : rs.getInt("P_Employee_Expensereports_ID");
                     z.reportId = rs.getString("Report_Id");
                     z.reportNumber = rs.getString("Report_Number");
                     z.reportName = rs.getString("Report_Name");
@@ -924,13 +945,13 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
 
             // 2. Charger toutes les feuilles de temps de comptes de d\u00e9penses (ExpenseAccount)
             String sqlTS = "SELECT ts.P_Time_Sheet_ID, ts.P_Employee_ID, ts.P_Period_ID, ts.TimesheetStatus, ts.P_Payment_ID, " +
-                " pay.PayDate, pay.DocStatus, pay.NetPay, gains.Total_Gain_Amt " +
+                " pay.PayDate, pay.TimeSheetStatus DocStatus, pay.NetPay, gains.Total_Gain_Amt " +
                 "FROM P_Time_Sheet ts " +
                 "LEFT JOIN P_Payment pay ON pay.P_Payment_ID = ts.P_Payment_ID " +
                 "LEFT JOIN ( " +
                 "    SELECT pg.P_Payment_ID, SUM(pg.AmountCalc) AS Total_Gain_Amt " +
                 "    FROM P_Payment_Gain pg " +
-                "    INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16') " +
+                "    INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16', 'GL16NB', 'GL16NS') " +
                 "    GROUP BY pg.P_Payment_ID " +
                 ") gains ON gains.P_Payment_ID = ts.P_Payment_ID " +
                 "WHERE ts.SheetType = 'ExpenseAccount' " +
@@ -970,15 +991,15 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
             }
 
             // 3. Charger tous les paiements avec gains de d\u00e9penses (GL02/GL14/GL15/GL16) m\u00eame sans feuille
-            String sqlAllGains = "SELECT p.P_Payment_ID, p.P_Employee_ID, p.P_Period_ID, p.PayDate, p.DocStatus, " +
+            String sqlAllGains = "SELECT p.P_Payment_ID, p.P_Employee_ID, p.P_Period_ID, p.PayDate, p.TimeSheetStatus DocStatus, " +
                 " p.NetPay, SUM(pg.AmountCalc) AS Expense_Gains_Amt " +
                 "FROM P_Payment p " +
                 "INNER JOIN P_Payment_Gain pg ON pg.P_Payment_ID = p.P_Payment_ID " +
-                "INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16') " +
+                "INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16', 'GL16NB', 'GL16NS') " +
                 "WHERE p.AD_Client_ID = " + Env.getAD_Client_ID(m_ctx) + " " +
                 "  AND p.P_Period_ID IN (" + periodInClause + ") " +
-                "  AND p.DocStatus NOT IN ('VO', 'RE') " +
-                "GROUP BY p.P_Payment_ID, p.P_Employee_ID, p.P_Period_ID, p.PayDate, p.DocStatus, p.NetPay";
+//                "  AND p.TimeSheetStatus NOT IN ('VO', 'RE') " +
+                "GROUP BY p.P_Payment_ID, p.P_Employee_ID, p.P_Period_ID, p.PayDate, p.TimeSheetStatus, p.NetPay";
 
             Map<Integer, List<PaymentGainSummary>> empPaymentsMap = new HashMap<Integer, List<PaymentGainSummary>>();
             try (PreparedStatement pstmt = DB.prepareStatement(sqlAllGains, null);
@@ -1453,11 +1474,13 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
 
         // 1. Charger le d\u00e9tail des lignes Zoho (P_Employee_Expensereports_Detail)
         m_currentZohoDetails.clear();
-        if (row.expenseReportId > 0)
+        if (row.expenseReportId > 0 || (row.reportId != null && !row.reportId.isEmpty()))
         {
+            String repIdEscaped = row.reportId != null ? DB.TO_STRING(row.reportId) : "''";
             String sql = "SELECT Category_Name, Amount, tps_amt, tvq_amt, tvh_amt, Item_Date, Description, Gl_Code " +
                 "FROM P_Employee_Expensereports_Detail " +
-                "WHERE P_Employee_Expensereports_ID = " + row.expenseReportId + " " +
+                "WHERE (P_Employee_Expensereports_ID = " + row.expenseReportId + " " +
+                "       OR (report_id IS NOT NULL AND report_id = " + repIdEscaped + ")) " +
                 "ORDER BY Item_Date ASC, P_Employee_Expensereports_Detail_ID ASC";
 
             try (PreparedStatement pstmt = DB.prepareStatement(sql, null);
@@ -1480,6 +1503,33 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
             catch (Exception e)
             {
                 s_log.log(Level.SEVERE, "loadZohoDetail", e);
+            }
+
+            // Si les d\u00e9tails ne sont pas encore t\u00e9l\u00e9charg\u00e9s, les r\u00e9cup\u00e9rer \u00e0 la vol\u00e9e depuis Zoho
+            if (m_currentZohoDetails.isEmpty() && row.reportId != null && !row.reportId.isEmpty())
+            {
+                fetchSingleReportDetailFromZoho(row.expenseReportId, row.reportId);
+                try (PreparedStatement pstmt = DB.prepareStatement(sql, null);
+                     ResultSet rs = pstmt.executeQuery())
+                {
+                    while (rs.next())
+                    {
+                        ZohoItemDetail d = new ZohoItemDetail();
+                        d.category = rs.getString("Category_Name");
+                        d.amount = rs.getBigDecimal("Amount");
+                        d.tps = rs.getBigDecimal("tps_amt");
+                        d.tvq = rs.getBigDecimal("tvq_amt");
+                        d.tvh = rs.getBigDecimal("tvh_amt");
+                        d.itemDate = rs.getTimestamp("Item_Date");
+                        d.description = rs.getString("Description");
+                        d.glCode = rs.getString("Gl_Code");
+                        m_currentZohoDetails.add(d);
+                    }
+                }
+                catch (Exception e)
+                {
+                    s_log.log(Level.SEVERE, "loadZohoDetail reload", e);
+                }
             }
         }
         zohoDetailModel.fireTableDataChanged();
@@ -1519,7 +1569,7 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         m_currentEmpHistory.clear();
         if (row.employeeId > 0)
         {
-            String sql = "SELECT p.P_Payment_ID, per.Name AS Period_Name, p.PayDate, p.DocStatus, " +
+            String sql = "SELECT p.P_Payment_ID, per.Name AS Period_Name, p.PayDate, p.TimeSheetStatus DocStatus, " +
                 " ts.P_Time_Sheet_ID, ts.TimesheetStatus, gains.Total_Gain_Amt " +
                 "FROM P_Payment p " +
                 "INNER JOIN P_Period per ON per.P_Period_ID = p.P_Period_ID " +
@@ -1527,7 +1577,7 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                 "LEFT JOIN ( " +
                 "    SELECT pg.P_Payment_ID, SUM(pg.AmountCalc) AS Total_Gain_Amt " +
                 "    FROM P_Payment_Gain pg " +
-                "    INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16') " +
+                "    INNER JOIN P_Gain g ON g.P_Gain_ID = pg.P_Gain_ID AND g.Value IN ('GL02', 'GL14', 'GL15', 'GL16', 'GL16NB', 'GL16NS') " +
                 "    GROUP BY pg.P_Payment_ID " +
                 ") gains ON gains.P_Payment_ID = p.P_Payment_ID " +
                 "WHERE p.P_Employee_ID = " + row.employeeId + " " +
@@ -1603,7 +1653,11 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
     {
         Object src = e.getSource();
 
-        if (src == btnRefresh)
+        if (src == btnSyncZoho)
+        {
+            syncFromZoho();
+        }
+        else if (src == btnRefresh)
         {
             executeQuery();
         }
@@ -1749,6 +1803,688 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
         {
             JOptionPane.showMessageDialog(this, "Aucun employ\u00e9 associ\u00e9 sur cette ligne.", "Zoom", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    /**
+     * Actualiser et synchroniser les rapports et d\u00e9tails depuis Zoho Expense vers la table permanente P_Employee_Expensereports_Validation
+     */
+    private void syncFromZoho()
+    {
+        int choice = JOptionPane.showOptionDialog(
+            this,
+            "Souhaitez-vous actualiser les donn\u00e9es depuis Zoho Expense ?\n\n" +
+            "Cette op\u00e9ration interroge l'API Zoho Expense pour synchroniser la table permanente\n" +
+            "'P_Employee_Expensereports_Validation' et ses re\u00e7us d\u00e9taill\u00e9s.\n\n" +
+            "Choisissez le mode d'actualisation :",
+            "Actualisation Zoho Expense",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new Object[] {
+                "Actualiser tout (En-t\u00eates + Re\u00e7us d\u00e9taill\u00e9s)",
+                "Actualiser en-t\u00eates seulement (Rapide)",
+                "Annuler"
+            },
+            "Actualiser tout (En-t\u00eates + Re\u00e7us d\u00e9taill\u00e9s)"
+        );
+
+        if (choice != 0 && choice != 1)
+            return;
+
+        final boolean fetchDetails = (choice == 0);
+
+        final javax.swing.JDialog progressDialog = new javax.swing.JDialog(
+            m_frame != null ? m_frame : (JFrame) SwingUtilities.getWindowAncestor(this),
+            "Synchronisation Zoho Expense",
+            true
+        );
+        progressDialog.setDefaultCloseOperation(javax.swing.JDialog.DO_NOTHING_ON_CLOSE);
+        progressDialog.setSize(480, 160);
+        progressDialog.setLocationRelativeTo(this);
+        progressDialog.setLayout(new BorderLayout(10, 10));
+
+        JPanel pnlContent = new JPanel(new BorderLayout(5, 8));
+        pnlContent.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        pnlContent.setBackground(Color.WHITE);
+
+        final JLabel lblStatus = new JLabel("Connexion \u00e0 l'API Zoho Expense en cours...");
+        lblStatus.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblStatus.setForeground(new Color(30, 45, 70));
+        pnlContent.add(lblStatus, BorderLayout.NORTH);
+
+        final javax.swing.JProgressBar progressBar = new javax.swing.JProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBar.setPreferredSize(new Dimension(420, 22));
+        pnlContent.add(progressBar, BorderLayout.CENTER);
+
+        final JLabel lblSub = new JLabel("Veuillez patienter pendant la r\u00e9cup\u00e9ration des donn\u00e9es...");
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblSub.setForeground(new Color(100, 115, 130));
+        pnlContent.add(lblSub, BorderLayout.SOUTH);
+
+        progressDialog.add(pnlContent, BorderLayout.CENTER);
+
+        btnSyncZoho.setEnabled(false);
+        btnRefresh.setEnabled(false);
+
+        javax.swing.SwingWorker<SyncStats, String> worker = new javax.swing.SwingWorker<SyncStats, String>()
+        {
+            @Override
+            protected SyncStats doInBackground() throws Exception
+            {
+                publish("Authentification OAuth2 aupr\u00e8s de Zoho...");
+                String token = getZohoAccessToken();
+                if (token == null || token.isEmpty())
+                    throw new Exception("Impossible d'obtenir un jeton d'acc\u00e8s Zoho.");
+
+                publish("Chargement des r\u00e9f\u00e9rentiels de p\u00e9riodes et employ\u00e9s...");
+                List<PeriodInfo> periods = new ArrayList<PeriodInfo>();
+                String sqlP = "SELECT P_Period_ID, StartDate, EndDate, PeriodNo, Name FROM P_Period ORDER BY StartDate ASC";
+                try (PreparedStatement ps = DB.prepareStatement(sqlP, null);
+                     ResultSet rs = ps.executeQuery())
+                {
+                    while (rs.next())
+                    {
+                        PeriodInfo pi = new PeriodInfo();
+                        pi.periodId = rs.getInt("P_Period_ID");
+                        pi.startDate = rs.getTimestamp("StartDate");
+                        pi.endDate = rs.getTimestamp("EndDate");
+                        pi.periodNo = rs.getInt("PeriodNo");
+                        pi.name = rs.getString("Name");
+                        periods.add(pi);
+                    }
+                }
+
+                Map<String, Integer> empIdMap = new HashMap<String, Integer>();
+                Map<String, Integer> empOrgMap = new HashMap<String, Integer>();
+                String sqlEmp = "SELECT P_Employee_ID, Value, AD_Org_ID FROM P_Employee WHERE AD_Client_ID = " + Env.getAD_Client_ID(m_ctx);
+                try (PreparedStatement ps = DB.prepareStatement(sqlEmp, null);
+                     ResultSet rs = ps.executeQuery())
+                {
+                    while (rs.next())
+                    {
+                        int id = rs.getInt("P_Employee_ID");
+                        int org = rs.getInt("AD_Org_ID");
+                        String val = rs.getString("Value");
+                        if (val != null)
+                        {
+                            val = val.trim();
+                            empIdMap.put(val, id);
+                            empOrgMap.put(val, org);
+                            String stripped = val.replaceFirst("^0+(?!$)", "");
+                            empIdMap.put(stripped, id);
+                            empOrgMap.put(stripped, org);
+                        }
+                    }
+                }
+
+                // Charger feuilles de temps de comptes de d\u00e9penses existantes
+                Map<String, Integer> tsMap = new HashMap<String, Integer>();
+                Map<Integer, Integer> tsPayMap = new HashMap<Integer, Integer>();
+                String sqlTS = "SELECT P_Time_Sheet_ID, P_Employee_ID, P_Period_ID, P_Payment_ID FROM P_Time_Sheet " +
+                    "WHERE SheetType = 'ExpenseAccount' AND AD_Client_ID = " + Env.getAD_Client_ID(m_ctx);
+                try (PreparedStatement ps = DB.prepareStatement(sqlTS, null);
+                     ResultSet rs = ps.executeQuery())
+                {
+                    while (rs.next())
+                    {
+                        int tsId = rs.getInt("P_Time_Sheet_ID");
+                        int eId = rs.getInt("P_Employee_ID");
+                        int pId = rs.getInt("P_Period_ID");
+                        int payId = rs.getInt("P_Payment_ID");
+                        tsMap.put(eId + "_" + pId, tsId);
+                        if (payId > 0)
+                            tsPayMap.put(tsId, payId);
+                    }
+                }
+
+                SyncStats stats = new SyncStats();
+                List<JsonObject> allReports = new ArrayList<JsonObject>();
+                OkHttpClient client = new OkHttpClient();
+                String orgId = "851698770";
+
+                // 1. T\u00e9l\u00e9charger Approved
+                publish("T\u00e9l\u00e9chargement des rapports approuv\u00e9s...");
+                downloadReportsWithFilter(client, token, orgId, "Type.Approval,Status.Approved", allReports);
+
+                // 2. T\u00e9l\u00e9charger Reimbursed
+                publish("T\u00e9l\u00e9chargement des rapports rembours\u00e9s...");
+                downloadReportsWithFilter(client, token, orgId, "Type.Approval,Status.Reimbursed", allReports);
+
+                stats.totalProcessed = allReports.size();
+                publish("Enregistrement de " + allReports.size() + " rapports dans P_Employee_Expensereports_Validation...");
+
+                // Charger les enregistrements existants dans la table de validation
+                Map<String, Long> existingValIds = new HashMap<String, Long>();
+                String sqlExist = "SELECT report_id, P_Employee_Expensereports_Validation_ID FROM P_Employee_Expensereports_Validation";
+                try (PreparedStatement ps = DB.prepareStatement(sqlExist, null);
+                     ResultSet rs = ps.executeQuery())
+                {
+                    while (rs.next())
+                    {
+                        String rid = rs.getString("report_id");
+                        if (rid != null)
+                            existingValIds.put(rid, rs.getLong("P_Employee_Expensereports_Validation_ID"));
+                    }
+                }
+
+                int clientIdVal = Env.getAD_Client_ID(m_ctx);
+                int userIdVal = Env.getAD_User_ID(m_ctx);
+
+                List<RepDetailQueueItem> detailQueue = new ArrayList<RepDetailQueueItem>();
+
+                for (int i = 0; i < allReports.size(); i++)
+                {
+                    JsonObject jobj = allReports.get(i);
+                    String repId = jobj.get("report_id").getAsString();
+                    String repNo = jobj.has("report_number") && !jobj.get("report_number").isJsonNull() ? jobj.get("report_number").getAsString() : "";
+                    String repName = jobj.has("report_name") && !jobj.get("report_name").isJsonNull() ? jobj.get("report_name").getAsString() : "";
+                    String desc = jobj.has("description") && !jobj.get("description").isJsonNull() ? jobj.get("description").getAsString() : "";
+                    String empNo = jobj.has("employee_number") && !jobj.get("employee_number").isJsonNull() ? jobj.get("employee_number").getAsString().trim() : "";
+                    String status = jobj.has("status") && !jobj.get("status").isJsonNull() ? jobj.get("status").getAsString() : "";
+
+                    BigDecimal reimbTotal = getJsonBigDecimal(jobj, "reimbursable_total");
+                    BigDecimal amtToBeReimb = getJsonBigDecimal(jobj, "amount_to_be_reimbursed");
+                    if (amtToBeReimb.compareTo(BigDecimal.ZERO) == 0 && reimbTotal.compareTo(BigDecimal.ZERO) > 0)
+                        amtToBeReimb = reimbTotal;
+                    BigDecimal total = getJsonBigDecimal(jobj, "total");
+                    if (total.compareTo(BigDecimal.ZERO) == 0 && reimbTotal.compareTo(BigDecimal.ZERO) > 0)
+                        total = reimbTotal;
+
+                    Timestamp approvedDate = parseJsonTimestamp(jobj, "approved_date");
+                    Timestamp submittedDate = parseJsonTimestamp(jobj, "submitted_date");
+                    Timestamp reimbDate = parseJsonTimestamp(jobj, "reimbursement_date");
+                    Timestamp startDate = parseJsonTimestamp(jobj, "start_date");
+                    Timestamp endDate = parseJsonTimestamp(jobj, "end_date");
+
+                    // R\u00e9soudre l'employ\u00e9
+                    Integer empIdObj = empIdMap.get(empNo);
+                    int empId = empIdObj != null ? empIdObj : 0;
+                    Integer orgIdObj = empOrgMap.get(empNo);
+                    int empOrgId = orgIdObj != null ? orgIdObj : Env.getAD_Org_ID(m_ctx);
+
+                    // R\u00e9soudre la p\u00e9riode
+                    Date refDate = approvedDate != null ? approvedDate : (reimbDate != null ? reimbDate : submittedDate);
+                    int matchedPeriodId = 0;
+                    if (refDate != null)
+                    {
+                        for (PeriodInfo pi : periods)
+                        {
+                            if (!refDate.before(pi.startDate) && !refDate.after(pi.endDate))
+                            {
+                                matchedPeriodId = pi.periodId;
+                                break;
+                            }
+                        }
+                    }
+
+                    // R\u00e9soudre la feuille de temps et le paiement
+                    Integer tsIdObj = tsMap.get(empId + "_" + matchedPeriodId);
+                    int timeSheetId = tsIdObj != null ? tsIdObj : 0;
+                    int paymentId = 0;
+                    if (timeSheetId > 0)
+                    {
+                        Integer pIdObj = tsPayMap.get(timeSheetId);
+                        paymentId = pIdObj != null ? pIdObj : 0;
+                    }
+
+                    Long existingValId = existingValIds.get(repId);
+                    long valId = 0;
+
+                    if (existingValId != null && existingValId > 0)
+                    {
+                        valId = existingValId;
+                        String sqlUpd = "UPDATE P_Employee_Expensereports_Validation SET " +
+                            " status = ?, reimbursable_total = ?, amount_to_be_reimbursed = ?, total = ?, " +
+                            " approved_date = ?, submitted_date = ?, reimbursement_date = ?, start_date = ?, end_date = ?, " +
+                            " P_Period_ID = ?, P_Employee_ID = ?, " +
+                            " P_Time_Sheet_ID = CASE WHEN ? > 0 THEN ? ELSE P_Time_Sheet_ID END, " +
+                            " P_Payment_ID = CASE WHEN ? > 0 THEN ? ELSE P_Payment_ID END, " +
+                            " Updated = GETDATE(), UpdatedBy = ? " +
+                            "WHERE P_Employee_Expensereports_Validation_ID = ?";
+                        try (PreparedStatement ps = DB.prepareStatement(sqlUpd, null))
+                        {
+                            ps.setString(1, status);
+                            ps.setBigDecimal(2, reimbTotal);
+                            ps.setBigDecimal(3, amtToBeReimb);
+                            ps.setBigDecimal(4, total);
+                            ps.setTimestamp(5, approvedDate);
+                            ps.setTimestamp(6, submittedDate);
+                            ps.setTimestamp(7, reimbDate);
+                            ps.setTimestamp(8, startDate);
+                            ps.setTimestamp(9, endDate);
+                            ps.setInt(10, matchedPeriodId);
+                            ps.setInt(11, empId);
+                            ps.setInt(12, timeSheetId);
+                            ps.setInt(13, timeSheetId);
+                            ps.setInt(14, paymentId);
+                            ps.setInt(15, paymentId);
+                            ps.setInt(16, userIdVal);
+                            ps.setLong(17, valId);
+                            ps.executeUpdate();
+                        }
+                        stats.updatedCount++;
+                    }
+                    else
+                    {
+                        long nextSeq = getNextSequenceValue("P_Employee_Expensereports_ValidationSEQ");
+                        valId = nextSeq;
+
+                        String sqlIns = "INSERT INTO P_Employee_Expensereports_Validation (" +
+                            " P_Employee_Expensereports_Validation_ID, P_Employee_Expensereports_ID, AD_Client_ID, AD_Org_ID, " +
+                            " IsActive, Created, CreatedBy, Updated, UpdatedBy, report_id, report_name, description, report_number, " +
+                            " status, reimbursable_total, amount_to_be_reimbursed, total, employee_number, P_Employee_ID, " +
+                            " ExpensereportsType, P_Period_ID, P_Time_Sheet_ID, P_Payment_ID, approved_date, submitted_date, " +
+                            " reimbursement_date, start_date, end_date " +
+                            ") VALUES (?, ?, ?, ?, 'Y', GETDATE(), ?, GETDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ZohoExpense', ?, ?, ?, ?, ?, ?, ?, ?)";
+                        try (PreparedStatement ps = DB.prepareStatement(sqlIns, null))
+                        {
+                            ps.setLong(1, valId);
+                            ps.setLong(2, valId);
+                            ps.setInt(3, clientIdVal);
+                            ps.setInt(4, empOrgId);
+                            ps.setInt(5, userIdVal);
+                            ps.setInt(6, userIdVal);
+                            ps.setString(7, repId);
+                            ps.setString(8, repName);
+                            ps.setString(9, desc);
+                            ps.setString(10, repNo);
+                            ps.setString(11, status);
+                            ps.setBigDecimal(12, reimbTotal);
+                            ps.setBigDecimal(13, amtToBeReimb);
+                            ps.setBigDecimal(14, total);
+                            ps.setString(15, empNo);
+                            ps.setInt(16, empId);
+                            ps.setInt(17, matchedPeriodId);
+                            ps.setInt(18, timeSheetId);
+                            ps.setInt(19, paymentId);
+                            ps.setTimestamp(20, approvedDate);
+                            ps.setTimestamp(21, submittedDate);
+                            ps.setTimestamp(22, reimbDate);
+                            ps.setTimestamp(23, startDate);
+                            ps.setTimestamp(24, endDate);
+                            ps.executeUpdate();
+                        }
+                        existingValIds.put(repId, valId);
+                        stats.insertedCount++;
+                    }
+
+                    if (fetchDetails)
+                    {
+                        detailQueue.add(new RepDetailQueueItem(valId, repId, repNo, empOrgId));
+                    }
+                }
+
+                // 3. T\u00e9l\u00e9chargement des re\u00e7us d\u00e9taill\u00e9s si demand\u00e9
+                if (fetchDetails && !detailQueue.isEmpty())
+                {
+                    for (int d = 0; d < detailQueue.size(); d++)
+                    {
+                        RepDetailQueueItem item = detailQueue.get(d);
+                        if (d % 10 == 0 || d == detailQueue.size() - 1)
+                        {
+                            publish("Import des re\u00e7us et calcul des taxes (" + (d + 1) + " / " + detailQueue.size() + ")...");
+                        }
+
+                        int imported = syncReportDetails(client, token, orgId, item.valId, item.repId, item.orgId, clientIdVal, userIdVal);
+                        stats.detailCount += imported;
+                    }
+                }
+
+                return stats;
+            }
+
+            @Override
+            protected void process(List<String> chunks)
+            {
+                if (!chunks.isEmpty())
+                {
+                    String latest = chunks.get(chunks.size() - 1);
+                    lblStatus.setText(latest);
+                }
+            }
+
+            @Override
+            protected void done()
+            {
+                progressDialog.dispose();
+                btnSyncZoho.setEnabled(true);
+                btnRefresh.setEnabled(true);
+
+                try
+                {
+                    SyncStats res = get();
+                    JOptionPane.showMessageDialog(
+                        VZohoExpenseValidation.this,
+                        "\u2705 Synchronisation Zoho Expense termin\u00e9e avec succ\u00e8s !\n\n" +
+                        "\u2022 Rapports trait\u00e9s : " + res.totalProcessed + "\n" +
+                        "\u2022 Nouveaux rapports ins\u00e9r\u00e9s : " + res.insertedCount + "\n" +
+                        "\u2022 Rapports mis \u00e0 jour : " + res.updatedCount + "\n" +
+                        (fetchDetails ? "\u2022 Lignes de d\u00e9tail/taxes import\u00e9es : " + res.detailCount + "\n" : "") +
+                        "\nLa table permanente P_Employee_Expensereports_Validation est \u00e0 jour.",
+                        "Succ\u00e8s",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                    // Recharger imm\u00e9diatement le rapport d'audit
+                    executeQuery();
+                }
+                catch (Exception ex)
+                {
+                    s_log.log(Level.SEVERE, "syncFromZoho", ex);
+                    JOptionPane.showMessageDialog(
+                        VZohoExpenseValidation.this,
+                        "Erreur lors de la synchronisation Zoho Expense :\n" + ex.getMessage(),
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        };
+
+        worker.execute();
+        progressDialog.setVisible(true);
+    }
+
+    private int syncReportDetails(OkHttpClient client, String token, String orgId, long valId, String repId, int empOrgId, int clientIdVal, int userIdVal)
+    {
+        try
+        {
+            Request reqDet = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("X-com-zoho-expense-organizationid", orgId)
+                .addHeader("Content-Type", "application/json;")
+                .url("https://www.zohoapis.com/expense/v1/expensereports/" + repId + "/approvalhistory")
+                .get()
+                .build();
+
+            Response respDet = client.newCall(reqDet).execute();
+            if (!respDet.isSuccessful())
+                return 0;
+
+            JsonObject objDet = JsonParser.parseString(respDet.body().string()).getAsJsonObject();
+            JsonObject expRep = objDet.getAsJsonObject("expense_report");
+            if (expRep == null) return 0;
+            JsonArray expenses = expRep.getAsJsonArray("expenses");
+            if (expenses == null || expenses.size() == 0) return 0;
+
+            // Supprimer anciens d\u00e9tails
+            String sqlDel = "DELETE FROM P_Employee_Expensereports_Detail WHERE report_id = " + DB.TO_STRING(repId);
+            DB.executeUpdate(sqlDel, null);
+
+            BigDecimal repTps = BigDecimal.ZERO;
+            BigDecimal repTvq = BigDecimal.ZERO;
+            BigDecimal repTvh = BigDecimal.ZERO;
+            int count = 0;
+
+            for (int i = 0; i < expenses.size(); i++)
+            {
+                JsonObject expObj = expenses.get(i).getAsJsonObject();
+                JsonArray lineItems = expObj.getAsJsonArray("line_items");
+                if (lineItems == null) continue;
+
+                for (int t = 0; t < lineItems.size(); t++)
+                {
+                    JsonObject item = lineItems.get(t).getAsJsonObject();
+
+                    BigDecimal amount = getJsonBigDecimal(item, "claimed_bcy_total");
+                    BigDecimal totalTax = getJsonBigDecimal(item, "tax_amount");
+                    String taxName = item.has("tax_name") && !item.get("tax_name").isJsonNull() ? item.get("tax_name").getAsString() : "";
+
+                    BigDecimal tps = BigDecimal.ZERO;
+                    BigDecimal tvq = BigDecimal.ZERO;
+                    BigDecimal tvh = BigDecimal.ZERO;
+
+                    if (taxName.startsWith("TVH"))
+                    {
+                        tvh = totalTax;
+                    }
+                    else if (taxName.startsWith("TPS/TVQ"))
+                    {
+                        tvq = totalTax.multiply(new BigDecimal("0.66611")).setScale(2, RoundingMode.HALF_UP);
+                        tps = totalTax.subtract(tvq);
+                    }
+                    else if (taxName.startsWith("TVQ"))
+                    {
+                        tvq = totalTax;
+                    }
+                    else if (taxName.startsWith("TPS"))
+                    {
+                        tps = totalTax;
+                    }
+                    else if (taxName.startsWith("NS HST"))
+                    {
+                        tvh = totalTax;
+                    }
+
+                    repTps = repTps.add(tps);
+                    repTvq = repTvq.add(tvq);
+                    repTvh = repTvh.add(tvh);
+
+                    long detId = getNextSequenceValue("P_Employee_Expensereports_DetailSEQ");
+
+                    String catName = item.has("category_name") && !item.get("category_name").isJsonNull() ? item.get("category_name").getAsString() : "";
+                    String desc = item.has("description") && !item.get("description").isJsonNull() ? item.get("description").getAsString() : "";
+                    String glCode = item.has("gl_code") && !item.get("gl_code").isJsonNull() ? item.get("gl_code").getAsString() : "";
+                    String lineItemId = item.has("line_item_id") && !item.get("line_item_id").isJsonNull() ? item.get("line_item_id").getAsString() : "";
+                    String userName = item.has("user_name") && !item.get("user_name").isJsonNull() ? item.get("user_name").getAsString() : "";
+                    Timestamp itemDate = parseJsonTimestamp(item, "item_date");
+
+                    String sqlInsDet = "INSERT INTO P_Employee_Expensereports_Detail (" +
+                        " P_Employee_Expensereports_Detail_ID, P_Employee_Expensereports_ID, AD_Client_ID, AD_Org_ID, " +
+                        " IsActive, Created, CreatedBy, Updated, UpdatedBy, report_id, Category_Name, Amount, " +
+                        " tps_amt, tvq_amt, tvh_amt, tax_amount, Item_Date, Description, Gl_Code, line_item_code, user_name " +
+                        ") VALUES (?, ?, ?, ?, 'Y', GETDATE(), ?, GETDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    try (PreparedStatement ps = DB.prepareStatement(sqlInsDet, null))
+                    {
+                        ps.setLong(1, detId);
+                        ps.setLong(2, valId);
+                        ps.setInt(3, clientIdVal);
+                        ps.setInt(4, empOrgId);
+                        ps.setInt(5, userIdVal);
+                        ps.setInt(6, userIdVal);
+                        ps.setString(7, repId);
+                        ps.setString(8, catName);
+                        ps.setBigDecimal(9, amount);
+                        ps.setBigDecimal(10, tps);
+                        ps.setBigDecimal(11, tvq);
+                        ps.setBigDecimal(12, tvh);
+                        ps.setBigDecimal(13, totalTax);
+                        ps.setTimestamp(14, itemDate);
+                        ps.setString(15, desc);
+                        ps.setString(16, glCode);
+                        ps.setString(17, lineItemId);
+                        ps.setString(18, userName);
+                        ps.executeUpdate();
+                    }
+                    count++;
+                }
+            }
+
+            // Mettre \u00e0 jour les taxes dans l'en-t\u00eate
+            String sqlHdr = "UPDATE P_Employee_Expensereports_Validation SET tps_amt = ?, tvq_amt = ?, tvh_amt = ? " +
+                "WHERE P_Employee_Expensereports_Validation_ID = ?";
+            try (PreparedStatement ps = DB.prepareStatement(sqlHdr, null))
+            {
+                ps.setBigDecimal(1, repTps);
+                ps.setBigDecimal(2, repTvq);
+                ps.setBigDecimal(3, repTvh);
+                ps.setLong(4, valId);
+                ps.executeUpdate();
+            }
+
+            return count;
+        }
+        catch (Exception e)
+        {
+            s_log.log(Level.WARNING, "syncReportDetails error for " + repId, e);
+            return 0;
+        }
+    }
+
+    private void fetchSingleReportDetailFromZoho(long valId, String reportId)
+    {
+        try
+        {
+            String token = getZohoAccessToken();
+            if (token == null || token.isEmpty())
+                return;
+
+            String orgId = "851698770";
+            int clientIdVal = Env.getAD_Client_ID(m_ctx);
+            int userIdVal = Env.getAD_User_ID(m_ctx);
+
+            int empOrgId = Env.getAD_Org_ID(m_ctx);
+            String sqlOrg = "SELECT AD_Org_ID FROM P_Employee_Expensereports_Validation WHERE P_Employee_Expensereports_Validation_ID = " + valId;
+            try (PreparedStatement ps = DB.prepareStatement(sqlOrg, null);
+                 ResultSet rs = ps.executeQuery())
+            {
+                if (rs.next())
+                    empOrgId = rs.getInt(1);
+            }
+
+            OkHttpClient client = new OkHttpClient();
+            syncReportDetails(client, token, orgId, valId, reportId, empOrgId, clientIdVal, userIdVal);
+        }
+        catch (Exception e)
+        {
+            s_log.log(Level.WARNING, "fetchSingleReportDetailFromZoho error for " + reportId, e);
+        }
+    }
+
+    private void downloadReportsWithFilter(OkHttpClient client, String token, String orgId, String filter, List<JsonObject> targetList) throws Exception
+    {
+        int page = 1;
+        boolean hasMore = true;
+
+        while (hasMore)
+        {
+            String url = "https://www.zohoapis.com/expense/v1/expensereports?filter_by=" + filter + "&page=" + page + "&per_page=200";
+            Request req = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + token)
+                .addHeader("X-com-zoho-expense-organizationid", orgId)
+                .addHeader("Content-Type", "application/json;")
+                .url(url)
+                .get()
+                .build();
+
+            Response resp = client.newCall(req).execute();
+            if (!resp.isSuccessful())
+                throw new Exception("Erreur appel API Zoho reports (" + filter + "): HTTP " + resp.code());
+
+            JsonObject obj = JsonParser.parseString(resp.body().string()).getAsJsonObject();
+            JsonArray arr = obj.getAsJsonArray("expense_reports");
+            if (arr != null)
+            {
+                for (int i = 0; i < arr.size(); i++)
+                {
+                    targetList.add(arr.get(i).getAsJsonObject());
+                }
+            }
+
+            hasMore = false;
+            if (obj.has("page_context"))
+            {
+                JsonObject pCtx = obj.getAsJsonObject("page_context");
+                if (pCtx.has("has_more_page"))
+                {
+                    hasMore = pCtx.get("has_more_page").getAsBoolean();
+                }
+            }
+            page++;
+        }
+    }
+
+    private static synchronized String getZohoAccessToken() throws Exception
+    {
+        long now = System.currentTimeMillis();
+        if (s_cachedToken != null && now < s_tokenExpiryTime)
+        {
+            return s_cachedToken;
+        }
+
+        String clientId = "1000.LEHQGZ4J5ODKNV6IZTI5Y2YOM74NER";
+        String clientSecret = "8e7ecb00424af024312f9f3d507680fc3d602c7784";
+        String scope = "ZohoExpense.fullaccess.ALL";
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+            .add("grant_type", "client_credentials")
+            .add("client_secret", clientSecret)
+            .add("client_id", clientId)
+            .add("scope", scope)
+            .build();
+
+        Request authReq = new Request.Builder()
+            .url("https://accounts.zoho.com/oauth/v2/token")
+            .post(formBody)
+            .addHeader("Content-Type", "application/json")
+            .build();
+
+        Response authResp = client.newCall(authReq).execute();
+        if (!authResp.isSuccessful())
+            throw new Exception("Erreur HTTP " + authResp.code() + " lors de l'authentification Zoho");
+
+        JsonObject authJson = JsonParser.parseString(authResp.body().string()).getAsJsonObject();
+        if (!authJson.has("access_token"))
+            throw new Exception("Jeton Zoho introuvable dans la r\u00e9ponse");
+
+        s_cachedToken = authJson.get("access_token").getAsString();
+        int expiresIn = authJson.has("expires_in") ? authJson.get("expires_in").getAsInt() : 3600;
+        s_tokenExpiryTime = now + (expiresIn - 300) * 1000L;
+
+        return s_cachedToken;
+    }
+
+    private static long getNextSequenceValue(String sequenceName)
+    {
+        String sql = "SELECT NEXT VALUE FOR " + sequenceName;
+        try (PreparedStatement ps = DB.prepareStatement(sql, null);
+             ResultSet rs = ps.executeQuery())
+        {
+            if (rs.next())
+                return rs.getLong(1);
+        }
+        catch (Exception e)
+        {
+            s_log.log(Level.SEVERE, "getNextSequenceValue: " + sequenceName, e);
+        }
+        return 0;
+    }
+
+    private static BigDecimal getJsonBigDecimal(JsonObject jobj, String key)
+    {
+        if (jobj.has(key) && !jobj.get(key).isJsonNull())
+        {
+            try
+            {
+                return jobj.get(key).getAsBigDecimal();
+            }
+            catch (Exception ignored) {}
+        }
+        return BigDecimal.ZERO;
+    }
+
+    private static Timestamp parseJsonTimestamp(JsonObject jobj, String key)
+    {
+        if (!jobj.has(key) || jobj.get(key).isJsonNull()) return null;
+        String s = jobj.get(key).getAsString().trim();
+        if (s.isEmpty()) return null;
+        try
+        {
+            if (s.length() >= 19)
+            {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                return new Timestamp(sdf.parse(s.substring(0, 19)).getTime());
+            }
+            else if (s.length() == 10)
+            {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                return new Timestamp(sdf.parse(s).getTime());
+            }
+        }
+        catch (Exception ignored) {}
+        return null;
     }
 
     /**
@@ -2225,6 +2961,30 @@ public class VZohoExpenseValidation extends CPanel implements FormPanel, ActionL
                 case 6: return h.amount != null ? CURRENCY_FMT.format(h.amount) : "0.00 $";
                 default: return null;
             }
+        }
+    }
+
+    private static class SyncStats
+    {
+        int totalProcessed = 0;
+        int insertedCount = 0;
+        int updatedCount = 0;
+        int detailCount = 0;
+    }
+
+    private static class RepDetailQueueItem
+    {
+        long valId;
+        String repId;
+        String repNo;
+        int orgId;
+
+        RepDetailQueueItem(long valId, String repId, String repNo, int orgId)
+        {
+            this.valId = valId;
+            this.repId = repId;
+            this.repNo = repNo;
+            this.orgId = orgId;
         }
     }
 }
