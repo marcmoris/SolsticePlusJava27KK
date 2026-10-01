@@ -3883,7 +3883,7 @@ public class TimeGeneration
 
 	public void GenerationExpense_Account_DetV2( Properties ctx, int Client_ID, int Org_ID, int Employee_ID, int Payment_Group_ID, int Period_ID, int P_Time_Sheet_ID, String TrxName )
 	{
-		String sql = "SELECT P_Employee_Expensereports.P_Employee_Expensereports_ID, P_Employee_Expensereports.P_Period_ID, \r\n"
+		String sql = "SELECT P_Employee_Expensereports_Detail.tax_name, P_Employee_Expensereports.P_Employee_Expensereports_ID, P_Employee_Expensereports.P_Period_ID, \r\n"
 				+ " sum( P_Employee_Expensereports_Detail.Tps_Amt ) Tps_Amt, sum( P_Employee_Expensereports_Detail.tvq_amt ) Tvq_Amt, sum( P_Employee_Expensereports_Detail.Tvh_Amt ) Tvh_Amt, sum( P_Employee_Expensereports_Detail.amount) amt"
 				+ " from P_Employee_Expensereports "
   				   + " INNER JOIN P_Employee_Expensereports_Detail on P_Employee_Expensereports_Detail.P_Employee_Expensereports_ID = P_Employee_Expensereports.P_Employee_Expensereports_ID "
@@ -3892,7 +3892,7 @@ public class TimeGeneration
 			if ( Employee_ID != 0 )
 				sql = sql  + " AND P_Employee_Expensereports.P_Employee_ID = " + Employee_ID;
 			
-			sql = sql   + " GROUP BY P_Employee_Expensereports.P_Employee_Expensereports_ID, P_Employee_Expensereports.P_Period_ID "
+			sql = sql   + " GROUP BY P_Employee_Expensereports_Detail.tax_name, P_Employee_Expensereports.P_Employee_Expensereports_ID, P_Employee_Expensereports.P_Period_ID "
 				   ;
 		OriginTime = "DEP";
 //RETRO		OriginTime = "PER";
@@ -3965,7 +3965,48 @@ public class TimeGeneration
 					Dayqty = Tvh_Amt;
 					if ( Dayqty.compareTo( Env.ZERO) != 0 )
 					{
-						Gain = P_Gain.getWithValue(ctx, "GL16", null);
+						String tax_Name = rs.getString( "tax_name" );	
+						if ( tax_Name.startsWith( "NS HST") )
+						{
+							Gain = P_Gain.getWithValue(ctx, "GL16NS", null);
+
+							if ( Employee.getTaxation_Region_ID() != 161)
+							{
+							   P_Time_Sheet Timesheet = P_Time_Sheet.get(Env.getCtx(), TimeSheet.getRecord_ID(), null);
+							   P_Time_Sheet_Error.NewMessage( Timesheet, P_Time_Sheet_Error.ALERT_SEVERITY_LEVEL_Information, "A vérifier, employé avec une taxe de Nouvelle-Écosse",null);
+							} 
+
+						}
+						else if ( tax_Name.startsWith( "TVH ON") )
+						{
+							Gain = P_Gain.getWithValue(ctx, "GL16", null);
+
+							if ( Employee.getTaxation_Region_ID() != 164)
+							{
+							   P_Time_Sheet Timesheet = P_Time_Sheet.get(Env.getCtx(), TimeSheet.getRecord_ID(), null);
+							   P_Time_Sheet_Error.NewMessage( Timesheet, P_Time_Sheet_Error.ALERT_SEVERITY_LEVEL_Information, "A vérifier, employé avec une taxe de l'ontario",null);
+							} 
+
+						}
+						else 
+						{
+							Gain = P_Gain.getWithValue(ctx, "GL16NB", null);
+
+							if ( Employee.getTaxation_Region_ID() != 159)
+							{
+							   P_Time_Sheet Timesheet = P_Time_Sheet.get(Env.getCtx(), TimeSheet.getRecord_ID(), null);
+							   P_Time_Sheet_Error.NewMessage( Timesheet, P_Time_Sheet_Error.ALERT_SEVERITY_LEVEL_Information, "A vérifier, employé avec une taxe de Nouveau-Brunswick",null);
+							} 
+
+						}
+						
+						if ( Employee.getTaxation_Region_ID() == 166)
+						{
+						   P_Time_Sheet Timesheet = P_Time_Sheet.get(Env.getCtx(), TimeSheet.getRecord_ID(), null);
+						   P_Time_Sheet_Error.NewMessage( Timesheet, P_Time_Sheet_Error.ALERT_SEVERITY_LEVEL_Information, "A vérifier, employé avec une taxe dans une autre province",null);
+						} 
+
+							
 						create_time_sheet_detail ( Period_ID );
 						
 					}
